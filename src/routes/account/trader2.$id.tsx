@@ -79,7 +79,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
     const products = t("product");
 
     return (
-      <>
+      <div className="max-w-[1990px] mx-auto">
         <Header />
         <main
           className="flex-col pm-4 pt-[6rem]"
@@ -477,7 +477,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
             ))}
         </main>
         <Footer />
-      </>
+      </div>
     );
   },
 });
@@ -525,13 +525,13 @@ export const Header = () => {
     <>
       <header
         className={cn(
-          "lg:fixed top-0 xl:left-1/2 xl:-translate-x-1/2 w-full z-50 mx-auto place-self-center bg-background",
+          "lg:fixed top-0 xl:left-1/2 xl:-translate-x-1/2 w-full z-50 mx-auto place-self-center bg-background max-w-[1990px] mx-auto",
           location.pathname !== "/account/trader-profiles" ||
             (location.pathname.toString().includes("/account/trader2") &&
               "border-border border-solid border-b"),
         )}
       >
-        <div className="flex flex-col items-cetner gap-2 container  bg-background ">
+        <div className="flex flex-col items-cetner gap-2 bg-background ">
           <div className="flex items-center justify-between">
             <Link to="/" className="logo mt-2 flex flex-col">
               <img src={Logo} className="w-[12rem] h-auto" alt="Logo" />

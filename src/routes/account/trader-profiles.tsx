@@ -57,7 +57,7 @@ export const TraderProfiles = () => {
     isRefetching,
   } = useInfiniteQuery({
     queryKey: ["traders"],
-    queryFn: () => get_traders({ q, category, governorate, region }),
+    queryFn: ({pageParam}) => get_traders({ q, category, governorate, region, pageParam }),
     getNextPageParam: (lastPage) => {
       const currentPage = lastPage?.pagination?.current_page ?? 1;
       const lastPageNum = lastPage?.pagination?.last_page ?? 1;
@@ -278,11 +278,13 @@ export const get_traders = async ({
   category,
   governorate,
   region,
+pageParam
 }: {
   q?: string;
   category?: string;
   governorate?: string;
   region?: string;
+pageParam: number
 }) => {
   try {
     const { data: res_data } = await axios.post<GetCatgegorySearchResponse>(
@@ -292,6 +294,7 @@ export const get_traders = async ({
         category_id: +category === 0 ? null : +category,
         region_id: +region === 0 ? null : +region,
         governorate_id: +governorate === 0 ? null : +governorate,
+	page: pageParam
       },
       {
         withCredentials: true,

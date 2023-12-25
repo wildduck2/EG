@@ -20,7 +20,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
             to="/"
             className={cn(
               buttonVariants({ variant: "default" }),
-              "bg-[#ee1d24] hover:bg-white hover:text-[#ee1d24] border hover:border-[#ee1d24] w-[88.88px]",
+              "bg-[#ee1d24] hover:bg-white hover:text-[#ee1d24] border hover:border-[#ee1d24] w-[120px]",
             )}
           >
             {t("homepage")}
@@ -29,7 +29,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
             to="/our-services"
             className={cn(
               buttonVariants({ variant: "default" }),
-              "w-[88.88px]",
+              "w-[120px]",
             )}
           >
             {t("ourservice")}
@@ -40,7 +40,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
           position="top"
           nav={{
             className:
-              "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit hover:[&_button]:bg-[#ee1d24] hover:[&_button]:text-accent [&_button]:justify-center [&_ul]:flex-wrap w-full [&_button]:font-bold",
+              "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit [&_button]:px-6 hover:[&_button]:bg-[#ee1d24] hover:[&_button]:text-accent [&_button]:justify-center [&_ul]:flex-wrap w-full [&_button]:font-bold",
             group: [10],
             router: {},
             pathname: location.pathname,
@@ -71,7 +71,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
                   : [
                       {
                         title: "more",
-                        route: `/categories/more`,
+                        route: `/categories`,
                         state: { branch: 0 },
                         children: i18n.language === "en" ? "More" : "المزيد",
                       },
