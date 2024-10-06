@@ -1,0 +1,65 @@
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-medium text-[1rem];
+    font-family: "Poppins", sans-serif;
+    /* font-feature-settings: "rlig" 1, "calt" 1; */
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@layer utilities {
+  .step {
+    counter-increment: step;
+  }
+
+  .step:before {
+    @apply absolute w-9 h-9 bg-muted rounded-full font-mono font-medium text-center text-base inline-flex items-center justify-center -indent-px border-4 border-background;
+    @apply ml-[-50px] mt-[-4px];
+    content: counter(step);
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    @apply px-4;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  /* Width of the entire scrollbar */
+  height: 8px;
+  /* Height of the scrollbar for horizontal scrolling */
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  /* Scrollbar thumb color */
+  border-radius: 4px;
+  /* Scrollbar thumb radius */
+  height: 24px;
+  /* Scrollbar thumb height */
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--border) / 0.98);
+  /* Scrollbar thumb color on hover */
+}
+
+/* font-feature-settings: */
+/*     "rlig" 1, */
+/*     "calt" 1; */
+/* direction: rtl; */
+
+.customrotate {
+  transform: translateY(-3px) rotate(-181deg) rotateX(180deg);
+}
+
+.flex-basis {
+  flex-basis: 12.5%;
+}
