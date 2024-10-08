@@ -55,7 +55,6 @@ export const Search = () => {
             rtl: "التصنيفات والماركات",
           }}
           searchIcon={true}
-          showKbd={true}
           dir="rtl"
           onClick={() => setOpen(true)}
         />

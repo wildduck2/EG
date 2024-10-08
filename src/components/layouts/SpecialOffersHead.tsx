@@ -50,8 +50,8 @@ export const SpecialOffersHead: React.FC<specialoffersProps> = ({
             <Button
               variant="outline"
               className={cn(
-                "text-[#e60000] font-semibold border cursor-pointer px-5 py-1 rounded-md border-[#e60000] hover:bg-[#e60000] hover:text-white",
-                filter === e.category && "bg-[#e60000] text-white",
+                "text-red-500 font-semibold border cursor-pointer px-5 py-1 rounded-md border-red-500 hover:bg-red-500 hover:text-white",
+                filter === e.category && "bg-red-500 text-accent",
               )}
               onClick={() => handleData(e.category)}
             >

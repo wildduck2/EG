@@ -1,5 +1,18 @@
 import { Calendar, HandshakeIcon, Home, Settings } from "lucide-react";
-import { AccountType, ButtonProps, NavGroup, Separator } from "@/components/ui";
+import {
+  AccountType,
+  ButtonProps,
+  buttonVariants,
+  NavGroup,
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+  Separator,
+} from "@/components/ui";
 import { Button, SelectSwitcher } from "@/components/ui";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import React from "react";
@@ -8,60 +21,54 @@ import { cn } from "@/lib/utils";
 import { Search } from "@/components/ui/duckui/Search/Search";
 import { useTranslation } from "react-i18next";
 
+import shape from "../../../assets/shape.png";
+
 export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const t_languages = t("languages");
-  console.log(t_languages); // Check if it's an array or something else
-
-  const languages: AccountType[] = Array.isArray(t_languages)
-    ? t_languages.map((language) => ({
-        label: language,
-        name: language,
-      }))
-    : [];
-
-  console.log(languages);
 
   const [open, setOpen] = React.useState(false);
   return (
     <>
       <header>
+        <div className="flex items-center justify-between mx-28  px-8">
+          <Link to="/" className="logo mt-4">
+            <img src={Logo} className="w-[8rem] h-auto" alt="Logo" />
+          </Link>
+          <img src={shape} className="w-[300px] -mt-4" />
+        </div>
+
         <nav
           className={cn(
             "flex items-center justify-between mx-28 place-self-center px-8 pt-8 pb-4",
             // isSticky ? "sticky" : "",
           )}
         >
-          <div className="logo">
-            <Link to="/" className="logo">
-              <img src={Logo} className="w-24 h-auto" alt="Logo" />
-            </Link>
-          </div>
-
-          <div>
+          <div className="flex item-center gap-4">
+            <Select defaultValue="apple">
+              <SelectTrigger className="w-[80px] rounded-lg">
+                <SelectValue placeholder="Select a fruit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Country</SelectLabel>
+                  <SelectItem value="apple">Egypt</SelectItem>
+                  <SelectItem value="banana">UAE</SelectItem>
+                  <SelectItem value="blueberry">UK</SelectItem>
+                  <SelectItem value="grapes">USA</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
             <Search />
           </div>
           <div className="flex items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
-            <SelectSwitcher
-              isCollapsed={true}
-              trigger={{
-                className: cn("!w-12", 0 && "mx-auto"),
-              }}
-              content={{
-                className: "text-capitalize",
-                data: languages,
-              }}
-              wrapper={{
-                defaultValue: "العربيه",
-                onValueChange: (value) => {
-                  console.log(value);
-                  i18n.changeLanguage(
-                    value === "الانجليزيه" ? "English" : value,
-                  );
-                },
-              }}
+            <Button
+              title={t("English")}
+              variant={"outline"}
+              className="w-[100px]"
+              onClick={() => navigate({ to: "/auth/signin" })}
             />
             <Button
               title={"بيع"}
@@ -83,7 +90,7 @@ export const Header = () => {
             nav={{
               className:
                 "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-full [&_button]:justify-center",
-              group: [5],
+              group: [10],
               router: {},
               pathname: location.pathname,
               isCollabsed: false,
@@ -97,6 +104,105 @@ export const Header = () => {
     </>
   );
 };
+
+export interface headerNavigationDataTypes {
+  headerNavigationData?: string[][][][];
+  satatus: "loading" | "succeeded" | "failed";
+}
+
+export const NavigationHeaderLooping = ({
+  headerNavigationData,
+}: headerNavigationDataTypes) => {
+  return (
+    <ul className="flex w-[1100px]">
+      {headerNavigationData?.map((item, index) => {
+        return (
+          <li key={index} className="flex gap-16">
+            {item.map((child) => {
+              return child.map((item, index) => {
+                return (
+                  <ul key={index} className="flex flex-col !gap-2">
+                    {item.map((item, index) => {
+                      return (
+                        <li key={index} className="flex flex-col">
+                          {index === 0 ? (
+                            <h4 className="font-bold">{item}</h4>
+                          ) : (
+                            <li className="flex flex-col gap-1">
+                              {item.map((item, index) => {
+                                return (
+                                  <Link
+                                    to={item}
+                                    className={cn(
+                                      buttonVariants({ variant: "link" }),
+                                      "text-sm p-0 justify-start h-fit text-accent-foreground",
+                                    )}
+                                  >
+                                    {item}
+                                  </Link>
+                                );
+                              })}
+                            </li>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                );
+              });
+            })}
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
+
+export const hi = [
+  [
+    [
+      [
+        ["وصل حديثًا"],
+        ["عرض الكل", "ملابس", "أحذية وإكسسوارات", "ملابس رياضية"],
+      ],
+      [
+        ["العروض والميزات"],
+        ["الأكثر مبيعًا بدءًا من 299 جنيه", "قمصان وبلوزات تحت 1199 جنيه"],
+      ],
+    ],
+    [
+      [
+        ["الأكثر رواجًا الآن"],
+        [
+          "خريف/شتاء 2023",
+          "الرومانسية",
+          "الموسم الجديد في الدنيم",
+          "أناقة المدينة",
+          "الأناقة العصرية",
+        ],
+      ],
+    ],
+    [
+      [
+        ["تسوق حسب المنتج"],
+        [
+          "عرض الكل",
+          "فساتين",
+          "أعلى",
+          "قمصان وبلوزات",
+          "سويت شيرتات وهوديز",
+          "ملابس السباحة والشاطئ",
+          "سراويل",
+          "جينز",
+          "جمبسوت وبلايسوت",
+          "تنورات",
+          "أحذية",
+          "إكسسوارات",
+        ],
+      ],
+    ],
+  ],
+];
 
 const data: ButtonProps[] = [
   {
@@ -115,9 +221,39 @@ const data: ButtonProps[] = [
     children: "تدفئه وتكييف منزلي",
   },
   {
-    title: "العدد والمستلزمات",
+    title: "عقارات",
     route: "/my-ads",
-    children: "العدد والمستلزمات",
+    children: "عقارات",
+  },
+  {
+    title: "موارد البناء",
+    route: "/my-ads",
+    children: "موارد البناء",
+  },
+  {
+    title: "الكهرباء",
+    route: "/my-ads",
+    children: "الكهرباء",
+  },
+  {
+    title: "معادن",
+    route: "/my-ads",
+    children: "معادن",
+  },
+  {
+    title: "انظمه امنيه",
+    route: "/my-ads",
+    children: "انظمه امنيه",
+  },
+  {
+    title: "",
+    route: "/my-ads",
+    children: "معادن",
+  },
+  {
+    title: "المزيد",
+    route: "/my-ads",
+    children: "المزيد",
   },
 ];
 

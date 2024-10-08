@@ -18,3 +18,6 @@ export * from "./Header";
 export * from "./nav-group";
 export * from "./select";
 export * from "./select-switcher";
+export * from "./tabs";
+export * from "./breadcrumb";
+export * from "./toggle";

@@ -6,7 +6,6 @@ export const Route = createFileRoute("/home/_home")({
     <div>
       <Header />
       <Outlet />
-      safasdf
     </div>
   ),
 });

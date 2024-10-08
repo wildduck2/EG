@@ -1,7 +1,18 @@
 import { useEffect, useState } from "react";
-import { AddContent } from "../AddContent";
+import { ProductCard } from "../AddContent";
 import { SpecialOffersHead } from "../SpecialOffersHead";
 import { data } from "@/constants";
+import {
+  Carousel,
+  CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui";
+import React from "react";
+import Autoplay from "embla-carousel-autoplay";
+import { cn } from "@/lib/utils";
 
 export const SpecialOffers = () => {
   const [dataType, setDataType] = useState("special");
@@ -14,7 +25,7 @@ export const SpecialOffers = () => {
     setDataType(data as unknown as string);
   };
 
-  const [dataFiltered, setDataFiltered] = useState([]);
+  const [dataFiltered, setDataFiltered] = useState<typeof data>([]);
 
   useEffect(() => {
     if (dataType === "special") {
@@ -30,28 +41,53 @@ export const SpecialOffers = () => {
     }
   }, [dataType]);
 
-  return (
-    <div className={`py-12 bg-[#F5F6F7]`}>
-      <div className="px-8 mx-28">
-        {/* NOTE: You have to fix this */}
-        <SpecialOffersHead dataType={handleData} data="special" />
+  const [api, setApi] = React.useState<CarouselApi>();
+  const [current, setCurrent] = React.useState(0);
+  const [count, setCount] = React.useState(0);
 
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5">
-          {dataFiltered?.map((e, i) => (
-            <div className="" key={i}>
-              <AddContent
-                trusted={e.trusted}
-                img={e.img}
-                alt={e.alt}
-                price={e.price}
-                title={e.title}
-                location={e.location}
-                offers={e.offers}
-                date={e.date}
-              />
-            </div>
+  React.useEffect(() => {
+    if (!api) {
+      return;
+    }
+
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+
+    api.on("select", () => {
+      setCurrent(api.selectedScrollSnap() + 1);
+    });
+  }, [api]);
+
+  return (
+    <div className={`py-12 px-8 mx-28`}>
+      <SpecialOffersHead dataType={handleData} data="special" />
+      <Carousel
+        setApi={setApi}
+        opts={{
+          direction: "rtl",
+          loop: true,
+        }}
+      >
+        <CarouselContent>
+          {dataFiltered?.map((item, idx) => (
+            <CarouselItem className="basis-1/5" key={idx}>
+              <ProductCard data={item} />
+            </CarouselItem>
           ))}
-        </div>
+        </CarouselContent>
+        <CarouselPrevious className="left-8" />
+        <CarouselNext className="right-8" />
+      </Carousel>
+      <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto">
+        {Array.from({ length: count }).map((_, i) => (
+          <span
+            key={i}
+            className={cn(
+              "w-3 h-3 rounded-full border border-red-400 border-solid inline-flex",
+              current === i + 1 && "bg-red-400",
+            )}
+          />
+        ))}
       </div>
     </div>
   );

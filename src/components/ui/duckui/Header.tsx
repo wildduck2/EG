@@ -54,15 +54,6 @@ const Header = <T extends boolean>({
       )}
       {...props}
     >
-      {logo && logo}
-      {position === "side" && <Separator className="my-1" />}
-      <NavGroup<T>
-        position={position}
-        nav={{ ...nav.nav, isCollabsed: isCollabsed } as NavType<true>}
-        navigationKeys={nav.navigationKeys}
-      />
-
-      {position === "side" && <Separator className="my-1" />}
       <div
         className={cn("flex items-center gap-2", footerClassName)}
         {...footerProps}
@@ -72,6 +63,14 @@ const Header = <T extends boolean>({
             <React.Fragment key={idx}>{button}</React.Fragment>
           ))}
       </div>
+      {logo && logo}
+      {position === "side" && <Separator className="my-1" />}
+      <NavGroup<T>
+        position={position}
+        nav={{ ...nav.nav, isCollabsed: isCollabsed } as NavType<true>}
+        navigationKeys={nav.navigationKeys}
+      />
+      {position === "side" && <Separator className="my-1" />}
     </header>
   );
 };

@@ -6,6 +6,8 @@ import {
   CarouselApi,
   CarouselContent,
   CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
 } from "@/components/ui";
 import React from "react";
 import { cn } from "@/lib/utils";
@@ -31,7 +33,7 @@ export const HomeBannerSwiper = () => {
   return (
     <div className="relative">
       <Carousel
-        className="overflow-hidden px-8 mx-28 h-[450px] my-8"
+        className="overflow-hidden px-8 mx-28 h-[300px] my-8"
         setApi={setApi}
         opts={{
           direction: "rtl",
@@ -49,7 +51,7 @@ export const HomeBannerSwiper = () => {
               <img
                 src={Slide1}
                 alt="slide1"
-                className="h-[450px] object-cover rounded-2xl  w-full"
+                className="h-[300px] object-cover rounded-2xl  w-full"
               />
             </div>
           </CarouselItem>
@@ -58,7 +60,7 @@ export const HomeBannerSwiper = () => {
               <img
                 src={Slide2}
                 alt="slide3"
-                className="h-[450px] object-cover rounded-2xl w-full"
+                className="h-[300px] object-cover rounded-2xl w-full"
               />
             </div>
           </CarouselItem>
@@ -67,7 +69,7 @@ export const HomeBannerSwiper = () => {
               <img
                 src={Slide1}
                 alt="slide1"
-                className="h-[450px] object-cover rounded-2xl  w-full"
+                className="h-[300px] object-cover rounded-2xl  w-full"
               />
             </div>
           </CarouselItem>
@@ -76,13 +78,13 @@ export const HomeBannerSwiper = () => {
               <img
                 src={Slide2}
                 alt="slide3"
-                className="h-[450px] object-cover rounded-2xl w-full"
+                className="h-[300px] object-cover rounded-2xl w-full"
               />
             </div>
           </CarouselItem>
         </CarouselContent>
       </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto bottom-4 left-1/2 -translate-x-1/2 z-10 absolute">
+      <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto bottom-4 left-1/2 -translate-x-1/2 z-1 absolute">
         {Array.from({ length: count }).map((_, i) => (
           <span
             key={i}

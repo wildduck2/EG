@@ -5,10 +5,13 @@
 
   body {
     @apply bg-background text-foreground font-medium text-[1rem];
-    font-family: "Poppins", sans-serif;
-    /* font-feature-settings: "rlig" 1, "calt" 1; */
+    /* font-family: "Poppins", sans-serif; */
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
+    direction: rtl;
   }
 }
 
@@ -51,15 +54,28 @@
   /* Scrollbar thumb color on hover */
 }
 
-/* font-feature-settings: */
-/*     "rlig" 1, */
-/*     "calt" 1; */
-/* direction: rtl; */
-
 .customrotate {
   transform: translateY(-3px) rotate(-181deg) rotateX(180deg);
 }
 
 .flex-basis {
   flex-basis: 12.5%;
+}
+
+@layer utilities {
+  .underline__sudo {
+    @apply relative;
+
+    &::after {
+      @apply bg-red-400;
+      content: "";
+      transform: translateX(-50%) skew(-40deg);
+      position: absolute;
+      width: 100%;
+      height: 7px;
+      bottom: 0;
+      left: 48%;
+      z-index: -1;
+    }
+  }
 }

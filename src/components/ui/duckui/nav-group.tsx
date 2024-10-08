@@ -4,6 +4,15 @@ import { cn } from "@/lib/utils";
 import { Button, ButtonProps } from "./button";
 import { Separator } from "./separator";
 import { RootRoute, useLocation, useNavigate } from "@tanstack/react-router";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "./navigation-menu";
+import { hi, NavigationHeaderLooping } from "@/components/layouts";
 
 export function groupArrays<T>(numbers: number[], headers: T[]): T[][] {
   const result: T[][] = [];
@@ -84,13 +93,13 @@ const NavGroup = <T extends boolean>({
   };
 
   return (
-    <div
+    <NavigationMenu
       className={cn("h-full", variants.default, nav.className)}
       {...filteredKeys}
     >
       {grouped.map((keyGroup, idx) => (
         <React.Fragment key={idx}>
-          <ul
+          <NavigationMenuList
             className={cn(
               variants.default,
               "px-2 py-1",
@@ -108,45 +117,55 @@ const NavGroup = <T extends boolean>({
                 ...props
               } = key;
               return (
-                <li key={idx} className="w-full">
-                  <Button
-                    key={idx}
-                    icon={key.icon}
-                    variant={
-                      nav.pathname === key.route
-                        ? activeKeyVariant || "secondary"
-                        : position === "top"
-                          ? navKeysVariant || "ghost"
-                          : navKeysVariant || variant || "ghost"
-                    }
-                    isCollapsed={navIsCollabsed ? navIsCollabsed : false}
-                    onClick={() => {
-                      console.log(key.route);
-                      navigator({ to: key.route });
-                    }}
-                    className={cn(
-                      !navIsCollabsed && "w-full justify-between",
-                      position === "top" && "",
-                      key.className,
-                      navKeysClassName,
-                      activeKeyClassName,
-                    )}
-                    {...props}
-                    {...navKeysProps}
-                    {...activeKeyProps}
-                  >
-                    {children}
-                  </Button>
-                </li>
+                <NavigationMenuItem key={idx} className="w-full">
+                  <NavigationMenuTrigger className="w-fit bg-transparent p-0 [&_svg]:hidden">
+                    <Button
+                      key={idx}
+                      icon={key.icon}
+                      variant={
+                        nav.pathname === key.route
+                          ? activeKeyVariant || "secondary"
+                          : position === "top"
+                            ? navKeysVariant || "ghost"
+                            : navKeysVariant || variant || "ghost"
+                      }
+                      isCollapsed={navIsCollabsed ? navIsCollabsed : false}
+                      onClick={() => {
+                        console.log(key.route);
+                        navigator({ to: key.route });
+                      }}
+                      className={cn(
+                        !navIsCollabsed && "w-full justify-between",
+                        position === "top" && "",
+                        key.className,
+                        navKeysClassName,
+                        activeKeyClassName,
+                      )}
+                      {...props}
+                      {...navKeysProps}
+                      {...activeKeyProps}
+                    >
+                      {children}
+                    </Button>
+                  </NavigationMenuTrigger>
+                  {
+                    // <NavigationMenuContent className="w-[1100px] left-1/2 -translate-x-1/2 p-8 z-[1000]">
+                    //   <NavigationHeaderLooping
+                    //     headerNavigationData={hi}
+                    //     satatus="loading"
+                    //   />
+                    // </NavigationMenuContent>
+                  }
+                </NavigationMenuItem>
               );
             })}
-          </ul>
+          </NavigationMenuList>
           {idx !== grouped.length - 1 && position === "side" && (
             <Separator className="my-1" />
           )}
         </React.Fragment>
       ))}
-    </div>
+    </NavigationMenu>
   );
 };
 

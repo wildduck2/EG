@@ -5,11 +5,87 @@ import { Banner } from "@/components/layouts/Banner";
 import { Footer } from "@/components/layouts/Footer";
 import banner from "../../../assets/Background.png";
 import banner2 from "../../../assets/image-150.png";
-
+import img1 from "../../../assets/fire-extinguisher-colorful-flat-4eeefb.webp";
+import img2 from "../../../assets/422aa1520760c530804a7d6f148871eb.png";
+import img3 from "../../../assets/pngimg.com - air_conditioner_PNG20.png";
+import img4 from "../../../assets/red-black-gear-png-AgjFEw.png";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui";
+import Autoplay from "embla-carousel-autoplay";
+import { HomeSection } from "@/components/layouts/HomeSection";
 export const Home = () => {
   return (
     <div>
       <HomeBannerSwiper />
+
+      <div className="py-12">
+        <div className="px-8 mx-28">
+          <div className="flex justify-start items-center mb-7">
+            <div className="relative z-[2]">
+              <h2
+                className={`font-bold text-[23px] flex justify-center items-center gap-2  underline__sudo`}
+              >
+                الفئات
+              </h2>
+            </div>
+          </div>
+          <Carousel
+            opts={{
+              direction: "rtl",
+              align: "start",
+            }}
+            plugins={[Autoplay({ delay: 2000 })]}
+          >
+            <CarouselContent>
+              {" "}
+              {/* {data?.map((e , i) => ( */}
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="مكافحة الحريق" src={img1} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="التكييف المركزي" src={img2} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="تدفئه وتكييف منزلي" src={img3} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="العدد والمستلزمات" src={img4} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="مكافحة الحريق" src={img1} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="التكييف المركزي" src={img2} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="تدفئه وتكييف منزلي" src={img3} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="العدد والمستلزمات" src={img4} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="التكييف المركزي" src={img2} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="التكييف المركزي" src={img2} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="تدفئه وتكييف منزلي" src={img3} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="العدد والمستلزمات" src={img4} alt="img1" />
+              </CarouselItem>
+              <CarouselItem className="flex-basis transition-all">
+                <HomeSection title="التكييف المركزي" src={img2} alt="img1" />
+              </CarouselItem>
+              {/* ))} */}{" "}
+            </CarouselContent>
+          </Carousel>
+          {/* <MainHead title='استكشف الفئات' button='مشاهدة الكل' /> */}
+          {/* <div className="flex justify-center items-center flex-wrap">
+                     
+                 </div> */}{" "}
+        </div>
+      </div>
       <SpecialOffers />
       <Banner banner={banner} />
       <AirFighting />
@@ -19,10 +95,10 @@ export const Home = () => {
       <AirFighting />
       <Banner banner={banner2} />
       <AirConditioning />
+      <Footer />
     </div>
   );
 };
-/*      <Footer /> */
 
 // <Header<false>
 //     header={{

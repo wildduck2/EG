@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 export const AuthSignin = () => {
   const route = useNavigate();
   return (
-    <div className="h-screen w-1/2 p-12 pr-[8rem] flex relative">
+    <div className="h-screen w-1/2 p-12 flex relative">
       <Link
         to="/auth/signup"
         className={cn(
@@ -33,13 +33,13 @@ export const AuthSignin = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="Email"
+                  placeholder="example@example.com"
                   className="input"
                 />
                 <Input
                   id="password"
                   type="password"
-                  placeholder="Password"
+                  placeholder="••••••••••••"
                   className="input"
                 />
               </div>
