@@ -7,9 +7,9 @@ import {
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 export const Route = createRootRoute({
   //     <ScrollRestoration />
+  // <TanStackRouterDevtools />
   component: () => (
     <React.Fragment>
-      <TanStackRouterDevtools />
       <Outlet />
     </React.Fragment>
   ),

@@ -61,8 +61,8 @@ const SearchInput = React.forwardRef<HTMLButtonElement, SearchInputProps>(
           {searchIcon && <Search className="mr-2 h-4 w-4" />}
           <span className="hidden lg:inline-flex" dir={dir}>
             {dir === "rtl"
-              ? `ابحث ${searchPlaceholder.rtl}...`
-              : `Search ${searchPlaceholder.ltr}...`}
+              ? `${searchPlaceholder.rtl}...`
+              : `${searchPlaceholder.ltr}...`}
           </span>
           <span className="inline-flex lg:hidden" dir={dir}>
             {dir === "rtl" ? "ابحث" : "Search..."}

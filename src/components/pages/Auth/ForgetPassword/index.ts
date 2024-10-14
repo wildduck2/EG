@@ -1,2 +1,2 @@
 export * from "./ForgetPassword";
-export * from "./ForgetPassword.types";
+// export * from "./ForgetPassword.types";

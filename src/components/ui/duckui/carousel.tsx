@@ -6,20 +6,21 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
+import Autoplay from "embla-carousel-autoplay";
 
-type CarouselApi = UseEmblaCarouselType[1];
-type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
-type CarouselOptions = UseCarouselParameters[0];
-type CarouselPlugin = UseCarouselParameters[1];
+export type CarouselApi = UseEmblaCarouselType[1];
+export type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
+export type CarouselOptions = UseCarouselParameters[0];
+export type CarouselPlugin = UseCarouselParameters[1];
 
-type CarouselProps = {
+export type CarouselProps = {
   opts?: CarouselOptions;
   plugins?: CarouselPlugin;
   orientation?: "horizontal" | "vertical";
   setApi?: (api: CarouselApi) => void;
 };
 
-type CarouselContextProps = {
+export type CarouselContextProps = {
   carouselRef: ReturnType<typeof useEmblaCarousel>[0];
   api: ReturnType<typeof useEmblaCarousel>[1];
   scrollPrev: () => void;
@@ -250,11 +251,66 @@ const CarouselNext = React.forwardRef<
 });
 CarouselNext.displayName = "CarouselNext";
 
+export interface CustomCarouselProps extends React.HTMLProps<HTMLDivElement> {}
+
+const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
+  ({ className, children, ...props }, ref) => {
+    const [api, setApi] = React.useState<CarouselApi>();
+    const [current, setCurrent] = React.useState(0);
+    const [count, setCount] = React.useState(0);
+
+    React.useEffect(() => {
+      if (!api) {
+        return;
+      }
+
+      setCount(api.scrollSnapList().length);
+      setCurrent(api.selectedScrollSnap() + 1);
+
+      api.on("select", () => {
+        setCurrent(api.selectedScrollSnap() + 1);
+      });
+    }, [api]);
+
+    return (
+      <div className={cn("relative", className)} ref={ref} {...props}>
+        <Carousel
+          className="overflow-hidden h-full min-h-[100px] my-8"
+          setApi={setApi}
+          opts={{
+            direction: "rtl",
+            loop: true,
+          }}
+          plugins={[
+            Autoplay({
+              delay: 4000,
+            }),
+          ]}
+        >
+          <CarouselContent>{children}</CarouselContent>
+        </Carousel>
+
+        <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto bottom-4 left-1/2 -translate-x-1/2 z-1 absolute">
+          {Array.from({ length: count }).map((_, i) => (
+            <span
+              key={i}
+              className={cn(
+                "w-3 h-3 rounded-full border border-red-400 border-solid inline-flex",
+                current === i + 1 && "bg-red-400",
+              )}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  },
+);
+
 export {
-  type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CustomCarousel,
 };

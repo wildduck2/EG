@@ -1,9 +1,11 @@
+// @ts-nocheck
 import React from "react";
 import Logo from "../../assets/logo-01.png";
 import { Button } from "../ui";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/duckui/card";
 import { BadgeCheck, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "@tanstack/react-router";
 
 interface ProductCardProps {
   data: {
@@ -19,12 +21,17 @@ interface ProductCardProps {
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
-  const { trusted, img, price, title, location, date, offers, alt } =
-    data ?? {};
-  const [loved, setLoved] = React.useState(false);
+  const { price, title, location, date, offers, alt } = data ?? {};
+  const route = useNavigate();
 
   return (
-    <Card className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3">
+    <Card
+      className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer"
+      onClick={() => {
+        route({ to: "/home/categories/$id", params: { id: "1" } });
+        window.scrollTo(0, 0);
+      }}
+    >
       <CardHeader className="p-0 relative h-[250px] overflow-hidden">
         <img
           src={

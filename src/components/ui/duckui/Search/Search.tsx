@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import {
   CommandDialog,
@@ -45,14 +46,14 @@ export const Search = () => {
   const dir = "rtl";
   return (
     <>
-      <div className="[&_button.absolute]:left-12 wrapper">
+      <div className="[&_button.absolute]:left-12 wrapper w-full">
         <SearchInput
           variant="default"
           size="default"
-          className="lg:w-[700px]"
+          className="lg:max-w-[700px] md:w-full !w-full"
           searchPlaceholder={{
             ltr: "Categories, brands or items",
-            rtl: "التصنيفات والماركات",
+            rtl: "بتدور على ايه",
           }}
           searchIcon={true}
           dir="rtl"

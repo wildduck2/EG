@@ -15,6 +15,18 @@
   }
 }
 
+#root {
+  overflow: hidden;
+
+  input {
+    text-align: right;
+  }
+
+  /* input+div { */
+  /*   left: 1rem; */
+  /* } */
+}
+
 @layer utilities {
   .step {
     counter-increment: step;

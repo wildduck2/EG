@@ -1,9 +1,9 @@
-import { Header } from "../layouts/Header"
+import { Header } from "../layouts";
 
 export const Sections = () => {
-    return (
-        <div>
-            <Header />
-        </div>
-    )
-}
+  return (
+    <div>
+      <Header />
+    </div>
+  );
+};

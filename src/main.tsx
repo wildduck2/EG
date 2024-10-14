@@ -11,26 +11,27 @@ import { Provider } from "react-redux";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
+// @ts-expect-error
 const router = createRouter({ routeTree });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
-  interface Register {
-    router: typeof router;
-  }
+    interface Register {
+        router: typeof router;
+    }
 }
 
 // Render the app
 const rootElement = document.getElementById("root")!;
 if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <Provider store={store}>
-        <TooltipProvider>
-          <RouterProvider router={router} />
-        </TooltipProvider>
-      </Provider>
-    </StrictMode>,
-  );
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+        <StrictMode>
+            <Provider store={store}>
+                <TooltipProvider>
+                    <RouterProvider router={router} />
+                </TooltipProvider>
+            </Provider>
+        </StrictMode>,
+    );
 }

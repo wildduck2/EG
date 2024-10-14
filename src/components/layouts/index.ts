@@ -1,3 +1,4 @@
-export * from "./Header";
-export * from "./Home";
-export * from "./Auth";
+export * from "./header";
+export * from "./home";
+export * from "./auth";
+export * from "./footer";

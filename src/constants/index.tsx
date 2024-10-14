@@ -1,7 +1,19 @@
 import { Add, Add2, Add3 } from "@/assets";
 
-export const data = [
+export interface IProduct {
+  id: string;
+  trusted: boolean;
+  img: string;
+  alt: string;
+  price: string;
+  title: string;
+  offers: boolean;
+  location: string;
+  date: string;
+}
+export const data: IProduct[] = [
   {
+    id: "1",
     trusted: true,
     img: Add,
     alt: "",
@@ -12,6 +24,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "2",
     trusted: true,
     img: Add2,
     alt: "",
@@ -22,6 +35,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "3",
     trusted: true,
     img: Add3,
     alt: "",
@@ -32,6 +46,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "4",
     trusted: true,
     img: Add,
     alt: "",
@@ -42,6 +57,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "5",
     trusted: true,
     img: Add2,
     alt: "",
@@ -52,6 +68,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "6",
     trusted: true,
     img: Add3,
     alt: "",
@@ -62,6 +79,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "7",
     trusted: true,
     img: Add,
     alt: "",
@@ -72,6 +90,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "7",
     trusted: true,
     img: Add2,
     alt: "",
@@ -82,6 +101,7 @@ export const data = [
     date: "منذ 1 ايام",
   },
   {
+    id: "7",
     trusted: true,
     img: Add3,
     alt: "",
@@ -92,7 +112,8 @@ export const data = [
     date: "منذ 1 ايام",
   },
 ];
-type IconProps = React.HTMLAttributes<SVGElement>;
+
+export type IconProps = React.HTMLAttributes<SVGElement>;
 export const Icons = {
   logo: (props: IconProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" {...props}>
@@ -247,3 +268,27 @@ export const Icons = {
     </svg>
   ),
 };
+
+export interface headerData {
+  id: number;
+  category: string;
+  name: string;
+}
+
+export const headerData: headerData[] = [
+  {
+    id: 1,
+    category: "special",
+    name: "مميزة",
+  },
+  {
+    id: 2,
+    category: "lowPrice",
+    name: "الاقل سعرا",
+  },
+  {
+    id: 3,
+    category: "highPrice",
+    name: "الاعلى سعرا",
+  },
+];

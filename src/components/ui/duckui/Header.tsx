@@ -1,14 +1,8 @@
 "use client";
-
+// @ts-nocheck
 import React from "react";
 
-import {
-  filteredObject,
-  NavCollabsedType,
-  NavGroup,
-  NavGroupProps,
-  NavType,
-} from "./nav-group";
+import { filteredObject, NavGroup, NavGroupProps, NavType } from "./nav-group";
 import { Separator } from "./separator";
 
 import { cn } from "@/lib/utils";
