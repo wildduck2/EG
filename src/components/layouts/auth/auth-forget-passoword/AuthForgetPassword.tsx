@@ -5,12 +5,27 @@ import {
   Input,
   Label,
   Separator,
+  zodResolver,
 } from "@/components/ui";
+import { PhoneInput } from "@/components/ui/duckui/custom-inputs";
 import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { LucideIcon, Mail, Phone } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
+import {
+  passwordErrorsArray,
+  phoneErrorsArray,
+  phoneSchema,
+} from "../auth-signin";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const formSchema = z.object({
+  phone: phoneSchema,
+});
+
+type FormValues = z.infer<typeof formSchema>;
 
 export const AuthForgetPassword = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -18,6 +33,25 @@ export const AuthForgetPassword = () => {
   const [currentForgetMode, setCurrentForgetMode] = React.useState<
     "email" | "phone"
   >("email");
+
+  const methods = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      phone: "",
+    },
+    shouldUseNativeValidation: false,
+    criteriaMode: "all",
+    mode: "onChange",
+  });
+
+  const { register, formState, watch, handleSubmit } = methods;
+
+  const onSubmit = async (data: FormValues) => {
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+
+    console.log(formState);
+  };
 
   const { t, i18n } = useTranslation();
   const forgetpassword = t("forgetpassword");
@@ -31,6 +65,7 @@ export const AuthForgetPassword = () => {
         >
           {forgetpassword.signin}
         </Link>
+
         <Button
           title={t("languages")}
           variant={"outline"}
@@ -48,18 +83,33 @@ export const AuthForgetPassword = () => {
           </p>
         </div>
 
-        <div className="md:w-[350px]">
+        <div className="w-full">
           <form onSubmit={() => {}}>
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="phone" className="sr-only">
                   {forgetpassword.phonenumber}
                 </Label>
-                <Input
-                  id={"phone"}
-                  type={"tel"}
-                  placeholder="01 xxx-xxx-xxxx"
-                  className="input"
+
+                <PhoneInput
+                  name="phone"
+                  register={register("phone")}
+                  error={{
+                    states: formState.errors.phone?.types,
+                    errors: phoneErrorsArray,
+                    inputError: formState.errors.phone?.message,
+                    type: "slide",
+                  }}
+                  input={{
+                    id: "phone",
+                    placeholder: "01 xxx-xxx-xxxx",
+                    type: "tel",
+                    autoCapitalize: "none",
+                    autoComplete: "tel",
+                    autoCorrect: "off",
+                    required: true,
+                  }}
+                  value={watch("phone")}
                 />
               </div>
               <Button
@@ -70,7 +120,8 @@ export const AuthForgetPassword = () => {
                   className: "w-5 h-5",
                   icon: Phone as LucideIcon,
                 }}
-                loading={isLoading}
+                disabled={!formState.isValid || formState.isSubmitting}
+                loading={formState.isSubmitting}
               >
                 {forgetpassword.forgetpassword}
               </Button>
