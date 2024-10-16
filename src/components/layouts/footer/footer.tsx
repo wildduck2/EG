@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { Mail, PhoneCall } from "lucide-react";
 import { Facebook, Instagram, LinkedIn, logo, Whatsapp } from "@/assets";
+import { useTranslation } from "react-i18next";
 
 export const Footer = () => {
+  const { t } = useTranslation();
+  const footer = t("footer");
   return (
     <footer className="text-white bg-[#262727ed]">
       <div className="pt-12 container">
@@ -10,16 +13,16 @@ export const Footer = () => {
           <div className="flex justify-between flex-col md:flex-row lg:flex-col xl:flex-row gap-4 items-center xl:items-start w-full">
             <div>
               <h3 className="text-xl mg:text-3xl font-bold mb-2">
-                اعثر على صفقات مذهلة لدينا.
+                {footer.title}
               </h3>
               <h3 className="text-lg md:text-3xl font-bold text-red-500">
-                حمل التطبيق الآن!
+                {footer.subtitle}
               </h3>
             </div>
 
             <div>
               <h3 className="text-md font-bold mb-6 whitespace-nowrap">
-                تواصل معنا
+                {footer.numberstitle}
               </h3>
               <ul>
                 <li className="flex justify-start items-center gap-2 text-sm mb-3">
@@ -34,13 +37,13 @@ export const Footer = () => {
               </ul>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row gap-4 w-full">
+          <div className="flex flex-col md:flex-row gap-4 w-full items-center">
             <div>
               <img src={logo} className="w-[200px] h-auto" alt="Logo" />
             </div>
             <div className="flex flex-col gap-4 justify-cneter">
-              <h3 className="text-md font-bold">تابعنا : </h3>
-              <ul className="flex items-center justify-end xl:justify-start gap-3 lg:mb-4">
+              <h3 className="text-md font-bold">{footer.socialtitle}</h3>
+              <ul className="flex items-center xl:justify-start gap-3 lg:mb-4">
                 <li>
                   <Link>
                     <img
@@ -79,7 +82,7 @@ export const Footer = () => {
       <div className="bg-[#262727ed] py-4 border-t border-[#e5e7eb45]">
         <div className="flex justify-center items-center">
           <p className="font-semibold text-[13px] text-center">
-            جميع الحقوق محفوظه لدي البضاعه @ 2024
+            {footer.copyright}
           </p>
         </div>
       </div>

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as HomeHomeImport } from './routes/home/_home'
 import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
@@ -43,6 +44,11 @@ const HomeRoute = HomeImport.update({
 
 const AuthRoute = AuthImport.update({
   path: '/auth',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const TestRoute = TestImport.update({
+  path: '/test',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -119,6 +125,13 @@ const HomeCategoriesCategoriesIdLazyRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
+      parentRoute: typeof rootRoute
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -294,6 +307,7 @@ const HomeRouteChildren: HomeRouteChildren = {
 const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 export interface FileRoutesByFullPath {
+  '/test': typeof TestRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/home': typeof HomeHomeRouteWithChildren
   '/home/categories': typeof HomeCategoriesCategoriesRouteWithChildren
@@ -307,6 +321,7 @@ export interface FileRoutesByFullPath {
 }
 
 export interface FileRoutesByTo {
+  '/test': typeof TestRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/home': typeof HomeHomeIndexRoute
   '/home/categories': typeof HomeCategoriesCategoriesIndexRoute
@@ -319,6 +334,7 @@ export interface FileRoutesByTo {
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/test': typeof TestRoute
   '/auth': typeof AuthRouteWithChildren
   '/auth/_auth': typeof AuthAuthRouteWithChildren
   '/home': typeof HomeRouteWithChildren
@@ -337,6 +353,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/test'
     | '/auth'
     | '/home'
     | '/home/categories'
@@ -349,6 +366,7 @@ export interface FileRouteTypes {
     | '/home/categories/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/test'
     | '/auth'
     | '/home'
     | '/home/categories'
@@ -359,6 +377,7 @@ export interface FileRouteTypes {
     | '/home/categories/$id'
   id:
     | '__root__'
+    | '/test'
     | '/auth'
     | '/auth/_auth'
     | '/home'
@@ -376,12 +395,14 @@ export interface FileRouteTypes {
 }
 
 export interface RootRouteChildren {
+  TestRoute: typeof TestRoute
   AuthRoute: typeof AuthRouteWithChildren
   HomeRoute: typeof HomeRouteWithChildren
   AccountAccountIndexRoute: typeof AccountAccountIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  TestRoute: TestRoute,
   AuthRoute: AuthRouteWithChildren,
   HomeRoute: HomeRouteWithChildren,
   AccountAccountIndexRoute: AccountAccountIndexRoute,
@@ -399,10 +420,14 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
+        "/test",
         "/auth",
         "/home",
         "/account/_account/"
       ]
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/auth": {
       "filePath": "auth",

@@ -25,34 +25,46 @@ import { cn } from "@/lib/utils";
 import React from "react";
 import { z } from "zod";
 import { PasswordInput } from "@/components/ui/duckui/custom-inputs";
+import { useTranslation } from "react-i18next";
 
 export const AuthSignup = () => {
   const route = useNavigate();
+
+  const { t, i18n } = useTranslation();
+  const signup = t("signup");
+
   return (
-    <div className="h-screen w-full lg:w-1/2 p-12 flex relative">
-      <Link
-        to="/auth/signin"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute top-8 right-8 text-md",
-        )}
-      >
-        تسجيل الدخول
-      </Link>
+    <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">
+      <div className="absolute top-8 right-8 flex gap-2 items-center">
+        <Link
+          to="/auth/signin"
+          className={cn(buttonVariants({ variant: "ghost" }), "text-md")}
+        >
+          {signup.signin}
+        </Link>
+        <Button
+          title={t("languages")}
+          variant={"outline"}
+          className="w-full md:w-[100px] "
+          onClick={() =>
+            i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+          }
+        />
+      </div>
       <div className="flex flex-col items-center gap-3 justify-center mx-auto">
         <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-3xl font-semibold">إنشاء حساب</h1>
+          <h1 className="text-3xl font-semibold">{signup.createaccount}</h1>
           <p className="text-[.9rem] text-accent-foreground">
-            أدخل بياناتك أدناه لتسجيل حسابك
+            {signup.subtitle}
           </p>
         </div>
         <Tabs
           defaultValue="customer"
-          className="w-[350px] flex flex-col place-content-center"
+          className="md:w-[350px] w-[90%] flex flex-col place-content-center"
         >
           <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="customer">عميل</TabsTrigger>
-            <TabsTrigger value="trader">تاجر</TabsTrigger>
+            <TabsTrigger value="customer">{signup.customer}</TabsTrigger>
+            <TabsTrigger value="trader">{signup.trader}</TabsTrigger>
           </TabsList>
           <TabsContent value="customer">
             <AuthSignupForm type="customer" />
@@ -61,12 +73,13 @@ export const AuthSignup = () => {
             <AuthSignupForm type="trader" />
           </TabsContent>
         </Tabs>
-        <div className="flex gap-2 items-center mr-6">
+
+        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
           <Checkbox />
           <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
-            بالنقر على متابعة، فإنك توافق على
+            {signup.agree}
             <Link className="underline underline-offset-2 px-1 text-red-600">
-              الشروط والاحكام
+              {signup.link}
             </Link>
             .
           </p>
@@ -81,15 +94,20 @@ export interface AuthSignupProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
   ({ type }, ref) => {
+    const { t } = useTranslation();
+
+    const route = useNavigate();
+    const signup = t("signup");
+
     return (
-      <div className="w-[350px]">
+      <div className="md:w-[350px]">
         <form onSubmit={() => {}}>
           <div>
             <div className="flex flex-col">
               <Input
                 id="username"
                 type="text"
-                placeholder="اسم المستخدم"
+                placeholder={signup.username}
                 className="mb-2"
               />
 
@@ -97,14 +115,14 @@ export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
                 <Input
                   id="companyname"
                   type="text"
-                  placeholder="اسم الشركة"
+                  placeholder={signup.companyname}
                   className="mb-2"
                 />
               )}
               <Input
                 id="email"
                 type="email"
-                placeholder="example@example.com (اختياري)"
+                placeholder={"example@example.com" + signup.opt}
                 className="mb-2"
               />
               <Input
@@ -125,11 +143,11 @@ export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
               }}
               loading={false}
             >
-              انشاء حساب
+              {signup.createaccount}
             </Button>
             <Button
               variant="outline"
-              type="submit"
+              type="button"
               className="w-full"
               onClick={() => route({ to: "/auth/signin" })}
               icon={{
@@ -138,7 +156,7 @@ export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
               }}
               loading={false}
             >
-              تسجيل الدخول
+              {signup.signin}
             </Button>
           </div>
         </form>

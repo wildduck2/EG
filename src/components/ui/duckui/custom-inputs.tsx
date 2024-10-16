@@ -70,7 +70,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = () => {
             ref={passwordRef}
             onFocus={() => setPasswordShowMenu(true)}
           />
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
+          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-2">
             {passwordErrors.length > 0 && (
               <CircleAlert className="text-red-600 size-4" />
             )}

@@ -1,6 +1,7 @@
 import {
   Button,
   buttonVariants,
+  Checkbox,
   Input,
   Label,
   Separator,
@@ -9,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Link } from "@tanstack/react-router";
 import { LucideIcon, Mail, Phone } from "lucide-react";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 export const AuthForgetPassword = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -17,31 +19,41 @@ export const AuthForgetPassword = () => {
     "email" | "phone"
   >("email");
 
+  const { t, i18n } = useTranslation();
+  const forgetpassword = t("forgetpassword");
+
   return (
-    <div className="h-screen w-full lg:w-1/2 p-12 flex relative">
-      <Link
-        to="/auth/signup"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute top-8 right-8 text-md",
-        )}
-      >
-        سجل
-      </Link>
+    <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">
+      <div className="absolute top-8 right-8 flex gap-2 items-center">
+        <Link
+          to="/auth/signin"
+          className={cn(buttonVariants({ variant: "ghost" }), "text-md")}
+        >
+          {forgetpassword.signin}
+        </Link>
+        <Button
+          title={t("languages")}
+          variant={"outline"}
+          className="w-full md:w-[100px] "
+          onClick={() =>
+            i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+          }
+        />
+      </div>
       <div className="flex flex-col items-center gap-3 justify-center mx-auto">
         <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-3xl font-semibold">نسيت كلمة المرور</h1>
-          <p className="text-[.9rem] text-accent-foreground">
-            أدخل بياناتك أدناه لإعادة تعيين حسابك
+          <h1 className="text-3xl font-semibold">{forgetpassword.title}</h1>
+          <p className="text-[.9rem] text-accent-foreground max-w-[350px] text-center">
+            {forgetpassword.subtitle}
           </p>
         </div>
 
-        <div className="w-[350px]">
+        <div className="md:w-[350px]">
           <form onSubmit={() => {}}>
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-2">
-                <Label htmlFor="email" className="sr-only">
-                  رقم الهاتف
+                <Label htmlFor="phone" className="sr-only">
+                  {forgetpassword.phonenumber}
                 </Label>
                 <Input
                   id={"phone"}
@@ -60,23 +72,22 @@ export const AuthForgetPassword = () => {
                 }}
                 loading={isLoading}
               >
-                نسيت كلمة المرور
+                {forgetpassword.forgetpassword}
               </Button>
             </div>
           </form>
         </div>
 
-        <p className="text-[.9rem] text-accent-foreground w-[350px] text-center">
-          من خلال النقر على متابعة، فإنك توافق على
-          <Link className="underline underline-offset-2 px-1 text-red-600">
-            شروط الخدمة
-          </Link>
-          و
-          <Link className="underline underline-offset-2 px-1 text-red-600">
-            سياسة الخصوصية
-          </Link>
-          .
-        </p>
+        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
+          <Checkbox />
+          <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
+            {forgetpassword.agree}
+            <Link className="underline underline-offset-2 px-1 text-red-600">
+              {forgetpassword.link}
+            </Link>
+            .
+          </p>
+        </div>
       </div>
     </div>
   );

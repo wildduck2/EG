@@ -32,7 +32,7 @@ export interface SearchInputProps
     VariantProps<typeof SearchInputVariants> {
   searchIcon?: boolean;
   showKbd?: boolean;
-  searchPlaceholder?: { ltr: string; rtl: string };
+  searchPlaceholder?: string;
 }
 
 const SearchInput = React.forwardRef<HTMLButtonElement, SearchInputProps>(
@@ -60,9 +60,7 @@ const SearchInput = React.forwardRef<HTMLButtonElement, SearchInputProps>(
         >
           {searchIcon && <Search className="mr-2 h-4 w-4" />}
           <span className="hidden lg:inline-flex" dir={dir}>
-            {dir === "rtl"
-              ? `${searchPlaceholder.rtl}...`
-              : `${searchPlaceholder.ltr}...`}
+            {searchPlaceholder}...
           </span>
           <span className="inline-flex lg:hidden" dir={dir}>
             {dir === "rtl" ? "ابحث" : "Search..."}

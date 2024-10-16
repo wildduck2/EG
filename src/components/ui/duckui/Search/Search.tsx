@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import {
   CommandDialog,
@@ -12,10 +11,12 @@ import { FileIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { SearchInput } from "./SearchInput";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const Search = () => {
   const router = useNavigate();
   const [open, setOpen] = React.useState(false);
+  const { t, i18n } = useTranslation();
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -43,7 +44,7 @@ export const Search = () => {
     command();
   }, []);
 
-  const dir = "rtl";
+  let dir: string = "ltr";
   return (
     <>
       <div className="[&_button.absolute]:left-12 wrapper w-full">
@@ -51,15 +52,17 @@ export const Search = () => {
           variant="default"
           size="default"
           className="lg:max-w-[700px] md:w-full !w-full"
-          searchPlaceholder={{
-            ltr: "Categories, brands or items",
-            rtl: "بتدور على ايه",
-          }}
+          searchPlaceholder={t("search")}
           searchIcon={true}
-          dir="rtl"
+          dir="ltr"
           onClick={() => setOpen(true)}
         />
-        <CommandDialog open={open} onOpenChange={setOpen} dir={dir}>
+        <CommandDialog
+          open={open}
+          onOpenChange={setOpen}
+          // @ts-ignore
+          dir={dir}
+        >
           <CommandInput
             placeholder={dir === "ltr" ? "Type a command or search..." : "ابحث"}
           />

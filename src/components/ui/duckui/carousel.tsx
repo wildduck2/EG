@@ -278,7 +278,7 @@ const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
           className="overflow-hidden h-full min-h-[100px] my-8"
           setApi={setApi}
           opts={{
-            direction: "rtl",
+            direction: "ltr",
             loop: true,
           }}
           plugins={[

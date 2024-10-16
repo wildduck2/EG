@@ -14,17 +14,17 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   return (
     <TabsList
       className={cn(
-        "flex flex-col items-start h-full w-full md:w-[200px] !bg-transparent justify-start ml-4",
+        "grid grid-cols-2 items-start h-full w-full md:w-[200px] !bg-transparent justify-start mr-4 ikl-4 gap-4 md:grid-cols-1 lg:flex lg:flex-col mb-4",
         className,
       )}
       {...props}
     >
       {items.map((item) => (
         <TabsTrigger
-          className="w-full text-start justify-start"
+          className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
           value={item.title}
         >
-          {item.title}
+          {item.children}
         </TabsTrigger>
       ))}
     </TabsList>

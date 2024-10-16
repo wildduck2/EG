@@ -8,8 +8,11 @@ import banner from "../../../assets/Background.png";
 import banner2 from "../../../assets/image-150.png";
 import { ProductsPreview } from "@/components/layouts/product-preview";
 import { data } from "@/constants";
+import { useTranslation } from "react-i18next";
 
 export const Home = () => {
+  const { t, i18n } = useTranslation();
+
   return (
     <main className="flex flex-col [&>div]:pt-12 [&>div]:pb-12 container min-h-screen lg:mt-[17rem]">
       <HomeBannerSwiper />
@@ -23,8 +26,8 @@ export const Home = () => {
         />
       </Banner>
       <ProductsPreview
-        title="المنتجات المميزة"
-        data={data}
+        title={t("specialOffers")}
+        data={t("products")}
         buttonContent="اعرض المزيد"
       />
       <Banner>
@@ -35,8 +38,8 @@ export const Home = () => {
         />
       </Banner>
       <ProductsPreview
-        title="المنتجات المميزة"
-        data={data}
+        title={t("specialOffers")}
+        data={t("products")}
         buttonContent="اعرض المزيد"
       />
       <Banner>
@@ -47,8 +50,8 @@ export const Home = () => {
         />
       </Banner>
       <ProductsPreview
-        title="المنتجات المميزة"
-        data={data}
+        title={t("specialOffers")}
+        data={t("products")}
         buttonContent="اعرض المزيد"
       />
     </main>

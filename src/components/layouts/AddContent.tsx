@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import Logo from "../../assets/logo-01.png";
 import { Button } from "../ui";
@@ -6,6 +5,7 @@ import { Card, CardContent, CardFooter, CardHeader } from "../ui/duckui/card";
 import { BadgeCheck, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
+import i18next from "i18next";
 
 interface ProductCardProps {
   data: {
@@ -28,6 +28,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     <Card
       className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer"
       onClick={() => {
+        // @ts-ignore
         route({ to: "/home/categories/$id", params: { id: "1" } });
         window.scrollTo(0, 0);
       }}
@@ -46,7 +47,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
         <div className="absolute top-4 left-4"></div>
       </CardHeader>
       <CardContent className="p-2 flex items-start justify-between px-0">
-        <div className="flex justify-between items-center mb-2 flex-col">
+        <div className="flex justify-between items-start mb-2 flex-col">
           <h4 className="text-[14px] font-medium m-0 truncate">{title}</h4>
           <div className="flex justify-start items-center gap-1 mt-1 text-gray-500">
             <MapPin className="w-[15px]" />
@@ -81,8 +82,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
       <CardFooter className="flex justify-between items-end p-0 gap-4">
         <div className="flex flex-col">
           <div className="flex justify-start items-center gap-2">
-            <span className="whitespace-nowrap min-w-[6rem] text-center mb-2 text-lg">
-              {price} ج.م
+            <span className="whitespace-nowrap min-w-[6rem] text-lg">
+              {price} {i18next.language === "ar" ? "ج.م" : "EGP"}
             </span>
             <p className="text-gray-500 text-[12px]">{date}</p>
           </div>

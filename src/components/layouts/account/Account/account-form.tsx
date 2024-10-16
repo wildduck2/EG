@@ -29,6 +29,7 @@ import {
 import { Input } from "@/components/ui";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 const languages = [
   { label: "الإنجليزية", value: "en" },
@@ -68,6 +69,9 @@ const defaultValues: Partial<AccountFormValues> = {
 };
 
 export function AccountForm() {
+  const { t, i18n } = useTranslation();
+  const account = t("account");
+
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
@@ -78,18 +82,25 @@ export function AccountForm() {
   }
 
   return (
-    <div className="flex items-start gap-32 flex-col lg:flex-row">
+    <div className="flex items-start 2xl:gap-32 gap-8 flex-col xl:flex-row">
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <div className="flex items-start gap-12">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 p-4 border-border border border-solid rounded-md w-full"
+        >
+          <div className="flex items- gap-12">
             <FormField
               control={form.control}
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>الاسم</FormLabel>
+                  <FormLabel>{account.name}</FormLabel>
                   <FormControl>
-                    <Input placeholder="اسمك" value={field.value} {...field} />
+                    <Input
+                      placeholder={account.name}
+                      value={field.value}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -100,57 +111,60 @@ export function AccountForm() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>اسم الشركه</FormLabel>
+                  <FormLabel>{account.company}</FormLabel>
                   <FormControl>
-                    <Input placeholder="اسم شركتك" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div className="flex items-start gap-12">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>الايميل</FormLabel>
-                  <FormControl>
-                    <Input placeholder="ايميلك" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>رقم الجوال</FormLabel>
-                  <FormControl>
-                    <Input placeholder="رقم جوالك" {...field} />
+                    <Input placeholder={account.company} {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
-          <Button type="submit">تحديث الحساب</Button>
+          <div className="flex items-start gap-12">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{account.email}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={account.email} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{account.phone}</FormLabel>
+                  <FormControl>
+                    <Input placeholder={account.phone} {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button type="submit">{account.save}</Button>
         </form>
       </Form>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 p-4 border-border border border-solid w-full rounded-md"
+        >
           <FormField
             control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>كلمه المرور القديمه</FormLabel>
+                <FormLabel>{account.oldpassword}</FormLabel>
                 <FormControl>
-                  <Input placeholder="كلمه المرور القديمه" {...field} />
+                  <Input placeholder={account.oldpassword} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,9 +175,9 @@ export function AccountForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>كلمه المرور الجديده</FormLabel>
+                <FormLabel>{account.newpassword}</FormLabel>
                 <FormControl>
-                  <Input placeholder="كلمه المرور الجديده" {...field} />
+                  <Input placeholder={account.newpassword} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -174,15 +188,15 @@ export function AccountForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>تاكيد كلمه المرور الجديده</FormLabel>
+                <FormLabel>{account.confirmnewpassword}</FormLabel>
                 <FormControl>
-                  <Input placeholder="تاكيد كلمه المرور الجديده" {...field} />
+                  <Input placeholder={account.confirmnewpassword} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">تحديث الحساب</Button>
+          <Button type="submit">{account.save}</Button>
         </form>
       </Form>
     </div>

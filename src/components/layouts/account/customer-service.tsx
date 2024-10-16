@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui";
-import { MessageSquare, Phone, Share } from "lucide-react";
+import { LucideIcon, MessageSquare, Phone } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 
 export const CustomerServiceForm = () => {
@@ -19,7 +19,7 @@ export const CustomerServiceForm = () => {
           variant={"default"}
           className="h-[50px] [&_svg]:w-5 [&_svg]:h-5 bg-green-400 hover:bg-green-500"
           icon={{
-            icon: FaWhatsapp,
+            icon: FaWhatsapp as LucideIcon,
           }}
         >
           تواصل عبر الواتساب

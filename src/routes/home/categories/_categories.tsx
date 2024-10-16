@@ -1,4 +1,4 @@
-import { Header } from "@/components/layouts";
+import { Footer, Header } from "@/components/layouts";
 import { createFileRoute, Outlet } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/home/categories/_categories")({
@@ -6,6 +6,7 @@ export const Route = createFileRoute("/home/categories/_categories")({
     <div>
       <Header />
       <Outlet />
+      <Footer />
     </div>
   ),
 });

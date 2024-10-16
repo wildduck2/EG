@@ -15,6 +15,7 @@ import {
   PasswordInput,
   PhoneInput,
 } from "@/components/ui/duckui/custom-inputs";
+import { useTranslation } from "react-i18next";
 
 type Inputs = {
   phone: string;
@@ -32,27 +33,36 @@ export const AuthSignin = () => {
     formState: { errors },
   } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const { t, i18n } = useTranslation();
+  const signin = t("signin");
 
   return (
-    <div className="h-screen w-full lg:w-1/2 p-12 flex relative">
-      <Link
-        to="/auth/signup"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute top-8 right-8 text-md",
-        )}
-      >
-        التسجيل
-      </Link>
+    <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">
+      <div className="absolute top-8 right-8 flex gap-2 items-center">
+        <Link
+          to="/auth/signup"
+          className={cn(buttonVariants({ variant: "ghost" }), "text-md")}
+        >
+          {signin.signin}
+        </Link>
+        <Button
+          title={t("languages")}
+          variant={"outline"}
+          className="w-full md:w-[100px] "
+          onClick={() =>
+            i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
+          }
+        />
+      </div>
       <div className="flex flex-col items-center gap-3 justify-center mx-auto">
         <div className="flex flex-col gap-2 items-center">
-          <h1 className="text-3xl font-semibold">مرحبًا بعودتك</h1>
+          <h1 className="text-3xl font-semibold">{signin.title}</h1>
           <p className="text-[.9rem] text-accent-foreground">
-            أدخل بياناتك أدناه لتسجيل الدخول إلى حسابك
+            {signin.subtitle}
           </p>
         </div>
 
-        <div className="w-[350px]">
+        <div className="sm:w-[350px] w-[90%]">
           <form onSubmit={() => {}}>
             <div>
               <div className="flex flex-col">
@@ -66,7 +76,7 @@ export const AuthSignin = () => {
                 type="button"
                 onClick={() => route({ to: "/auth/forget-password" })}
               >
-                نسيت كلمة المرور
+                {signin.forgotpassword}
               </Button>
               <Button
                 variant="default"
@@ -78,7 +88,7 @@ export const AuthSignin = () => {
                 }}
                 loading={false}
               >
-                تسجيل الدخول
+                {signin.signin}
               </Button>
 
               <Button
@@ -92,18 +102,18 @@ export const AuthSignin = () => {
                 }}
                 loading={false}
               >
-                انشاء حساب
+                {signin.createaccount}
               </Button>
             </div>
           </form>
         </div>
 
-        <div className="flex gap-2 items-center mr-6">
+        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
           <Checkbox />
           <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
-            بالنقر على متابعة، فإنك توافق على
+            {signin.agree}
             <Link className="underline underline-offset-2 px-1 text-red-600">
-              الشروط والاحكام
+              {signin.link}
             </Link>
             .
           </p>

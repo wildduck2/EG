@@ -5,8 +5,8 @@ import {
   CardPreviewTitle,
 } from "@/components/ui";
 import { Button } from "../ui";
-import { IProduct } from "../pages";
 import { ProductCard } from "./AddContent";
+import { IProduct } from "@/constants";
 
 export interface ProductsPreviewProps {
   title?: string;

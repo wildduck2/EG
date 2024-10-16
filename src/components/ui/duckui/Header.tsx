@@ -1,5 +1,4 @@
 "use client";
-// @ts-nocheck
 import React from "react";
 
 import { filteredObject, NavGroup, NavGroupProps, NavType } from "./nav-group";

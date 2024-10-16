@@ -4,15 +4,19 @@ import { ProductCard } from "../../AddContent";
 import { specialoffersProps } from "./special-offers.types";
 import { data, headerData } from "@/constants";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 export const SpecialOffers = () => {
-  const [dataFiltered, setDataFiltered] = React.useState<typeof data>(data);
+  const { t, i18n } = useTranslation();
+  const products = t("products") as unknown as typeof data;
+
+  const [dataFiltered, setDataFiltered] = React.useState<typeof data>(products);
 
   return (
     <div>
-      <SpecialOffersHead data={headerData} />
+      <SpecialOffersHead data={t("filters")} />
       <CustomCarousel className="min-h-[447px]">
-        {dataFiltered.map((item, idx) => (
+        {products.map((item, idx) => (
           <CarouselItem
             key={idx}
             className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"

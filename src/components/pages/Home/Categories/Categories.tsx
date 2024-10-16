@@ -5,19 +5,13 @@ import {
   AccordionItem,
   AccordionTrigger,
   Breadcrumb,
-  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
   Button,
-  ButtonProps,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Header,
+  ScrollArea,
   Select,
   SelectContent,
   SelectGroup,
@@ -28,19 +22,16 @@ import {
   Separator,
   Toggle,
 } from "@/components/ui";
-import { cn } from "@/lib/utils";
-import {
-  AlignCenter,
-  ArrowLeftToLine,
-  ArrowRightFromLine,
-  Calendar,
-  Home,
-} from "lucide-react";
-import React from "react";
+import { AlertDialogCustom } from "@/components/ui/duckui/alert";
+import { ArrowDown01, Home } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 export const Categories = () => {
+  const { t, i18n } = useTranslation();
+  const products = t("products");
+
   return (
-    <main className="mx-28 px-8 flex flex-col py-4">
+    <main className="flex flex-col py-8 container min-h-screen lg:mt-[17rem]">
       <Breadcrumb className="mx-auto">
         <BreadcrumbList>
           <BreadcrumbItem>
@@ -60,23 +51,89 @@ export const Categories = () => {
       </Breadcrumb>
 
       <section className="flex gap-8 items-start my-8 min-h-[63vh]">
-        <div className="flex flex-col gap-4 h-full"></div>
         <div className="flex flex-col gap-4 w-full">
-          <h2 className="text-3xl font-semibold">تكنولوجيا المعلومات</h2>
+          <h2 className="text-3xl font-semibold">{t("categoriesname")}</h2>
           <Separator className="px-2" />
           <div className="flex items-center justify-between">
-            <div className="flex  gap-2 px-2">
-              {categoryData.slice(0, 6).map((item, idx) => (
-                <Toggle
-                  className="border border-border border-solid h-fit px-4 py-2 rounded-lg"
-                  key={item.id}
-                >
-                  {item.name}
-                </Toggle>
-              ))}
-            </div>
+            <AlertDialogCustom<boolean>
+              type="sheet"
+              drawerData={products.length > 0}
+              header={{
+                head: "فلتر",
+                description: "تحديد الفئات التي تريد مشاهدتها",
+              }}
+              footer={{
+                className:
+                  "flex w-full place-content-start justify-end items-end gap-2 [&__button]:w-32",
+                submit: <Button variant="default">تأكيد</Button>,
+                cancel: <Button variant="outline">الغاء</Button>,
+              }}
+              state={true}
+              trigger={{
+                children: (
+                  <Button variant="ghost" size="default" className="">
+                    <ArrowDown01 className="size-5 rotate-180" />
+                    {t("filter")}
+                  </Button>
+                ),
+              }}
+              content={{
+                dir: "rtl",
+                className:
+                  "flex flex-col gap-4 sm:max-w-[450px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full",
+                children: (
+                  <ScrollArea className="flex flex-col items-start p-2 w-full h-full">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Accordion
+                        type="multiple"
+                        className="w-full"
+                        defaultValue={["item-1", "item-2", "item-3"]}
+                      >
+                        <AccordionItem
+                          value={`item-${i + 1}`}
+                          className="border-b-2 border-border border-dashed"
+                        >
+                          <AccordionTrigger className="hover:no-underline px-2">
+                            اقسام
+                          </AccordionTrigger>
+                          <AccordionContent className="flex flex-wrap gap-2 px-2">
+                            {categoryData.slice(0, 6).map((item, idx) => (
+                              <Toggle
+                                className="border border-border border-solid h-fit px-4 py-2 rounded-lg"
+                                key={item.id}
+                              >
+                                {item.name}
+                              </Toggle>
+                            ))}
+                            <Toggle
+                              className="border border-red-400 border-dashed h-fit px-4 py-2 rounded-lg bg-red-100/70 text-red-500"
+                              key={0}
+                            >
+                              Show All
+                            </Toggle>
+                          </AccordionContent>
+                        </AccordionItem>
+                      </Accordion>
+                    ))}
+                  </ScrollArea>
+                ),
+              }}
+            />
+            {
+              // <div className="flex  gap-2 px-2">
+              //   {categoryData.slice(0, 6).map((item, idx) => (
+              //     <Toggle
+              //       className="border border-border border-solid h-fit px-4 py-2 rounded-lg"
+              //       key={item.id}
+              //     >
+              //       {item.name}
+              //     </Toggle>
+              //   ))}
+              // </div>
+            }
+
             <div className="flex items-center gap-2">
-              <span>صنف المنتج :</span>
+              <span>{t("sortby")}</span>
               <Select defaultValue={"None"}>
                 <SelectTrigger className="w-[80px]">
                   <SelectValue placeholder="" />
@@ -97,57 +154,7 @@ export const Categories = () => {
           <Separator className="px-2" />
 
           <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
-            <aside className="flex flex-col w-[300px] m-4 mt-12 border border-y-0 border-border border-solid h-full">
-              <div className="flex justify-between items-center p-2 w-full gap-4">
-                <Button
-                  variant="ghost"
-                  className="justify-between text-lg w-full [&_span]:ml-0"
-                  icon={{ icon: AlignCenter, className: "!size-5" }}
-                >
-                  فلتر
-                </Button>
-
-                <Button variant="ghost" size="icon" className="w-12">
-                  <ArrowLeftToLine className="size-5 rotate-180" />
-                </Button>
-              </div>
-              <Separator className="px-2" />
-              <div className="flex flex-col items-start p-2 w-full">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Accordion
-                    type="multiple"
-                    className="w-full"
-                    defaultValue={["item-1", "item-2", "item-3"]}
-                  >
-                    <AccordionItem
-                      value={`item-${i + 1}`}
-                      className="border-b-2 border-border border-dashed"
-                    >
-                      <AccordionTrigger className="hover:no-underline px-2">
-                        اقسام
-                      </AccordionTrigger>
-                      <AccordionContent className="flex flex-wrap gap-2 px-2">
-                        {categoryData.slice(0, 6).map((item, idx) => (
-                          <Toggle
-                            className="border border-border border-solid h-fit px-4 py-2 rounded-lg"
-                            key={item.id}
-                          >
-                            {item.name}
-                          </Toggle>
-                        ))}
-                        <Toggle
-                          className="border border-red-400 border-dashed h-fit px-4 py-2 rounded-lg bg-red-100/70 text-red-500"
-                          key={0}
-                        >
-                          Show All
-                        </Toggle>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                ))}
-              </div>
-            </aside>
-            {data?.map((item, idx) => (
+            {products?.map((item, idx) => (
               <div className="" key={idx}>
                 <ProductCard data={item} />
               </div>
@@ -194,48 +201,5 @@ const categoryData = [
     id: 7,
     name: "الأجهزة المنزلية",
     icon: { icon: Home, className: "!size-5" },
-  },
-];
-
-const data = [
-  {
-    trusted: false,
-    img: "",
-    alt: "",
-    price: "330.00",
-    title: "مواسير سملس جدول 40",
-    offers: false,
-    location: "القاهره / شارع الجمهورية",
-    date: "منذ 1 ايام",
-  },
-  {
-    trusted: true,
-    img: "",
-    alt: "",
-    price: "330.00",
-    title: "مواسير سملس جدول 40",
-    offers: false,
-    location: "القاهره / شارع الجمهورية",
-    date: "منذ 1 ايام",
-  },
-  {
-    trusted: true,
-    img: "",
-    alt: "",
-    price: "330.00",
-    title: "مواسير سملس جدول 40",
-    offers: true,
-    location: "القاهره / شارع الجمهورية",
-    date: "منذ 1 ايام",
-  },
-  {
-    trusted: true,
-    img: "",
-    alt: "",
-    price: "330.00",
-    title: "مواسير سملس جدول 40",
-    offers: true,
-    location: "القاهره / شارع الجمهورية",
-    date: "منذ 1 ايام",
   },
 ];
