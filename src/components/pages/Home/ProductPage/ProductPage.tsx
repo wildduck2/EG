@@ -1,6 +1,5 @@
 import { map } from "@/assets";
 import { Footer } from "@/components/layouts";
-import { ProductCard } from "@/components/layouts/AddContent";
 import { data as Data } from "@/constants";
 import {
   Accordion,
@@ -44,6 +43,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useTranslation } from "react-i18next";
+import { AdItemCard } from "@/components/layouts/home/ad-item-card";
 gsap.registerPlugin(ScrollTrigger);
 
 export const ProductPage = () => {
@@ -197,7 +197,7 @@ export const ProductPage = () => {
                       className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3"
                       key={idx}
                     >
-                      <ProductCard data={item} />
+                      <AdItemCard {...item} />
                     </CarouselItem>
                   ))}
                 </CustomCarousel>

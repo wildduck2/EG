@@ -1,4 +1,4 @@
-import { ProductCard } from "@/components/layouts/AddContent";
+import { AdItemCard } from "@/components/layouts/home/ad-item-card";
 import {
   Accordion,
   AccordionContent,
@@ -156,7 +156,7 @@ export const Categories = () => {
           <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
             {products?.map((item, idx) => (
               <div className="" key={idx}>
-                <ProductCard data={item} />
+                <AdItemCard {...item} />
               </div>
             ))}
           </div>

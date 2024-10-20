@@ -143,32 +143,25 @@ interface PhoneInputProps {
     type?: "slide" | "raw";
   };
   input: React.ComponentPropsWithoutRef<typeof Input>;
-  value?: string;
 }
 
-export function PhoneInput({
-  name,
-  register,
-  error,
-  value,
-  input,
-}: PhoneInputProps) {
+export function PhoneInput({ name, register, error, input }: PhoneInputProps) {
   const { states, errors, inputError, type = "raw" } = error;
   const { className, ...inputProps } = input;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2 w-full">
       <div className="relative">
         <Input
           className={cn(
-            states && "border-red-400 bg-red-100 w-full ring-red-400",
+            states && "border-red-400 bg-red-100 ring-red-400",
             className,
           )}
           {...inputProps}
           {...register}
         />
 
-        {states && type === "raw" && (
+        {states && (
           <Badge
             variant="ghost"
             size="icon"
@@ -185,7 +178,7 @@ export function PhoneInput({
         )}
       </div>
 
-      {inputError && (
+      {inputError && type === "raw" && (
         <p
           className={cn(
             "text-red-600 text-sm",
@@ -202,7 +195,9 @@ export function PhoneInput({
         <div
           className={cn(
             "transition-all duration-300 ease-in-out overflow-hidden",
-            states ? "max-h-[160px] opacity-100" : "max-h-0 opacity-0",
+            states || inputError
+              ? "max-h-[960px] opacity-100"
+              : "max-h-0 opacity-0",
           )}
         >
           <ul className="flex flex-col items-start gap-1">

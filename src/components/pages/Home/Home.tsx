@@ -1,17 +1,16 @@
+import { useTranslation } from "react-i18next";
 import {
   CategorySwiper,
   HomeBannerSwiper,
   SpecialOffers,
+  AdGridSection,
+  Banner,
 } from "@/components/layouts";
-import { Banner } from "@/components/ui";
 import banner from "../../../assets/Background.png";
 import banner2 from "../../../assets/image-150.png";
-import { ProductsPreview } from "@/components/layouts/product-preview";
-import { data } from "@/constants";
-import { useTranslation } from "react-i18next";
 
 export const Home = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   return (
     <main className="flex flex-col [&>div]:pt-12 [&>div]:pb-12 container min-h-screen lg:mt-[17rem]">
@@ -25,9 +24,9 @@ export const Home = () => {
           className="w-full h-full object-cover rounded-xl"
         />
       </Banner>
-      <ProductsPreview
+      <AdGridSection
         title={t("specialOffers")}
-        data={t("products")}
+        url="/home"
         buttonContent="اعرض المزيد"
       />
       <Banner>
@@ -37,9 +36,9 @@ export const Home = () => {
           className="w-full h-full object-cover rounded-xl"
         />
       </Banner>
-      <ProductsPreview
+      <AdGridSection
         title={t("specialOffers")}
-        data={t("products")}
+        url="/home"
         buttonContent="اعرض المزيد"
       />
       <Banner>
@@ -49,9 +48,9 @@ export const Home = () => {
           className="w-full h-full object-cover rounded-xl"
         />
       </Banner>
-      <ProductsPreview
+      <AdGridSection
         title={t("specialOffers")}
-        data={t("products")}
+        url="/home"
         buttonContent="اعرض المزيد"
       />
     </main>

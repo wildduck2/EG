@@ -21,7 +21,6 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-  Textarea,
 } from "@/components/ui";
 import { Link } from "@tanstack/react-router";
 

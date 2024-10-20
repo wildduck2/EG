@@ -1,10 +1,16 @@
 import React from "react";
 import { Button, CarouselItem, CustomCarousel } from "@/components/ui";
-import { ProductCard } from "../../AddContent";
 import { specialoffersProps } from "./special-offers.types";
 import { data, headerData } from "@/constants";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { AdItemCard } from "../ad-item-card";
+import { useQuery } from "@tanstack/react-query";
+import { get_special_offers } from "./special-offers.lib";
+import {
+  ButtonListSkeleton,
+  SpecialOffersSkeleton,
+} from "./special-offers.skeleton";
 
 export const SpecialOffers = () => {
   const { t, i18n } = useTranslation();
@@ -12,21 +18,38 @@ export const SpecialOffers = () => {
 
   const [dataFiltered, setDataFiltered] = React.useState<typeof data>(products);
 
+  // Query Special Offers
+  const { data, status } = useQuery({
+    queryKey: ["specialOffers"],
+    queryFn: get_special_offers,
+  });
+
+  // if (status === "pending") {
   return (
     <div>
-      <SpecialOffersHead data={t("filters")} />
-      <CustomCarousel className="min-h-[447px]">
-        {products.map((item, idx) => (
-          <CarouselItem
-            key={idx}
-            className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-          >
-            <ProductCard data={item} />
-          </CarouselItem>
-        ))}
-      </CustomCarousel>
+      <ButtonListSkeleton />
+      <SpecialOffersSkeleton />
     </div>
   );
+  // }
+
+  if (status === "success") {
+    return (
+      <div>
+        <SpecialOffersHead data={t("filters")} />
+        <CustomCarousel className="min-h-[447px]">
+          {products.map((item, idx) => (
+            <CarouselItem
+              key={idx}
+              className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+            >
+              <AdItemCard {...item} />
+            </CarouselItem>
+          ))}
+        </CustomCarousel>
+      </div>
+    );
+  }
 };
 
 export const SpecialOffersHead: React.FC<specialoffersProps> = ({ data }) => {

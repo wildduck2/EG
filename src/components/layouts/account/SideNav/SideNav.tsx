@@ -21,7 +21,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     >
       {items.map((item) => (
         <TabsTrigger
-          className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+          className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground capitalize"
           value={item.title}
         >
           {item.children}

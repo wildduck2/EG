@@ -1,37 +1,23 @@
-import { Icons } from "@/constants";
 import {
   Button,
   buttonVariants,
   Checkbox,
-  Input,
-  Label,
-  Separator,
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
   zodResolver,
 } from "@/components/ui";
-import { Link, useNavigate } from "@tanstack/react-router";
-import { FcGoogle } from "react-icons/fc";
-import {
-  Circle,
-  CircleAlert,
-  Eye,
-  EyeOff,
-  LucideIcon,
-  Mail,
-} from "lucide-react";
+import { Link, useNavigate, UseNavigateResult } from "@tanstack/react-router";
+import { LucideIcon, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { z } from "zod";
-import {
-  PasswordInput,
-  PhoneInput,
-} from "@/components/ui/duckui/custom-inputs";
+import { PhoneInput } from "@/components/ui/duckui/custom-inputs";
 import { useTranslation } from "react-i18next";
 import {
   companyNameErrorsArray,
+  companyNameSchema,
   emailErrorsArray,
   emailSchema,
   passwordErrorsArray,
@@ -42,6 +28,7 @@ import {
   usernameSchema,
 } from "../auth-signin";
 import { useForm } from "react-hook-form";
+import axios from "axios";
 
 export const AuthSignup = () => {
   const route = useNavigate();
@@ -83,10 +70,10 @@ export const AuthSignup = () => {
             <TabsTrigger value="trader">{signup.trader}</TabsTrigger>
           </TabsList>
           <TabsContent value="customer">
-            <AuthSignupForm type="customer" />
+            <AuthSignupForm type="customer" schema={customerFormSchema} />
           </TabsContent>
           <TabsContent value="trader">
-            <AuthSignupForm type="trader" />
+            <AuthSignupForm type="trader" schema={traderFormSchemaa} />
           </TabsContent>
         </Tabs>
 
@@ -105,29 +92,48 @@ export const AuthSignup = () => {
   );
 };
 
-const formSchema = z.object({
+const middleSchema = z.object({
   phone: phoneSchema,
   password: passwordSchema,
-  email: emailSchema,
+  password_confirmation: z.string(),
+  email: emailSchema.optional().nullable(),
   username: usernameSchema,
-  companyname: usernameSchema,
 });
 
-type FormValues = z.infer<typeof formSchema>;
+const customerFormSchema = middleSchema.refine(
+  (data) => data.password === data.password_confirmation,
+  {
+    path: ["password_confirmation"],
+    message: "Passwords must match",
+  },
+);
+
+type TraderValues = z.infer<typeof traderFormSchemaa>;
+
+const traderFormSchemaa = middleSchema
+  .extend({
+    companyname: companyNameSchema,
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    path: ["password_confirmation"],
+    message: "Passwords must match",
+  });
 
 export interface AuthSignupProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "trader" | "customer";
+  schema: z.ZodType<TraderValues>;
 }
 export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
-  ({ type }, ref) => {
-    const methods = useForm<FormValues>({
-      resolver: zodResolver(formSchema),
+  ({ type, schema }, ref) => {
+    const methods = useForm<TraderValues>({
+      resolver: zodResolver(schema),
       defaultValues: {
         phone: "",
         password: "",
+        password_confirmation: "",
         email: "",
         username: "",
-        companyname: "",
+        companyname: null,
       },
       shouldUseNativeValidation: false,
       criteriaMode: "all",
@@ -135,22 +141,50 @@ export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
     });
 
     const { register, formState, watch, handleSubmit } = methods;
+    const route = useNavigate();
 
-    const onSubmit = async (data: FormValues) => {
+    const onSubmit = async (
+      data: TraderValues,
+      route: UseNavigateResult<string>,
+    ) => {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 5000));
+      try {
+        const { data: res_data } = await axios.post(
+          process.env.BACKEND__BASE_URL + "/user/register",
+          {
+            name: data.username,
+            email: data.email,
+            company_name: data.companyname,
+            password_confirmation: data.password_confirmation,
+            phone_number: data.phone,
+            password: data.password,
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
-      console.log(formState);
+        if (res_data.success) {
+          route({ to: "/auth/verification" });
+        }
+
+        console.log(res_data);
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
     };
+    console.log(formState.errors);
 
     const { t } = useTranslation();
 
-    const route = useNavigate();
     const signup = t("signup");
 
     return (
       <div className="md:w-[350px]">
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit((data) => onSubmit(data, route))}>
           <div>
             <div className="flex flex-col gap-2">
               <PhoneInput
@@ -253,6 +287,25 @@ export const AuthSignupForm = React.forwardRef<HTMLDivElement, AuthSignupProps>(
                   required: true,
                 }}
                 value={watch("password")}
+              />
+              <PhoneInput
+                name="confirm_password"
+                register={register("password_confirmation")}
+                error={{
+                  states: formState.errors.password_confirmation?.types,
+                  errors: ["Passwords must match"],
+                  inputError: formState.errors.password_confirmation?.message,
+                  type: "slide",
+                }}
+                input={{
+                  id: "confirm_password",
+                  placeholder: "••••••••••••",
+                  type: "password",
+                  autoCapitalize: "none",
+                  autoCorrect: "off",
+                  required: true,
+                }}
+                value={watch("password_confirmation")}
               />
             </div>
             <Button

@@ -2,24 +2,19 @@ import {
   Button,
   buttonVariants,
   Checkbox,
-  Input,
   Label,
-  Separator,
   zodResolver,
 } from "@/components/ui";
 import { PhoneInput } from "@/components/ui/duckui/custom-inputs";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
-import { LucideIcon, Mail, Phone } from "lucide-react";
+import { Link, useNavigate, UseNavigateResult } from "@tanstack/react-router";
+import { LucideIcon, Phone } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import {
-  passwordErrorsArray,
-  phoneErrorsArray,
-  phoneSchema,
-} from "../auth-signin";
+import { phoneErrorsArray, phoneSchema } from "../auth-signin";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import axios from "axios";
 
 const formSchema = z.object({
   phone: phoneSchema,
@@ -28,12 +23,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const AuthForgetPassword = () => {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  const [currentForgetMode, setCurrentForgetMode] = React.useState<
-    "email" | "phone"
-  >("email");
-
   const methods = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,12 +34,35 @@ export const AuthForgetPassword = () => {
   });
 
   const { register, formState, watch, handleSubmit } = methods;
+  const route = useNavigate();
 
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (
+    data: FormValues,
+    route: UseNavigateResult<string>,
+  ) => {
     // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    try {
+      const { data: res_data } = await axios.post(
+        process.env.BACKEND__BASE_URL + "/user/password-send-otp",
+        {
+          phone_number: data.phone,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
-    console.log(formState);
+      if (res_data.success) {
+        route({ to: "/auth/verification" });
+      }
+
+      console.log(res_data);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   };
 
   const { t, i18n } = useTranslation();
@@ -84,7 +96,7 @@ export const AuthForgetPassword = () => {
         </div>
 
         <div className="w-full">
-          <form onSubmit={() => {}}>
+          <form onSubmit={handleSubmit((data) => onSubmit(data, route))}>
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="phone" className="sr-only">

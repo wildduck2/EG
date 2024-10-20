@@ -1,27 +1,28 @@
-import React from "react";
-import Logo from "../../assets/logo-01.png";
-import { Button } from "../ui";
-import { Card, CardContent, CardFooter, CardHeader } from "../ui/duckui/card";
+import { useNavigate } from "@tanstack/react-router";
+import { AddItemCardProps } from "./ad-item-card.types";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui";
+import { Logo } from "@/assets";
 import { BadgeCheck, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useNavigate } from "@tanstack/react-router";
 import i18next from "i18next";
 
-interface ProductCardProps {
-  data: {
-    trusted: boolean;
-    img: string;
-    price: string;
-    title: string;
-    location: string;
-    date: string;
-    offers: boolean;
-    alt: string;
-  };
-}
-
-export const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
-  const { price, title, location, date, offers, alt } = data ?? {};
+export const AdItemCard: React.FC<AddItemCardProps> = ({
+  price,
+  title,
+  location,
+  date,
+  offers,
+  alt,
+  id,
+  img,
+  trusted,
+}) => {
   const route = useNavigate();
 
   return (

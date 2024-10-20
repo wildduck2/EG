@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
 import Autoplay from "embla-carousel-autoplay";
+import { useTranslation } from "react-i18next";
 
 export type CarouselApi = UseEmblaCarouselType[1];
 export type UseCarouselParameters = Parameters<typeof useEmblaCarousel>;
@@ -251,13 +252,20 @@ const CarouselNext = React.forwardRef<
 });
 CarouselNext.displayName = "CarouselNext";
 
-export interface CustomCarouselProps extends React.HTMLProps<HTMLDivElement> {}
+export interface CustomCarouselProps extends React.HTMLProps<HTMLDivElement> {
+  showArrows?: boolean;
+  showIndicators?: boolean;
+}
 
 const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
-  ({ className, children, ...props }, ref) => {
+  (
+    { className, children, showArrows = true, showIndicators = true, ...props },
+    ref,
+  ) => {
     const [api, setApi] = React.useState<CarouselApi>();
     const [current, setCurrent] = React.useState(0);
     const [count, setCount] = React.useState(0);
+    const { t, i18n } = useTranslation();
 
     React.useEffect(() => {
       if (!api) {
@@ -278,7 +286,7 @@ const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
           className="overflow-hidden h-full min-h-[100px] my-8"
           setApi={setApi}
           opts={{
-            direction: "ltr",
+            direction: i18n.language === "ar" ? "ltr" : "rtl",
             loop: true,
           }}
           plugins={[
@@ -288,19 +296,27 @@ const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
           ]}
         >
           <CarouselContent>{children}</CarouselContent>
+          {showArrows && (
+            <>
+              <CarouselPrevious className="absolute left-2 top-1/2 -translate-y-1/2" />
+              <CarouselNext className="absolute right-2 top-1/2 -translate-y-1/2" />
+            </>
+          )}
         </Carousel>
 
-        <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto bottom-4 left-1/2 -translate-x-1/2 z-1 absolute">
-          {Array.from({ length: count }).map((_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "w-3 h-3 rounded-full border border-red-400 border-solid inline-flex",
-                current === i + 1 && "bg-red-400",
-              )}
-            />
-          ))}
-        </div>
+        {showIndicators && (
+          <div className="py-2 text-center text-sm text-muted-foreground gap-1 flex items-center w-fit justify-center mx-auto bottom-4 left-1/2 -translate-x-1/2 z-1 absolute">
+            {Array.from({ length: count }).map((_, i) => (
+              <span
+                key={i}
+                className={cn(
+                  "w-3 h-3 rounded-full border border-red-400 border-solid inline-flex",
+                  current === i + 1 && "bg-red-400",
+                )}
+              />
+            ))}
+          </div>
+        )}
       </div>
     );
   },

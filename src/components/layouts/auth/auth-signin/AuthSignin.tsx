@@ -1,5 +1,5 @@
 import { Button, buttonVariants, Checkbox, zodResolver } from "@/components/ui";
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, UseNavigateResult } from "@tanstack/react-router";
 import { LucideIcon, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
@@ -7,6 +7,11 @@ import { PhoneInput } from "@/components/ui/duckui/custom-inputs";
 import { useTranslation } from "react-i18next";
 import { z } from "zod";
 import { DevTool } from "@hookform/devtools";
+import axios from "axios";
+
+export enum ConfirmPasswordRules {
+  Match = "Passwords do not match",
+}
 
 export enum UserNameRules {
   MinLength = "Must be at least 3 characters long",
@@ -47,6 +52,7 @@ export const passwordErrorsArray = enumToArray(PasswordRules);
 export const emailErrorsArray = enumToArray(EmailRules);
 export const userNameErrorsArray = enumToArray(UserNameRules);
 export const companyNameErrorsArray = enumToArray(CompanyNameRules);
+export const confirmPasswordErrorsArray = enumToArray(ConfirmPasswordRules);
 
 interface SinginI18n {
   register: string;
@@ -80,7 +86,7 @@ export const phoneSchema = z
   .string()
   .min(10, PhoneInputError.TooShort)
   .max(15, PhoneInputError.TooLong)
-  .regex(/^\d+$/, PhoneInputError.InvalidCharacters);
+  .regex(/^\+?\d+$/, PhoneInputError.InvalidCharacters);
 
 export const passwordSchema = z
   .string()
@@ -99,8 +105,6 @@ const formSchema = z.object({
 type FormValues = z.infer<typeof formSchema>;
 
 export const AuthSignin = () => {
-  const route = useNavigate();
-
   const methods = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -114,11 +118,36 @@ export const AuthSignin = () => {
 
   const { register, formState, watch, handleSubmit } = methods;
 
-  const onSubmit = async (data: FormValues) => {
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+  const route = useNavigate();
 
-    console.log(formState);
+  const onSubmit = async (
+    data: FormValues,
+    route: UseNavigateResult<string>,
+  ) => {
+    // Simulate API call
+    try {
+      const { data: res_data } = await axios.post(
+        process.env.BACKEND__BASE_URL + "/user/login",
+        {
+          phone_number: data.phone,
+          password: data.password,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (res_data.success) {
+        route({ to: "/home" });
+      }
+
+      console.log(res_data);
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
   };
 
   const { t, i18n } = useTranslation();
@@ -132,7 +161,7 @@ export const AuthSignin = () => {
           to="/auth/signup"
           className={cn(buttonVariants({ variant: "ghost" }), "text-md")}
         >
-          {signin.signin}
+          {signin.createaccount}
         </Link>
         <Button
           title={t("languages")}
@@ -152,7 +181,7 @@ export const AuthSignin = () => {
         </div>
 
         <div className="sm:w-[350px] w-[90%]">
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit((data) => onSubmit(data, route))}>
             <div>
               <div className="flex flex-col gap-2">
                 <PhoneInput
@@ -162,7 +191,7 @@ export const AuthSignin = () => {
                     states: formState.errors.phone?.types,
                     errors: phoneErrorsArray,
                     inputError: formState.errors.phone?.message,
-                    type: "slide",
+                    type: "raw",
                   }}
                   input={{
                     id: "phone",
@@ -173,7 +202,6 @@ export const AuthSignin = () => {
                     autoCorrect: "off",
                     required: true,
                   }}
-                  value={watch("phone")}
                 />
 
                 <PhoneInput
@@ -194,7 +222,6 @@ export const AuthSignin = () => {
                     autoCorrect: "off",
                     required: true,
                   }}
-                  value={watch("password")}
                 />
               </div>
               <Button
@@ -234,17 +261,6 @@ export const AuthSignin = () => {
               </Button>
             </div>
           </form>
-        </div>
-
-        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
-          <Checkbox />
-          <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
-            {signin.agree}
-            <Link className="underline underline-offset-2 px-1 text-red-600">
-              {signin.link}
-            </Link>
-            .
-          </p>
         </div>
       </div>
     </div>
