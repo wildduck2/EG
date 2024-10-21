@@ -1,3 +1,3 @@
 export * from "./Home";
-export * from "./Categories";
+export * from "./category-page";
 export * from "./ProductPage";

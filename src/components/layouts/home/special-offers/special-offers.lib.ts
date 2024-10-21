@@ -7,7 +7,7 @@ export async function get_special_offers(): Promise<
   try {
     const { data: res_data } = await axios.get<
       Awaited<GetSpecialOffersRes<CategoryItemType>>
-    >(process.env.BACKEND__BASE_URL + "/client/special", {
+    >(process.env.BACKEND__BASE_URL + "/client/categories", {
       headers: {
         "Content-Type": "application/json",
       },

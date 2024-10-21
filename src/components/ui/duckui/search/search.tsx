@@ -6,10 +6,10 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/duckui";
+  SearchInput,
+} from "@/components/ui";
 import { FileIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
-import { SearchInput } from "./SearchInput";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 

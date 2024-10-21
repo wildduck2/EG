@@ -1,6 +1,7 @@
+import React from "react";
+import { useTranslation } from "react-i18next";
 import {
   ButtonProps,
-  buttonVariants,
   NavGroup,
   Select,
   SelectContent,
@@ -10,16 +11,15 @@ import {
   SelectTrigger,
   SelectValue,
   Separator,
+  Button,
+  Search,
 } from "@/components/ui";
-import { Button } from "@/components/ui";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
-import React from "react";
 import { Logo } from "@/assets";
 import { cn } from "@/lib/utils";
-import { Search } from "@/components/ui/duckui/Search/Search";
-import { useTranslation } from "react-i18next";
 
 import shape from "../../../assets/shape.png";
+import { queryClient } from "@/main";
 
 export const Header = () => {
   const location = useLocation();
@@ -41,6 +41,10 @@ export const Header = () => {
     };
   }, [location.pathname]);
 
+  // Query to get categories
+  const userData = queryClient.getQueryData(["categories"]);
+  console.log(userData);
+
   return (
     <>
       <header
@@ -60,7 +64,6 @@ export const Header = () => {
           <nav
             className={cn(
               "grid md:flex items-center md:justify-center lg:justify-between place-self-center pt-2 pb-4 gap-2 w-full",
-              // isSticky ? "sticky" : "",
             )}
           >
             <div className="flex item-center gap-4 w-full">
@@ -126,108 +129,6 @@ export const Header = () => {
   );
 };
 
-export interface headerNavigationDataTypes {
-  headerNavigationData?: string[][][][];
-  satatus: "loading" | "succeeded" | "failed";
-}
-
-export const NavigationHeaderLooping = ({
-  headerNavigationData,
-}: headerNavigationDataTypes) => {
-  return (
-    <ul className="flex w-[1100px]">
-      {headerNavigationData?.map((item, index) => {
-        return (
-          <li key={index} className="flex gap-16">
-            {item.map((child) => {
-              return child.map((item, index) => {
-                return (
-                  <ul key={index} className="flex flex-col !gap-2">
-                    {item.map((item, index) => {
-                      return (
-                        <li key={index} className="flex flex-col">
-                          {index === 0 ? (
-                            <h4 className="font-bold">{item}</h4>
-                          ) : (
-                            <li className="flex flex-col gap-1">
-                              {
-                                // @ts-ignore
-                                item.map((item, index) => {
-                                  return (
-                                    <Link
-                                      to={item}
-                                      className={cn(
-                                        buttonVariants({ variant: "link" }),
-                                        "text-sm p-0 justify-start h-fit text-accent-foreground",
-                                      )}
-                                    >
-                                      {item}
-                                    </Link>
-                                  );
-                                })
-                              }
-                            </li>
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                );
-              });
-            })}
-          </li>
-        );
-      })}
-    </ul>
-  );
-};
-
-export const hi = [
-  [
-    [
-      [
-        ["وصل حديثًا"],
-        ["عرض الكل", "ملابس", "أحذية وإكسسوارات", "ملابس رياضية"],
-      ],
-      [
-        ["العروض والميزات"],
-        ["الأكثر مبيعًا بدءًا من 299 جنيه", "قمصان وبلوزات تحت 1199 جنيه"],
-      ],
-    ],
-    [
-      [
-        ["الأكثر رواجًا الآن"],
-        [
-          "خريف/شتاء 2023",
-          "الرومانسية",
-          "الموسم الجديد في الدنيم",
-          "أناقة المدينة",
-          "الأناقة العصرية",
-        ],
-      ],
-    ],
-    [
-      [
-        ["تسوق حسب المنتج"],
-        [
-          "عرض الكل",
-          "فساتين",
-          "أعلى",
-          "قمصان وبلوزات",
-          "سويت شيرتات وهوديز",
-          "ملابس السباحة والشاطئ",
-          "سراويل",
-          "جينز",
-          "جمبسوت وبلايسوت",
-          "تنورات",
-          "أحذية",
-          "إكسسوارات",
-        ],
-      ],
-    ],
-  ],
-];
-
 const data: ButtonProps[] = [
   {
     title: "المزيد",
@@ -280,42 +181,3 @@ const data: ButtonProps[] = [
     children: "معادن",
   },
 ];
-
-// const location = useLocation();
-// const [searchFocus, setSearchFocus] = React.useState(false);
-// const [isSticky, setIsSticky] = React.useState(false);
-// const [searchVal, setSearchVal] = React.useState("");
-// const { t, i18n } = useTranslation();
-//
-// const langs = [
-//   { lang: "عربي", code: "ar" },
-//   { lang: "English", code: "en" },
-// ];
-//
-// const changeLangTitle = langs?.filter((e) =>
-//   e.code === i18n.language ? e.lang : "",
-// );
-// {
-//   /* @ts-ignore */
-// }
-//
-// const changeLang = (lng) => {
-//   i18n.changeLanguage(lng);
-// };
-//
-// React.useEffect(() => {
-//   searchVal !== "" ? setSearchFocus(true) : setSearchFocus(false);
-// }, [searchVal]);
-//
-// const activeLink = ["/", "/sections", "/about", "/sales", "/info"];
-//
-// const handleScroll = () => {
-//   if (window.scrollY > 0) {
-//     setIsSticky(true);
-//   } else {
-//     setIsSticky(false);
-//   }
-// };
-// React.useEffect(() => {
-//   window.addEventListener("scroll", handleScroll);
-// }, []);
