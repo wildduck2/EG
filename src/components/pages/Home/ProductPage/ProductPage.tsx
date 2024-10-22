@@ -12,8 +12,13 @@ import { ProductPageWrapper } from "@/components/layouts/product-page";
 gsap.registerPlugin(ScrollTrigger);
 
 import { useGSAP } from "@gsap/react";
+import { useLocation, useParams } from "@tanstack/react-router";
+import { ProductType } from "@/components/layouts";
 
 export const ProductPage = () => {
+  const { id } = useParams({ strict: false });
+  const { state } = useLocation();
+
   useGSAP(() => {
     const mm = gsap.matchMedia();
     mm.add("(min-width: 1300px)", () => {
@@ -57,7 +62,7 @@ export const ProductPage = () => {
           </Breadcrumb>
         }
 
-        <ProductPageWrapper />
+        <ProductPageWrapper id={Number(id)} state={state as ProductType} />
       </main>
     </>
   );

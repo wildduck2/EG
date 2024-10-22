@@ -6,7 +6,9 @@ import {
   BadgeCheck,
   Clock10,
   Heart,
+  LucideIcon,
   MapPin,
+  MessageSquare,
   Phone,
   Share,
   Star,
@@ -19,12 +21,15 @@ import {
   AccordionTrigger,
   AvatarCustom,
   Button,
+  Skeleton,
 } from "@/components/ui";
+import { get_product_hazards } from "./product-page-info.libs";
+import { useQuery } from "@tanstack/react-query";
 
 export const ProductPreviewInfo = React.forwardRef<
   HTMLDivElement,
   ProductPreviewInfoProps
->(({ className, children, ...props }, ref) => {
+>(({ className, data, children, ...props }, ref) => {
   const { t, i18n } = useTranslation();
 
   const products = t("product");
@@ -54,8 +59,8 @@ export const ProductPreviewInfo = React.forwardRef<
       >
         <Heart className={cn("size-4", "text-red-400 fill-red-400")} />
       </Button>
-      <h3 className="text-3xl font-semibold">{products.productname}</h3>
-      <h2 className="text-2xl font-semibold">{products.price}</h2>
+      <h3 className="text-3xl font-semibold">{data.name}</h3>
+      <h2 className="text-2xl font-semibold">{data.price}</h2>
       <div className="flex items-center gap-4">
         <div className="flex gap-2">
           <Button
@@ -86,40 +91,48 @@ export const ProductPreviewInfo = React.forwardRef<
       </div>
 
       <div className="flex items-center gap-12 py-1">
-        <div className="flex items-center gap-1 text-primary/60">
-          <MapPin className="size-4" />
-          <span className="text-sm">{products.location}</span>
-        </div>
+        {data.address && (
+          <div className="flex items-center gap-1 text-primary/60">
+            <MapPin className="size-4" />
+            <span className="text-sm">{data.address}</span>
+          </div>
+        )}
 
         <div className="flex items-center gap-1 text-primary/60">
           <Clock10 className="size-4" />
-          <span className="text-sm">{products.date}</span>
+          <span className="text-sm">{data.age}</span>
         </div>
       </div>
       <div className="md:flex items-center gap-4 w-full my-2 grid grid-cols-2">
-        <Button
-          variant={"default"}
-          className="w-full lg:max-w-[300px] h-[50px] grid-2"
-          icon={{
-            icon: Phone,
-          }}
-        >
-          {products.calltrader}
-        </Button>
-        <Button
-          variant={"default"}
-          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6 bg-green-400 hover:bg-green-500"
-          icon={{
-            icon: FaWhatsapp as LucideIcon,
-          }}
-        />
-        <Button
-          variant={"default"}
-          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-          icon={{
-            icon: Phone,
-          }}
-        ></Button>
+        <a href={`tel:${data.user.phone_number}`} target="_blank">
+          <Button
+            variant={"default"}
+            className="w-full lg:max-w-[300px] h-[50px] grid-2"
+            icon={{
+              icon: Phone,
+            }}
+          >
+            {products.calltrader}
+          </Button>
+        </a>
+        <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
+          <Button
+            variant={"default"}
+            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6 bg-green-400 hover:bg-green-500"
+            icon={{
+              icon: FaWhatsapp as LucideIcon,
+            }}
+          />
+        </a>
+        <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
+          <Button
+            variant={"default"}
+            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+            icon={{
+              icon: MessageSquare,
+            }}
+          ></Button>
+        </a>
         <Button
           variant={"ghost"}
           className="w-full max-w-[300px] h-[50px] grid-4"
@@ -143,12 +156,12 @@ export const ProductPreviewInfo = React.forwardRef<
                   "border-muted-foreground/80 border-[2px] size-[60px]",
                 )}
                 avatar_image={{
-                  src: "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
-                  alt: "wildduck",
+                  src: data.user.image ?? "",
+                  alt: data.user.name ?? "",
                   className: cn("rounded-md object-cover object-top"),
                 }}
                 fallback={{
-                  children: "WD",
+                  children: data.user.name?.charAt(0) ?? "",
                   className: "bg-zinc-900/80",
                 }}
               />
@@ -171,31 +184,62 @@ export const ProductPreviewInfo = React.forwardRef<
                     className={cn("size-4", "text-white fill-blue-400")}
                   />
                 </Button>
-                <h3 className="text-xl font-semibold">{products.name}</h3>
+                <h3 className="text-xl font-semibold">{data.user.name}</h3>
               </div>
-              <p className="text-sm text-primary/60">{products.joined}</p>
+              <p className="text-sm text-primary/60">
+                {data.user.phone_verified_at}
+              </p>
             </div>
           </Button>
-          <Accordion
-            type="multiple"
-            className="w-full"
-            defaultValue={["item-1", "item-2", "item-3"]}
-          >
-            <AccordionItem value={`item-${1}`} className="">
-              <AccordionTrigger className="hover:no-underline px-2">
-                {products.hazard}
-              </AccordionTrigger>
-              <AccordionContent className="flex flex-wrap gap-2 px-2">
-                <ul className="flex flex-col gap-2">
-                  {products.hazards.map((item, i) => (
-                    <li className="text-md text-primary/60">{item} </li>
-                  ))}
-                </ul>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <SafetyAccordion />
         </div>
       </div>
     </div>
   );
 });
+
+export const SafetyAccordion = () => {
+  const { t, i18n } = useTranslation();
+  const products = t("product");
+
+  // Query
+  const { data, status } = useQuery({
+    queryKey: ["safety"],
+    queryFn: () => get_product_hazards(),
+  });
+
+  if (status === "pending") {
+    return (
+      <div className="h-32 w-full mt-2 border border-border/20 border-solid p-4 space-y-2 rounded-lg">
+        <Skeleton className="h-6 w-[50%]" />
+        <Skeleton className="h-2 w-[70%]" />
+        <Skeleton className="h-2 w-[90%]" />
+        <Skeleton className="h-2 w-[80%]" />
+        <Skeleton className="h-2 w-[40%]" />
+      </div>
+    );
+  }
+
+  if (status === "success" && data) {
+    return (
+      <Accordion
+        type="multiple"
+        className="w-full"
+        defaultValue={["item-1", "item-2", "item-3"]}
+      >
+        <AccordionItem value={`item-${1}`} className="">
+          <AccordionTrigger className="hover:no-underline px-2">
+            {products.hazard}
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-wrap gap-2 px-2">
+            <ul className="flex flex-col gap-2">
+              {[...data.map((item) => item.title)].map((item, i) => (
+                <li className="text-md text-primary/60">{item} </li>
+              ))}
+            </ul>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+  }
+};

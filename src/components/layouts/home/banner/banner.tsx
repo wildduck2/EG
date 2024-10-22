@@ -5,7 +5,7 @@ import { BannerSKeleton } from "./banner.skeleton";
 export interface BannerProps extends React.HTMLProps<HTMLDivElement> {}
 export const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
   ({ className, children, ...props }, ref) => {
-    return <BannerSKeleton />;
+    // return <BannerSKeleton />;
 
     return (
       <div

@@ -7,7 +7,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui";
-import { Home } from "lucide-react";
 
 export const Categories = () => {
   return (

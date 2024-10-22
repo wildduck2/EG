@@ -1,18 +1,15 @@
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CustomCarousel,
-} from "@/components/ui";
-import React from "react";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui";
 import { CategorySwiperItem } from "../category-swiper-card";
 import { get_categories } from "./category-swiper.lib";
 import { CategorySwiperSkeleton } from "./category-swiper.skeleton";
 import Autoplay from "embla-carousel-autoplay";
+import { useNavigate } from "@tanstack/react-router";
 
 export const CategorySwiper = () => {
+  const route = useNavigate();
+
   // Translate Api
   const { t } = useTranslation();
 
@@ -22,9 +19,9 @@ export const CategorySwiper = () => {
     queryFn: get_categories,
   });
 
-  // if (status === "pending") {
-  return <CategorySwiperSkeleton />;
-  // }
+  if (status === "pending") {
+    return <CategorySwiperSkeleton />;
+  }
 
   if (status === "success") {
     return (
@@ -49,6 +46,12 @@ export const CategorySwiper = () => {
             <CarouselContent>
               {data?.map((e, i) => (
                 <CarouselItem
+                  onClick={() => {
+                    route({
+                      to: `/home/categories/$id`,
+                      params: { id: e.name },
+                    });
+                  }}
                   className="basis-1/3 md:basis-1/5 xl:basis-[14%] transition-all"
                   key={i}
                 >

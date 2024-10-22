@@ -1,6 +1,6 @@
 export type ReqResponseType<T> = {
   success: boolean;
-  data: T[];
+  data: T;
 };
 
 export type GetCategories<T> = Awaited<T[]>;

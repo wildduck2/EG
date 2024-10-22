@@ -8,46 +8,37 @@ import {
 } from "@/components/ui";
 import { AdGridSectionProps } from "./ad-grid-section.types";
 import { AdItemCard } from "../ad-item-card";
-import { AdGridSectionSkeleton } from "./ad-grid-section.skeleton";
-import { get_ads_section } from "./ad-grid-section.lib";
-import { useQuery } from "@tanstack/react-query";
+import { useTranslation } from "react-i18next";
 
 export const AdGridSection: React.FC<AdGridSectionProps> = ({
-  title,
-  url,
+  ads,
+  sort_order,
+  category_id,
+  category_name,
+  category_name_en,
   buttonContent,
 }) => {
-  // Query Grid Section
-  const { data, status } = useQuery({
-    queryKey: ["todos"],
-    queryFn: () => get_ads_section({ url }),
-    refetchOnWindowFocus: false,
-  });
-
-  // if (status === "pending"){
-  return <AdGridSectionSkeleton />;
-  // }
-
-  if (status === "success") {
-    return (
-      <CardPreview>
-        <CardPreviewHeader>
-          <CardPreviewTitle>{title}</CardPreviewTitle>
-          <Button
-            variant="outline"
-            className="border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
-          >
-            {buttonContent}
-          </Button>
-        </CardPreviewHeader>
-        <CardPreviewContent>
-          {data.map((item, index) => {
-            return <AdItemCard {...item} key={index} />;
-          })}
-        </CardPreviewContent>
-      </CardPreview>
-    );
-  }
+  const { t, i18n } = useTranslation();
+  return (
+    <CardPreview>
+      <CardPreviewHeader>
+        <CardPreviewTitle>
+          {i18n.language === "en" ? category_name_en : category_name}
+        </CardPreviewTitle>
+        <Button
+          variant="outline"
+          className="border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
+        >
+          {buttonContent}
+        </Button>
+      </CardPreviewHeader>
+      <CardPreviewContent>
+        {ads.map((item, index) => {
+          return <AdItemCard {...item} key={index} />;
+        })}
+      </CardPreviewContent>
+    </CardPreview>
+  );
 };
 
 AdGridSection.displayName = "ProductsPreview";

@@ -1,13 +1,13 @@
 import axios from "axios";
-import { CategoryItemType } from "../category-swiper-card";
 import { GetSpecialOffers, GetSpecialOffersRes } from "./special-offers.types";
+import { ProductType } from "../ad-item-card";
 export async function get_special_offers(): Promise<
-  GetSpecialOffers<CategoryItemType>
+  GetSpecialOffers<ProductType>
 > {
   try {
     const { data: res_data } = await axios.get<
-      Awaited<GetSpecialOffersRes<CategoryItemType>>
-    >(process.env.BACKEND__BASE_URL + "/client/categories", {
+      Awaited<GetSpecialOffersRes<ProductType>>
+    >(process.env.BACKEND__BASE_URL + "/client/featured-ads/page/1", {
       headers: {
         "Content-Type": "application/json",
       },

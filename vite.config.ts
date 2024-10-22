@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
   return {
     define: {
       "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
+      "process.env.BACKEND__BASE_UPLOAD_URL": JSON.stringify(
+        env.BACKEND__BASE_UPLOAD_URL,
+      ),
     },
     plugins: [
       TanStackRouterVite({

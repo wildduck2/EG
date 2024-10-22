@@ -18,7 +18,11 @@ export const CategorySwiperItem: React.FC<CategoryItemType> = ({
   return (
     <Link className="flex flex-col justify-center items-center h-40 w-full rounded-lg">
       <div className="relative rounded-full w-[120px] h-[100px] flex justify-center items-center group">
-        <img src={image} alt={name} className="rounded-full w-[90px]" />
+        <img
+          src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + image}
+          alt={name}
+          className="rounded full w-[90px]"
+        />
         <img
           src={Bg}
           alt={"animation image for " + name}

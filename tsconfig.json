@@ -1,35 +1,44 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "outDir": "./dist",
-    "paths": {
-      "@/*": ["./src/*"]
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        },
+        "target": "ES2020",
+        "useDefineForClassFields": true,
+        "lib": [
+            "ES2020",
+            "DOM",
+            "DOM.Iterable"
+        ],
+        "module": "ESNext",
+        "skipLibCheck": true,
+        /* Bundler mode */
+        "moduleResolution": "bundler",
+        "strictNullChecks": true,
+        // "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": false,
+        "jsx": "react-jsx",
+        /* Linting */
+        "strict": false,
+        "noImplicitAny": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": false,
+        // "esModuleInterop": true,
+        // "allowSyntheticDefaultImports": true,
+        // "forceConsistentCasingInFileNames": true,
+        // "noEmitOnError": false,
+        "composite": true,
+        "allowSyntheticDefaultImports": true
     },
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    /* Bundler mode */
-    "moduleResolution": "bundler",
-    "strictNullChecks": false,
-    // "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
-    "jsx": "react-jsx",
-    /* Linting */
-    "strict": false,
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": false,
-    // "esModuleInterop": true,
-    // "allowSyntheticDefaultImports": true,
-    // "forceConsistentCasingInFileNames": true,
-    // "noEmitOnError": false,
-    "composite": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "include": ["vite.config.ts", "src"]
+    "include": [
+        "vite.config.ts",
+        "src"
+    ]
 }

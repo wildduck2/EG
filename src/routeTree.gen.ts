@@ -34,6 +34,9 @@ const AuthAuthForgetPasswordLazyImport = createFileRoute(
 const HomeCategoriesCategoriesIdLazyImport = createFileRoute(
   '/home/categories/_categories/$id',
 )()
+const HomeCategoriesProductProductIdLazyImport = createFileRoute(
+  '/home/categories/product/_product/$id',
+)()
 
 // Create/Update Routes
 
@@ -117,6 +120,16 @@ const HomeCategoriesCategoriesIdLazyRoute =
     getParentRoute: () => HomeCategoriesCategoriesRoute,
   } as any).lazy(() =>
     import('./routes/home/categories/_categories.$id.lazy').then(
+      (d) => d.Route,
+    ),
+  )
+
+const HomeCategoriesProductProductIdLazyRoute =
+  HomeCategoriesProductProductIdLazyImport.update({
+    path: '/product/$id',
+    getParentRoute: () => HomeCategoriesRoute,
+  } as any).lazy(() =>
+    import('./routes/home/categories/product/_product.$id.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -223,6 +236,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeCategoriesCategoriesIndexImport
       parentRoute: typeof HomeCategoriesCategoriesImport
     }
+    '/home/categories/product/_product/$id': {
+      id: '/home/categories/product/_product/$id'
+      path: '/product/$id'
+      fullPath: '/home/categories/product/$id'
+      preLoaderRoute: typeof HomeCategoriesProductProductIdLazyImport
+      parentRoute: typeof HomeCategoriesImport
+    }
   }
 }
 
@@ -284,10 +304,13 @@ const HomeCategoriesCategoriesRouteWithChildren =
 
 interface HomeCategoriesRouteChildren {
   HomeCategoriesCategoriesRoute: typeof HomeCategoriesCategoriesRouteWithChildren
+  HomeCategoriesProductProductIdLazyRoute: typeof HomeCategoriesProductProductIdLazyRoute
 }
 
 const HomeCategoriesRouteChildren: HomeCategoriesRouteChildren = {
   HomeCategoriesCategoriesRoute: HomeCategoriesCategoriesRouteWithChildren,
+  HomeCategoriesProductProductIdLazyRoute:
+    HomeCategoriesProductProductIdLazyRoute,
 }
 
 const HomeCategoriesRouteWithChildren = HomeCategoriesRoute._addFileChildren(
@@ -318,6 +341,7 @@ export interface FileRoutesByFullPath {
   '/home/': typeof HomeHomeIndexRoute
   '/home/categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
   '/home/categories/': typeof HomeCategoriesCategoriesIndexRoute
+  '/home/categories/product/$id': typeof HomeCategoriesProductProductIdLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -330,6 +354,7 @@ export interface FileRoutesByTo {
   '/auth/signup': typeof AuthAuthSignupLazyRoute
   '/account': typeof AccountAccountIndexRoute
   '/home/categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
+  '/home/categories/product/$id': typeof HomeCategoriesProductProductIdLazyRoute
 }
 
 export interface FileRoutesById {
@@ -348,6 +373,7 @@ export interface FileRoutesById {
   '/home/_home/': typeof HomeHomeIndexRoute
   '/home/categories/_categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
   '/home/categories/_categories/': typeof HomeCategoriesCategoriesIndexRoute
+  '/home/categories/product/_product/$id': typeof HomeCategoriesProductProductIdLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -364,6 +390,7 @@ export interface FileRouteTypes {
     | '/home/'
     | '/home/categories/$id'
     | '/home/categories/'
+    | '/home/categories/product/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/test'
@@ -375,6 +402,7 @@ export interface FileRouteTypes {
     | '/auth/signup'
     | '/account'
     | '/home/categories/$id'
+    | '/home/categories/product/$id'
   id:
     | '__root__'
     | '/test'
@@ -391,6 +419,7 @@ export interface FileRouteTypes {
     | '/home/_home/'
     | '/home/categories/_categories/$id'
     | '/home/categories/_categories/'
+    | '/home/categories/product/_product/$id'
   fileRoutesById: FileRoutesById
 }
 
@@ -462,7 +491,8 @@ export const routeTree = rootRoute
       "filePath": "home/categories",
       "parent": "/home",
       "children": [
-        "/home/categories/_categories"
+        "/home/categories/_categories",
+        "/home/categories/product/_product/$id"
       ]
     },
     "/home/categories/_categories": {
@@ -499,6 +529,10 @@ export const routeTree = rootRoute
     "/home/categories/_categories/": {
       "filePath": "home/categories/_categories.index.tsx",
       "parent": "/home/categories/_categories"
+    },
+    "/home/categories/product/_product/$id": {
+      "filePath": "home/categories/product/_product.$id.lazy.tsx",
+      "parent": "/home/categories"
     }
   }
 }

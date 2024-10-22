@@ -281,12 +281,12 @@ const CustomCarousel = React.forwardRef<HTMLDivElement, CustomCarouselProps>(
     }, [api]);
 
     return (
-      <div className={cn("relative", className)} ref={ref} {...props}>
+      <div className={cn("relative my-8", className)} ref={ref} {...props}>
         <Carousel
-          className="overflow-hidden h-full min-h-[100px] my-8"
+          className="overflow-hidden h-full min-h-[100px]"
           setApi={setApi}
           opts={{
-            direction: i18n.language === "ar" ? "ltr" : "rtl",
+            direction: i18n.language === "ar" ? "rtl" : "ltr",
             loop: true,
           }}
           plugins={[

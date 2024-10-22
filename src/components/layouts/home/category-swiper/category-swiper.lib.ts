@@ -2,12 +2,10 @@ import axios from "axios";
 import { CategoryItemType } from "../category-swiper-card";
 import { GetCategories, GetCategoriesReq } from "./category-swiper.types";
 
-export async function get_categories(): Promise<
-  GetCategories<CategoryItemType>
-> {
+export async function get_categories(): Promise<GetCategories<CategoryItemType> | null> {
   try {
     const { data: res_data } = await axios.get<
-      Awaited<GetCategoriesReq<CategoryItemType>>
+      Awaited<GetCategoriesReq<CategoryItemType[]>>
     >(process.env.BACKEND__BASE_URL + "/client/categories", {
       headers: {
         "Content-Type": "application/json",

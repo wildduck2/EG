@@ -2,6 +2,7 @@ import {
   CategoryPageFilter,
   CategoryPageProducts,
   CategoryPageWrapperSkeleton,
+  get_gategory_page_ads,
 } from "@/components/layouts";
 import {
   Select,
@@ -13,18 +14,30 @@ import {
   SelectValue,
   Separator,
 } from "@/components/ui";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
 export const CategoryPageWrapper = () => {
   const { t, i18n } = useTranslation();
   const products = t("products");
 
-  return <CategoryPageWrapperSkeleton />;
+  const id = useParams({ strict: false });
+
+  // Query Categories
+  const { data, status } = useQuery({
+    queryKey: ["categories"],
+    queryFn: get_gategory_page_ads,
+  });
+
+  if (status === "pending") {
+    return <CategoryPageWrapperSkeleton />;
+  }
 
   return (
     <section className="flex gap-8 items-start my-8 min-h-[63vh]">
       <div className="flex flex-col gap-4 w-full">
-        <h2 className="text-3xl font-semibold">{t("categoriesname")}</h2>
+        <h2 className="text-3xl font-semibold">{id.id}</h2>
         <Separator className="px-2" />
         <div className="flex items-center justify-between">
           <CategoryPageFilter />
@@ -50,7 +63,7 @@ export const CategoryPageWrapper = () => {
         </div>
         <Separator className="px-2" />
 
-        <CategoryPageProducts />
+        <CategoryPageProducts data={data} />
       </div>
     </section>
   );

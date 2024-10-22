@@ -12,7 +12,6 @@ import { Provider } from "react-redux";
 import { routeTree } from "./routeTree.gen";
 
 // Create a new router instance
-// @ts-expect-error
 const router = createRouter({ routeTree });
 
 // Register the router instance for type safety

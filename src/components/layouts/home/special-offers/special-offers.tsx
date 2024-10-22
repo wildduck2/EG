@@ -24,21 +24,21 @@ export const SpecialOffers = () => {
     queryFn: get_special_offers,
   });
 
-  // if (status === "pending") {
-  return (
-    <div>
-      <ButtonListSkeleton />
-      <SpecialOffersSkeleton />
-    </div>
-  );
-  // }
+  if (status === "pending") {
+    return (
+      <div>
+        <ButtonListSkeleton />
+        <SpecialOffersSkeleton />
+      </div>
+    );
+  }
 
   if (status === "success") {
     return (
       <div>
         <SpecialOffersHead data={t("filters")} />
         <CustomCarousel className="min-h-[447px]">
-          {products.map((item, idx) => (
+          {data.map((item, idx) => (
             <CarouselItem
               key={idx}
               className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
