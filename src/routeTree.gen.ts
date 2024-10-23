@@ -13,35 +13,36 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TestImport } from './routes/test'
-import { Route as HomeHomeImport } from './routes/home/_home'
+import { Route as IndexImport } from './routes/index'
+import { Route as CategoriesCategoriesImport } from './routes/categories/_categories'
 import { Route as AuthAuthImport } from './routes/auth/_auth'
-import { Route as HomeHomeIndexImport } from './routes/home/_home.index'
+import { Route as CategoriesCategoriesIndexImport } from './routes/categories/_categories.index'
 import { Route as AccountAccountIndexImport } from './routes/account/_account.index'
-import { Route as HomeCategoriesCategoriesImport } from './routes/home/categories/_categories'
-import { Route as HomeCategoriesCategoriesIndexImport } from './routes/home/categories/_categories.index'
+import { Route as AuthAuthVerificationImport } from './routes/auth/_auth.verification'
 
 // Create Virtual Routes
 
-const HomeImport = createFileRoute('/home')()
+const CategoriesImport = createFileRoute('/categories')()
 const AuthImport = createFileRoute('/auth')()
-const HomeCategoriesImport = createFileRoute('/home/categories')()
+const CategoriesCategoriesIdLazyImport = createFileRoute(
+  '/categories/_categories/$id',
+)()
+const AuthAuthVerificationConfirmedLazyImport = createFileRoute(
+  '/auth/_auth/verification-confirmed',
+)()
 const AuthAuthSignupLazyImport = createFileRoute('/auth/_auth/signup')()
 const AuthAuthSigninLazyImport = createFileRoute('/auth/_auth/signin')()
 const AuthAuthForgetPasswordLazyImport = createFileRoute(
   '/auth/_auth/forget-password',
 )()
-const HomeCategoriesCategoriesIdLazyImport = createFileRoute(
-  '/home/categories/_categories/$id',
-)()
-const HomeCategoriesProductProductIdLazyImport = createFileRoute(
-  '/home/categories/product/_product/$id',
+const CategoriesProductProductIdLazyImport = createFileRoute(
+  '/categories/product/_product/$id',
 )()
 
 // Create/Update Routes
 
-const HomeRoute = HomeImport.update({
-  path: '/home',
+const CategoriesRoute = CategoriesImport.update({
+  path: '/categories',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -50,19 +51,14 @@ const AuthRoute = AuthImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const TestRoute = TestImport.update({
-  path: '/test',
+const IndexRoute = IndexImport.update({
+  path: '/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const HomeCategoriesRoute = HomeCategoriesImport.update({
-  path: '/categories',
-  getParentRoute: () => HomeRoute,
-} as any)
-
-const HomeHomeRoute = HomeHomeImport.update({
-  id: '/_home',
-  getParentRoute: () => HomeRoute,
+const CategoriesCategoriesRoute = CategoriesCategoriesImport.update({
+  id: '/_categories',
+  getParentRoute: () => CategoriesRoute,
 } as any)
 
 const AuthAuthRoute = AuthAuthImport.update({
@@ -70,15 +66,34 @@ const AuthAuthRoute = AuthAuthImport.update({
   getParentRoute: () => AuthRoute,
 } as any)
 
-const HomeHomeIndexRoute = HomeHomeIndexImport.update({
+const CategoriesCategoriesIndexRoute = CategoriesCategoriesIndexImport.update({
   path: '/',
-  getParentRoute: () => HomeHomeRoute,
+  getParentRoute: () => CategoriesCategoriesRoute,
 } as any)
 
 const AccountAccountIndexRoute = AccountAccountIndexImport.update({
   path: '/account/',
   getParentRoute: () => rootRoute,
 } as any)
+
+const CategoriesCategoriesIdLazyRoute = CategoriesCategoriesIdLazyImport.update(
+  {
+    path: '/$id',
+    getParentRoute: () => CategoriesCategoriesRoute,
+  } as any,
+).lazy(() =>
+  import('./routes/categories/_categories.$id.lazy').then((d) => d.Route),
+)
+
+const AuthAuthVerificationConfirmedLazyRoute =
+  AuthAuthVerificationConfirmedLazyImport.update({
+    path: '/verification-confirmed',
+    getParentRoute: () => AuthAuthRoute,
+  } as any).lazy(() =>
+    import('./routes/auth/_auth.verification-confirmed.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthAuthSignupLazyRoute = AuthAuthSignupLazyImport.update({
   path: '/signup',
@@ -103,33 +118,17 @@ const AuthAuthForgetPasswordLazyRoute = AuthAuthForgetPasswordLazyImport.update(
   import('./routes/auth/_auth.forget-password.lazy').then((d) => d.Route),
 )
 
-const HomeCategoriesCategoriesRoute = HomeCategoriesCategoriesImport.update({
-  id: '/_categories',
-  getParentRoute: () => HomeCategoriesRoute,
+const AuthAuthVerificationRoute = AuthAuthVerificationImport.update({
+  path: '/verification',
+  getParentRoute: () => AuthAuthRoute,
 } as any)
 
-const HomeCategoriesCategoriesIndexRoute =
-  HomeCategoriesCategoriesIndexImport.update({
-    path: '/',
-    getParentRoute: () => HomeCategoriesCategoriesRoute,
-  } as any)
-
-const HomeCategoriesCategoriesIdLazyRoute =
-  HomeCategoriesCategoriesIdLazyImport.update({
-    path: '/$id',
-    getParentRoute: () => HomeCategoriesCategoriesRoute,
-  } as any).lazy(() =>
-    import('./routes/home/categories/_categories.$id.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const HomeCategoriesProductProductIdLazyRoute =
-  HomeCategoriesProductProductIdLazyImport.update({
+const CategoriesProductProductIdLazyRoute =
+  CategoriesProductProductIdLazyImport.update({
     path: '/product/$id',
-    getParentRoute: () => HomeCategoriesRoute,
+    getParentRoute: () => CategoriesRoute,
   } as any).lazy(() =>
-    import('./routes/home/categories/product/_product.$id.lazy').then(
+    import('./routes/categories/product/_product.$id.lazy').then(
       (d) => d.Route,
     ),
   )
@@ -138,11 +137,11 @@ const HomeCategoriesProductProductIdLazyRoute =
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/test': {
-      id: '/test'
-      path: '/test'
-      fullPath: '/test'
-      preLoaderRoute: typeof TestImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
     '/auth': {
@@ -159,33 +158,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthImport
       parentRoute: typeof AuthRoute
     }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeImport
+    '/categories': {
+      id: '/categories'
+      path: '/categories'
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesImport
       parentRoute: typeof rootRoute
     }
-    '/home/_home': {
-      id: '/home/_home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeHomeImport
-      parentRoute: typeof HomeRoute
-    }
-    '/home/categories': {
-      id: '/home/categories'
+    '/categories/_categories': {
+      id: '/categories/_categories'
       path: '/categories'
-      fullPath: '/home/categories'
-      preLoaderRoute: typeof HomeCategoriesImport
-      parentRoute: typeof HomeImport
+      fullPath: '/categories'
+      preLoaderRoute: typeof CategoriesCategoriesImport
+      parentRoute: typeof CategoriesRoute
     }
-    '/home/categories/_categories': {
-      id: '/home/categories/_categories'
-      path: '/categories'
-      fullPath: '/home/categories'
-      preLoaderRoute: typeof HomeCategoriesCategoriesImport
-      parentRoute: typeof HomeCategoriesRoute
+    '/auth/_auth/verification': {
+      id: '/auth/_auth/verification'
+      path: '/verification'
+      fullPath: '/auth/verification'
+      preLoaderRoute: typeof AuthAuthVerificationImport
+      parentRoute: typeof AuthAuthImport
     }
     '/auth/_auth/forget-password': {
       id: '/auth/_auth/forget-password'
@@ -208,6 +200,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthSignupLazyImport
       parentRoute: typeof AuthAuthImport
     }
+    '/auth/_auth/verification-confirmed': {
+      id: '/auth/_auth/verification-confirmed'
+      path: '/verification-confirmed'
+      fullPath: '/auth/verification-confirmed'
+      preLoaderRoute: typeof AuthAuthVerificationConfirmedLazyImport
+      parentRoute: typeof AuthAuthImport
+    }
+    '/categories/_categories/$id': {
+      id: '/categories/_categories/$id'
+      path: '/$id'
+      fullPath: '/categories/$id'
+      preLoaderRoute: typeof CategoriesCategoriesIdLazyImport
+      parentRoute: typeof CategoriesCategoriesImport
+    }
     '/account/_account/': {
       id: '/account/_account/'
       path: '/account'
@@ -215,33 +221,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountAccountIndexImport
       parentRoute: typeof rootRoute
     }
-    '/home/_home/': {
-      id: '/home/_home/'
+    '/categories/_categories/': {
+      id: '/categories/_categories/'
       path: '/'
-      fullPath: '/home/'
-      preLoaderRoute: typeof HomeHomeIndexImport
-      parentRoute: typeof HomeHomeImport
+      fullPath: '/categories/'
+      preLoaderRoute: typeof CategoriesCategoriesIndexImport
+      parentRoute: typeof CategoriesCategoriesImport
     }
-    '/home/categories/_categories/$id': {
-      id: '/home/categories/_categories/$id'
-      path: '/$id'
-      fullPath: '/home/categories/$id'
-      preLoaderRoute: typeof HomeCategoriesCategoriesIdLazyImport
-      parentRoute: typeof HomeCategoriesCategoriesImport
-    }
-    '/home/categories/_categories/': {
-      id: '/home/categories/_categories/'
-      path: '/'
-      fullPath: '/home/categories/'
-      preLoaderRoute: typeof HomeCategoriesCategoriesIndexImport
-      parentRoute: typeof HomeCategoriesCategoriesImport
-    }
-    '/home/categories/product/_product/$id': {
-      id: '/home/categories/product/_product/$id'
+    '/categories/product/_product/$id': {
+      id: '/categories/product/_product/$id'
       path: '/product/$id'
-      fullPath: '/home/categories/product/$id'
-      preLoaderRoute: typeof HomeCategoriesProductProductIdLazyImport
-      parentRoute: typeof HomeCategoriesImport
+      fullPath: '/categories/product/$id'
+      preLoaderRoute: typeof CategoriesProductProductIdLazyImport
+      parentRoute: typeof CategoriesImport
     }
   }
 }
@@ -249,15 +241,20 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthAuthRouteChildren {
+  AuthAuthVerificationRoute: typeof AuthAuthVerificationRoute
   AuthAuthForgetPasswordLazyRoute: typeof AuthAuthForgetPasswordLazyRoute
   AuthAuthSigninLazyRoute: typeof AuthAuthSigninLazyRoute
   AuthAuthSignupLazyRoute: typeof AuthAuthSignupLazyRoute
+  AuthAuthVerificationConfirmedLazyRoute: typeof AuthAuthVerificationConfirmedLazyRoute
 }
 
 const AuthAuthRouteChildren: AuthAuthRouteChildren = {
+  AuthAuthVerificationRoute: AuthAuthVerificationRoute,
   AuthAuthForgetPasswordLazyRoute: AuthAuthForgetPasswordLazyRoute,
   AuthAuthSigninLazyRoute: AuthAuthSigninLazyRoute,
   AuthAuthSignupLazyRoute: AuthAuthSignupLazyRoute,
+  AuthAuthVerificationConfirmedLazyRoute:
+    AuthAuthVerificationConfirmedLazyRoute,
 }
 
 const AuthAuthRouteWithChildren = AuthAuthRoute._addFileChildren(
@@ -274,166 +271,138 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
-interface HomeHomeRouteChildren {
-  HomeHomeIndexRoute: typeof HomeHomeIndexRoute
+interface CategoriesCategoriesRouteChildren {
+  CategoriesCategoriesIdLazyRoute: typeof CategoriesCategoriesIdLazyRoute
+  CategoriesCategoriesIndexRoute: typeof CategoriesCategoriesIndexRoute
 }
 
-const HomeHomeRouteChildren: HomeHomeRouteChildren = {
-  HomeHomeIndexRoute: HomeHomeIndexRoute,
+const CategoriesCategoriesRouteChildren: CategoriesCategoriesRouteChildren = {
+  CategoriesCategoriesIdLazyRoute: CategoriesCategoriesIdLazyRoute,
+  CategoriesCategoriesIndexRoute: CategoriesCategoriesIndexRoute,
 }
 
-const HomeHomeRouteWithChildren = HomeHomeRoute._addFileChildren(
-  HomeHomeRouteChildren,
+const CategoriesCategoriesRouteWithChildren =
+  CategoriesCategoriesRoute._addFileChildren(CategoriesCategoriesRouteChildren)
+
+interface CategoriesRouteChildren {
+  CategoriesCategoriesRoute: typeof CategoriesCategoriesRouteWithChildren
+  CategoriesProductProductIdLazyRoute: typeof CategoriesProductProductIdLazyRoute
+}
+
+const CategoriesRouteChildren: CategoriesRouteChildren = {
+  CategoriesCategoriesRoute: CategoriesCategoriesRouteWithChildren,
+  CategoriesProductProductIdLazyRoute: CategoriesProductProductIdLazyRoute,
+}
+
+const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
+  CategoriesRouteChildren,
 )
-
-interface HomeCategoriesCategoriesRouteChildren {
-  HomeCategoriesCategoriesIdLazyRoute: typeof HomeCategoriesCategoriesIdLazyRoute
-  HomeCategoriesCategoriesIndexRoute: typeof HomeCategoriesCategoriesIndexRoute
-}
-
-const HomeCategoriesCategoriesRouteChildren: HomeCategoriesCategoriesRouteChildren =
-  {
-    HomeCategoriesCategoriesIdLazyRoute: HomeCategoriesCategoriesIdLazyRoute,
-    HomeCategoriesCategoriesIndexRoute: HomeCategoriesCategoriesIndexRoute,
-  }
-
-const HomeCategoriesCategoriesRouteWithChildren =
-  HomeCategoriesCategoriesRoute._addFileChildren(
-    HomeCategoriesCategoriesRouteChildren,
-  )
-
-interface HomeCategoriesRouteChildren {
-  HomeCategoriesCategoriesRoute: typeof HomeCategoriesCategoriesRouteWithChildren
-  HomeCategoriesProductProductIdLazyRoute: typeof HomeCategoriesProductProductIdLazyRoute
-}
-
-const HomeCategoriesRouteChildren: HomeCategoriesRouteChildren = {
-  HomeCategoriesCategoriesRoute: HomeCategoriesCategoriesRouteWithChildren,
-  HomeCategoriesProductProductIdLazyRoute:
-    HomeCategoriesProductProductIdLazyRoute,
-}
-
-const HomeCategoriesRouteWithChildren = HomeCategoriesRoute._addFileChildren(
-  HomeCategoriesRouteChildren,
-)
-
-interface HomeRouteChildren {
-  HomeHomeRoute: typeof HomeHomeRouteWithChildren
-  HomeCategoriesRoute: typeof HomeCategoriesRouteWithChildren
-}
-
-const HomeRouteChildren: HomeRouteChildren = {
-  HomeHomeRoute: HomeHomeRouteWithChildren,
-  HomeCategoriesRoute: HomeCategoriesRouteWithChildren,
-}
-
-const HomeRouteWithChildren = HomeRoute._addFileChildren(HomeRouteChildren)
 
 export interface FileRoutesByFullPath {
-  '/test': typeof TestRoute
+  '/': typeof IndexRoute
   '/auth': typeof AuthAuthRouteWithChildren
-  '/home': typeof HomeHomeRouteWithChildren
-  '/home/categories': typeof HomeCategoriesCategoriesRouteWithChildren
+  '/categories': typeof CategoriesCategoriesRouteWithChildren
+  '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/signup': typeof AuthAuthSignupLazyRoute
+  '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedLazyRoute
+  '/categories/$id': typeof CategoriesCategoriesIdLazyRoute
   '/account': typeof AccountAccountIndexRoute
-  '/home/': typeof HomeHomeIndexRoute
-  '/home/categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
-  '/home/categories/': typeof HomeCategoriesCategoriesIndexRoute
-  '/home/categories/product/$id': typeof HomeCategoriesProductProductIdLazyRoute
+  '/categories/': typeof CategoriesCategoriesIndexRoute
+  '/categories/product/$id': typeof CategoriesProductProductIdLazyRoute
 }
 
 export interface FileRoutesByTo {
-  '/test': typeof TestRoute
+  '/': typeof IndexRoute
   '/auth': typeof AuthAuthRouteWithChildren
-  '/home': typeof HomeHomeIndexRoute
-  '/home/categories': typeof HomeCategoriesCategoriesIndexRoute
+  '/categories': typeof CategoriesCategoriesIndexRoute
+  '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/signup': typeof AuthAuthSignupLazyRoute
+  '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedLazyRoute
+  '/categories/$id': typeof CategoriesCategoriesIdLazyRoute
   '/account': typeof AccountAccountIndexRoute
-  '/home/categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
-  '/home/categories/product/$id': typeof HomeCategoriesProductProductIdLazyRoute
+  '/categories/product/$id': typeof CategoriesProductProductIdLazyRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/test': typeof TestRoute
+  '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/auth/_auth': typeof AuthAuthRouteWithChildren
-  '/home': typeof HomeRouteWithChildren
-  '/home/_home': typeof HomeHomeRouteWithChildren
-  '/home/categories': typeof HomeCategoriesRouteWithChildren
-  '/home/categories/_categories': typeof HomeCategoriesCategoriesRouteWithChildren
+  '/categories': typeof CategoriesRouteWithChildren
+  '/categories/_categories': typeof CategoriesCategoriesRouteWithChildren
+  '/auth/_auth/verification': typeof AuthAuthVerificationRoute
   '/auth/_auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/_auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/_auth/signup': typeof AuthAuthSignupLazyRoute
+  '/auth/_auth/verification-confirmed': typeof AuthAuthVerificationConfirmedLazyRoute
+  '/categories/_categories/$id': typeof CategoriesCategoriesIdLazyRoute
   '/account/_account/': typeof AccountAccountIndexRoute
-  '/home/_home/': typeof HomeHomeIndexRoute
-  '/home/categories/_categories/$id': typeof HomeCategoriesCategoriesIdLazyRoute
-  '/home/categories/_categories/': typeof HomeCategoriesCategoriesIndexRoute
-  '/home/categories/product/_product/$id': typeof HomeCategoriesProductProductIdLazyRoute
+  '/categories/_categories/': typeof CategoriesCategoriesIndexRoute
+  '/categories/product/_product/$id': typeof CategoriesProductProductIdLazyRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/test'
+    | '/'
     | '/auth'
-    | '/home'
-    | '/home/categories'
+    | '/categories'
+    | '/auth/verification'
     | '/auth/forget-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verification-confirmed'
+    | '/categories/$id'
     | '/account'
-    | '/home/'
-    | '/home/categories/$id'
-    | '/home/categories/'
-    | '/home/categories/product/$id'
+    | '/categories/'
+    | '/categories/product/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/test'
+    | '/'
     | '/auth'
-    | '/home'
-    | '/home/categories'
+    | '/categories'
+    | '/auth/verification'
     | '/auth/forget-password'
     | '/auth/signin'
     | '/auth/signup'
+    | '/auth/verification-confirmed'
+    | '/categories/$id'
     | '/account'
-    | '/home/categories/$id'
-    | '/home/categories/product/$id'
+    | '/categories/product/$id'
   id:
     | '__root__'
-    | '/test'
+    | '/'
     | '/auth'
     | '/auth/_auth'
-    | '/home'
-    | '/home/_home'
-    | '/home/categories'
-    | '/home/categories/_categories'
+    | '/categories'
+    | '/categories/_categories'
+    | '/auth/_auth/verification'
     | '/auth/_auth/forget-password'
     | '/auth/_auth/signin'
     | '/auth/_auth/signup'
+    | '/auth/_auth/verification-confirmed'
+    | '/categories/_categories/$id'
     | '/account/_account/'
-    | '/home/_home/'
-    | '/home/categories/_categories/$id'
-    | '/home/categories/_categories/'
-    | '/home/categories/product/_product/$id'
+    | '/categories/_categories/'
+    | '/categories/product/_product/$id'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  TestRoute: typeof TestRoute
+  IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
-  HomeRoute: typeof HomeRouteWithChildren
+  CategoriesRoute: typeof CategoriesRouteWithChildren
   AccountAccountIndexRoute: typeof AccountAccountIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  TestRoute: TestRoute,
+  IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
-  HomeRoute: HomeRouteWithChildren,
+  CategoriesRoute: CategoriesRouteWithChildren,
   AccountAccountIndexRoute: AccountAccountIndexRoute,
 }
 
@@ -449,14 +418,14 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/test",
+        "/",
         "/auth",
-        "/home",
+        "/categories",
         "/account/_account/"
       ]
     },
-    "/test": {
-      "filePath": "test.tsx"
+    "/": {
+      "filePath": "index.tsx"
     },
     "/auth": {
       "filePath": "auth",
@@ -468,40 +437,31 @@ export const routeTree = rootRoute
       "filePath": "auth/_auth.tsx",
       "parent": "/auth",
       "children": [
+        "/auth/_auth/verification",
         "/auth/_auth/forget-password",
         "/auth/_auth/signin",
-        "/auth/_auth/signup"
+        "/auth/_auth/signup",
+        "/auth/_auth/verification-confirmed"
       ]
     },
-    "/home": {
-      "filePath": "home",
+    "/categories": {
+      "filePath": "categories",
       "children": [
-        "/home/_home",
-        "/home/categories"
+        "/categories/_categories",
+        "/categories/product/_product/$id"
       ]
     },
-    "/home/_home": {
-      "filePath": "home/_home.tsx",
-      "parent": "/home",
+    "/categories/_categories": {
+      "filePath": "categories/_categories.tsx",
+      "parent": "/categories",
       "children": [
-        "/home/_home/"
+        "/categories/_categories/$id",
+        "/categories/_categories/"
       ]
     },
-    "/home/categories": {
-      "filePath": "home/categories",
-      "parent": "/home",
-      "children": [
-        "/home/categories/_categories",
-        "/home/categories/product/_product/$id"
-      ]
-    },
-    "/home/categories/_categories": {
-      "filePath": "home/categories/_categories.tsx",
-      "parent": "/home/categories",
-      "children": [
-        "/home/categories/_categories/$id",
-        "/home/categories/_categories/"
-      ]
+    "/auth/_auth/verification": {
+      "filePath": "auth/_auth.verification.tsx",
+      "parent": "/auth/_auth"
     },
     "/auth/_auth/forget-password": {
       "filePath": "auth/_auth.forget-password.lazy.tsx",
@@ -515,24 +475,24 @@ export const routeTree = rootRoute
       "filePath": "auth/_auth.signup.lazy.tsx",
       "parent": "/auth/_auth"
     },
+    "/auth/_auth/verification-confirmed": {
+      "filePath": "auth/_auth.verification-confirmed.lazy.tsx",
+      "parent": "/auth/_auth"
+    },
+    "/categories/_categories/$id": {
+      "filePath": "categories/_categories.$id.lazy.tsx",
+      "parent": "/categories/_categories"
+    },
     "/account/_account/": {
       "filePath": "account/_account.index.tsx"
     },
-    "/home/_home/": {
-      "filePath": "home/_home.index.tsx",
-      "parent": "/home/_home"
+    "/categories/_categories/": {
+      "filePath": "categories/_categories.index.tsx",
+      "parent": "/categories/_categories"
     },
-    "/home/categories/_categories/$id": {
-      "filePath": "home/categories/_categories.$id.lazy.tsx",
-      "parent": "/home/categories/_categories"
-    },
-    "/home/categories/_categories/": {
-      "filePath": "home/categories/_categories.index.tsx",
-      "parent": "/home/categories/_categories"
-    },
-    "/home/categories/product/_product/$id": {
-      "filePath": "home/categories/product/_product.$id.lazy.tsx",
-      "parent": "/home/categories"
+    "/categories/product/_product/$id": {
+      "filePath": "categories/product/_product.$id.lazy.tsx",
+      "parent": "/categories"
     }
   }
 }

@@ -4,7 +4,7 @@ import "./scss/styles.scss";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./i18n.ts";
-import { TooltipProvider } from "@/components/ui";
+import { Toaster, TooltipProvider } from "@/components/ui";
 import { store } from "@/context";
 import { Provider } from "react-redux";
 
@@ -34,6 +34,7 @@ if (!rootElement.innerHTML) {
         <TooltipProvider>
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
+            <Toaster />
           </QueryClientProvider>
         </TooltipProvider>
       </Provider>

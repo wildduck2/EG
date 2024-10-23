@@ -34,3 +34,4 @@ export * from "./form-resolvers";
 export * from "./skeleton";
 export * from "./custom-inputs";
 export * from "./search";
+export * from "./input-otp";

@@ -1,6 +1,5 @@
 import axios from "axios";
 import {
-  GetCategoryPageAds,
   GetCategoryPageAdsRes,
   GetCategoryPageAdsType,
 } from "./category-page-wrapper.types";

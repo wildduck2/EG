@@ -1,72 +1,40 @@
+import { Link, useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
+import { useForm } from "react-hook-form";
 import {
   Button,
   buttonVariants,
   Checkbox,
   Label,
   zodResolver,
+  FormTextInput,
 } from "@/components/ui";
-import { PhoneInput } from "@/components/ui/duckui/custom-inputs";
 import { cn } from "@/lib/utils";
-import { Link, useNavigate, UseNavigateResult } from "@tanstack/react-router";
 import { LucideIcon, Phone } from "lucide-react";
-import React from "react";
-import { useTranslation } from "react-i18next";
-import { phoneErrorsArray, phoneSchema } from "../auth-signin";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import axios from "axios";
-
-const formSchema = z.object({
-  phone: phoneSchema,
-});
-
-type FormValues = z.infer<typeof formSchema>;
+import { phoneErrorsArray } from "../auth-signin/auth-signin.lib";
+import {
+  ForgetPasswordFormType,
+  forgetPasswordSchema,
+} from "./auth-forget-password.dto";
+import { onSubmitForgetPassword } from "./auth-forget-password.lib";
+import { ForgetPasswordI18n } from "./auth-forget-password.types";
 
 export const AuthForgetPassword = () => {
-  const methods = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+  const { t, i18n } = useTranslation();
+  const forgetpassword = t("forgetpassword") as unknown as ForgetPasswordI18n;
+
+  const methods = useForm<ForgetPasswordFormType>({
+    resolver: zodResolver(forgetPasswordSchema),
     defaultValues: {
-      phone: "",
+      phone: "+201285971377",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
     mode: "onChange",
   });
 
-  const { register, formState, watch, handleSubmit } = methods;
+  const { register, formState, handleSubmit } = methods;
   const route = useNavigate();
-
-  const onSubmit = async (
-    data: FormValues,
-    route: UseNavigateResult<string>,
-  ) => {
-    // Simulate API call
-    try {
-      const { data: res_data } = await axios.post(
-        process.env.BACKEND__BASE_URL + "/user/password-send-otp",
-        {
-          phone_number: data.phone,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      if (res_data.success) {
-        route({ to: "/auth/verification" });
-      }
-
-      console.log(res_data);
-    } catch (error) {
-      console.log(error);
-      return null;
-    }
-  };
-
-  const { t, i18n } = useTranslation();
-  const forgetpassword = t("forgetpassword");
 
   return (
     <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">
@@ -96,14 +64,18 @@ export const AuthForgetPassword = () => {
         </div>
 
         <div className="w-full">
-          <form onSubmit={handleSubmit((data) => onSubmit(data, route))}>
+          <form
+            onSubmit={handleSubmit((data) =>
+              onSubmitForgetPassword(data, route),
+            )}
+          >
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="phone" className="sr-only">
                   {forgetpassword.phonenumber}
                 </Label>
 
-                <PhoneInput
+                <FormTextInput
                   name="phone"
                   register={register("phone")}
                   error={{
@@ -121,7 +93,6 @@ export const AuthForgetPassword = () => {
                     autoCorrect: "off",
                     required: true,
                   }}
-                  value={watch("phone")}
                 />
               </div>
               <Button

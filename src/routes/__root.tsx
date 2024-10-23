@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { Footer, Header } from "@/components/layouts";
 
 export const Route = createRootRoute({
   //     <ScrollRestoration />

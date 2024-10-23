@@ -6,9 +6,7 @@ import {
   GridSectionType,
 } from "./ad-grid-sections-wrapper.types";
 
-export async function get_ads_section({}: GetAdsSectionsWrapperType): Promise<
-  GetAdsSectionsWrapper<GridSectionType>
-> {
+export async function get_ads_section({}: GetAdsSectionsWrapperType): Promise<GetAdsSectionsWrapper<GridSectionType> | null> {
   try {
     const { data: res_data } = await axios.get<
       Awaited<AdGridSectionsWrapperRes<GridSectionType>>
