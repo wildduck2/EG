@@ -5,7 +5,7 @@
 - [*] On Click on ad go to view Ad Details [ note: scroll resortation ]
 - [ ] Update profile can update my info
 - [*] Handle Empty Wishlist and My Ads and with languages and add button to add ad when empty
-- [ ] login/signup page direction on language
+- [*] login/signup page direction on language
 - [ ] Create Ad from profile With ad new Components based on Categories ids (long one)
 - [ ] View Ad get values from ad components multi features if there is any (long one)
 - [ ] Edit Ad Form and delete Ad (long one)

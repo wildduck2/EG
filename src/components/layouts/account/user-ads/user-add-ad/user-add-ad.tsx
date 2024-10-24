@@ -23,6 +23,7 @@ import {
 } from "@/components/ui";
 import { AlertDialogCustom } from "@/components/ui/duckui/alert";
 import { cn } from "@/lib/utils";
+import { watch } from "fs";
 import { Plus, UploadIcon } from "lucide-react";
 import React from "react";
 import {
@@ -34,8 +35,8 @@ import { z } from "zod";
 
 // Define the Zod schema for location validation
 const locationSchema = z.object({
-  lat: z.number().nonnegative("Latitude is required"),
-  lng: z.number().nonnegative("Longitude is required"),
+  lat: z.string().nonempty("Latitude is required"),
+  lng: z.string().nonempty("Longitude is required"),
 });
 
 // Define the Zod schema for adding an advertisement
@@ -59,22 +60,25 @@ export type AddAdFormType = z.infer<typeof addAdSchema>;
 export type LocationType = z.infer<typeof locationSchema>;
 
 export const UserAddAd = () => {
-  const { register, formState, handleSubmit } = useForm<AddAdFormType>({
-    resolver: zodResolver(addAdSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      price: "",
-      note: "",
-      location: { lat: 0, lng: 0 },
-    },
-    criteriaMode: "all",
-    mode: "all",
-  });
+  const { register, watch, formState, handleSubmit, setValue } =
+    useForm<AddAdFormType>({
+      resolver: zodResolver(addAdSchema),
+      defaultValues: {
+        name: "",
+        description: "",
+        price: "",
+        note: "",
+        location: { lat: "", lng: "" },
+      },
+      criteriaMode: "all",
+      mode: "all",
+    });
 
-  console.log(formState.errors.location);
-
-  const hi = register("location.lat");
+  React.useEffect(() => {
+    const hj = setValue("location", { lat: "234", lng: "324234" });
+    console.log(hj);
+    const hi = register("location.lat");
+  }, []);
 
   return (
     <>
@@ -331,7 +335,10 @@ export const UserAddAd = () => {
                       className: "text-sm flex",
                     }}
                   >
-                    <GetLocation register={register("location")} />
+                    <GetLocation
+                      register={register}
+                      error={formState.errors.note?.message}
+                    />
                   </FormInput>
 
                   <FormInput
@@ -410,9 +417,13 @@ export const UploadAdPictures = () => {
 
 interface GetLocationProps {
   register: UseFormRegister<AddAdFormType>;
+  error: string;
 }
 
-export const GetLocation: React.FC<GetLocationProps> = ({ register }) => {
+export const GetLocation: React.FC<GetLocationProps> = ({
+  register,
+  error: input_error,
+}) => {
   const [location, setLocation] = React.useState<LocationType | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -422,7 +433,10 @@ export const GetLocation: React.FC<GetLocationProps> = ({ register }) => {
         (position) => {
           const { latitude, longitude } = position.coords;
           // Set the location state
-          const newLocation: LocationType = { lat: latitude, lng: longitude };
+          const newLocation: LocationType = {
+            lat: latitude.toString(),
+            lng: longitude.toString(),
+          };
           setLocation(newLocation);
           setError(null);
         },
@@ -459,16 +473,18 @@ export const GetLocation: React.FC<GetLocationProps> = ({ register }) => {
     <div>
       <div className="flex items-center gap-2">
         <Input
-          {...register("location.lat", { required: true })}
+          // {...register("location.lat")}
           value={location?.lat ?? ""}
+          className={cn(input_error && "border-red-400 bg-red-100")}
           placeholder="Latitude"
-          disabled
+          // disabled
         />
         <Input
-          {...register("location.lng", { required: true })}
+          // {...register("location.lng")}
           value={location?.lng ?? ""}
+          className={cn(input_error && "border-red-400 bg-red-100")}
           placeholder="Longitude"
-          disabled
+          // disabled
         />
       </div>
       <Button
