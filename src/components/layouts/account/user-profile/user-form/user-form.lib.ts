@@ -1,14 +1,19 @@
 import axios from "axios";
-import { UpdateUserFormData } from "./user-form.types";
+import { UpdateUserFormData, User } from "./user-form.types";
 import { toast } from "sonner";
 
 export const token = "17|sWdz2ihTHtn38P3cqQukik3Qr6fwg4gBkJ6Ipv4o9a76b011";
 
-export async function getUser() {
+export async function getUser(user: User | null) {
   // Simulate API call
   try {
-    const { data: res_data } = await axios.get(
+    if (!user) return null;
+    const { data: res_data } = await axios.post(
       process.env.BACKEND__BASE_URL + "/user/user-data",
+      {
+        phone_number: user.phone_number,
+        user_type: "client",
+      },
       {
         headers: {
           "Content-Type": "application/json",

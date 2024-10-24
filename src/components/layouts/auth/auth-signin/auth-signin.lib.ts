@@ -3,6 +3,7 @@ import { PasswordRules, PhoneInputError } from "./auth-signin.constants";
 import { SigninFormType } from "./auth-signin.dto";
 import axios from "axios";
 import { toast } from "sonner";
+import { SigninReqType } from "./auth-signin.types";
 
 export function enumToArray<T extends {}>(enumObj: T): T[keyof T][] {
   return Object.values(enumObj) as T[keyof T][];
@@ -14,9 +15,9 @@ export const passwordErrorsArray = enumToArray(PasswordRules);
 export const onSubmitSignin = async (
   data: SigninFormType,
   route: UseNavigateResult<string>,
-) => {
+): Promise<SigninReqType | null> => {
   try {
-    const { data: res_data } = await axios.post(
+    const { data: res_data } = await axios.post<SigninReqType>(
       process.env.BACKEND__BASE_URL + "/user/login",
       {
         phone_number: data.phone,
@@ -29,13 +30,16 @@ export const onSubmitSignin = async (
       },
     );
 
-    if (!res_data.success) {
-      return toast.error("Sign in failed");
+    if (!res_data.data) {
+      toast.error("Sign in failed");
+      return null;
     }
 
     route({ to: "/" });
     toast.success("Sign in successfully");
+    return res_data;
   } catch (error) {
-    return toast.error("Sign in failed");
+    toast.error("Sign in failed");
+    return null;
   }
 };

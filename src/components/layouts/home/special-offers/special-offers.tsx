@@ -33,7 +33,7 @@ export const SpecialOffers = () => {
     );
   }
 
-  if (status === "success") {
+  if (status === "success" && data) {
     return (
       <div>
         <SpecialOffersHead data={t("filters")} />

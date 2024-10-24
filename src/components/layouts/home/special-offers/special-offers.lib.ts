@@ -1,9 +1,7 @@
 import axios from "axios";
 import { GetSpecialOffers, GetSpecialOffersRes } from "./special-offers.types";
 import { ProductType } from "../ad-item-card";
-export async function get_special_offers(): Promise<
-  GetSpecialOffers<ProductType>
-> {
+export async function get_special_offers(): Promise<GetSpecialOffers<ProductType> | null> {
   try {
     const { data: res_data } = await axios.get<
       Awaited<GetSpecialOffersRes<ProductType>>

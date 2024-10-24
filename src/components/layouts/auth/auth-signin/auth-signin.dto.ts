@@ -1,11 +1,7 @@
 import { z } from "zod";
-import {
-  CompanyNameRules,
-  EmailRules,
-  PasswordRules,
-  PhoneInputError,
-  UserNameRules,
-} from "./auth-signin.constants";
+import { PasswordRules, PhoneInputError } from "./auth-signin.constants";
+import { User } from "../../account/user-profile";
+import { atom } from "jotai";
 
 export const phoneSchema = z
   .string()
@@ -28,3 +24,5 @@ export const signinFormSchema = z.object({
 });
 
 export type SigninFormType = z.infer<typeof signinFormSchema>;
+
+export const user = atom<User | null>(null);

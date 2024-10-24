@@ -16,7 +16,7 @@ export const HomeBannerSwiper = () => {
     return <BannerSwiperSkeleton />;
   }
 
-  if (status === "success") {
+  if (status === "success" && data) {
     return (
       <CustomCarousel showIndicators={false}>
         {Array.from({ length: 1 }).map((_) => (

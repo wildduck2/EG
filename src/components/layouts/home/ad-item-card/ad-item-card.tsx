@@ -11,6 +11,8 @@ import { Logo } from "@/assets";
 import { BadgeCheck, Heart, MapPin, Star } from "lucide-react";
 import { cn } from "@/lib/utils";
 import i18next from "i18next";
+import { useMutate } from "../../account/user-wishlist/user-wishlist.hook";
+import React from "react";
 
 export const AdItemCard: React.FC<AddItemCardProps> = ({
   name,
@@ -19,16 +21,16 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
   image,
   age,
   region,
+  wishlist,
   brand_image,
 }) => {
   return (
     <Link
-      to={"/home/categories/$id"}
-      params={{ id: `${id}` }}
-      state={{ id: `${id}` }}
-      onClick={() => {
-        window.scrollTo(0, 0);
-      }}
+    // to={"/categories/$id"}
+    // params={{ id: `${id}` }}
+    // onClick={() => {
+    //   window.scrollTo(0, 0);
+    // }}
     >
       <Card className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer">
         <CardHeader className="p-0 relative h-[250px] overflow-hidden">
@@ -52,28 +54,7 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
               </span>
             </div>
           </div>
-          <Button
-            variant="secondary"
-            size="sm"
-            className={cn(
-              "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100",
-              // offers && "bg-red-400 hover:bg-red-500/70",
-            )}
-            label={{
-              children: "مفضلة",
-              className:
-                "bg-red-100/70 border-red-200 border hover:bg-red-100/70 [&_span]:text-red-400 [&_span]:mt-[-.4rem]",
-              showLabel: true,
-              side: "bottom",
-            }}
-          >
-            <Heart
-              className={cn(
-                "size-4",
-                // !offers ? "text-red-400 fill-red-400" : "text-white fill-white",
-              )}
-            />
-          </Button>
+          <AddWishlistButton id={id} wishlist={wishlist} />
         </CardContent>
         <CardFooter className="flex justify-between items-end p-0 gap-4">
           <div className="flex flex-col">
@@ -121,5 +102,46 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
         </CardFooter>
       </Card>
     </Link>
+  );
+};
+
+export type AddWishlistButtonType = {
+  id: number;
+  wishlist: boolean;
+};
+export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
+  const [wishlistState, setWishlistState] = React.useState<boolean>(wishlist);
+  const { startMutation } = useMutate({
+    id,
+    wish_list_state: wishlistState ? "remove" : "add",
+  });
+
+  return (
+    <Button
+      variant="secondary"
+      size="sm"
+      className={cn(
+        "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100",
+        wishlistState && "bg-red-400 hover:bg-red-500/70",
+      )}
+      label={{
+        children: "مفضلة",
+        className:
+          "bg-red-100/70 border-red-200 border hover:bg-red-100/70 [&_span]:text-red-400 [&_span]:mt-[-.4rem]",
+        showLabel: true,
+        side: "bottom",
+      }}
+      onClick={() => {
+        setWishlistState(!wishlistState);
+        startMutation.mutate();
+      }}
+    >
+      <Heart
+        className={cn(
+          "size-4",
+          // !offers ? "text-red-400 fill-red-400" : "text-white fill-white",
+        )}
+      />
+    </Button>
   );
 };

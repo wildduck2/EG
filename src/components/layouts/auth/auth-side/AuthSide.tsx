@@ -14,7 +14,7 @@ export const AuthSide = () => {
       </div>
       <div className="flex flex-col items-start justify-between h-full relative z-2">
         <div className="top">
-          <Link to="/home" className="logo">
+          <Link to="/" className="logo">
             <img src={LogoWhite} className="w-28 h-auto" alt="Logo" />
           </Link>
         </div>

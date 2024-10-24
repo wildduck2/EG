@@ -5,13 +5,14 @@ import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
 import { FormTextInput } from "@/components/ui/duckui/custom-inputs";
 import { useTranslation } from "react-i18next";
-import { signinFormSchema, SigninFormType } from "./auth-signin.dto";
+import { signinFormSchema, SigninFormType, user } from "./auth-signin.dto";
 import {
   onSubmitSignin,
   passwordErrorsArray,
   phoneErrorsArray,
 } from "./auth-signin.lib";
 import { SinginI18n } from "./auth-signin.types";
+import { useAtom } from "jotai";
 
 export const AuthSignin = () => {
   const methods = useForm<SigninFormType>({
@@ -26,6 +27,7 @@ export const AuthSignin = () => {
   });
 
   const { register, formState, handleSubmit } = methods;
+  const [_, setUserData] = useAtom(user);
 
   const route = useNavigate();
 
@@ -59,7 +61,15 @@ export const AuthSignin = () => {
         </div>
 
         <div className="sm:w-[350px] w-[90%]">
-          <form onSubmit={handleSubmit((data) => onSubmitSignin(data, route))}>
+          <form
+            onSubmit={handleSubmit(async (data) => {
+              const res = await onSubmitSignin(data, route);
+
+              if (res) {
+                setUserData(res.data.user);
+              }
+            })}
+          >
             <div>
               <div className="flex flex-col gap-2">
                 <FormTextInput

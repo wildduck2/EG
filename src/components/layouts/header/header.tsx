@@ -13,13 +13,23 @@ import {
   Separator,
   Button,
   Search,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuItem,
 } from "@/components/ui";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/assets";
 import { cn } from "@/lib/utils";
 
 import shape from "../../../assets/shape.png";
-import { queryClient } from "@/main";
+import { useAtom } from "jotai";
+import { user } from "../auth";
 
 export const Header = () => {
   const location = useLocation();
@@ -27,8 +37,8 @@ export const Header = () => {
   const { t, i18n } = useTranslation();
   const t_languages = t("languages");
 
-  const [open, setOpen] = React.useState(false);
-
+  const route = useNavigate();
+  const [userData, setUserData] = useAtom(user);
   const [isSticky, setIsSticky] = React.useState(false);
 
   React.useEffect(() => {
@@ -41,19 +51,17 @@ export const Header = () => {
     };
   }, [location.pathname]);
 
-  // Query to get categories
-  const userData = queryClient.getQueryData(["categories"]);
   console.log(userData);
 
   return (
     <>
       <header
         className={cn(
-          "lg:fixed top-0 xl:left-1/2 xl:-translate-x-1/2 w-full z-50 bg-background  mx-auto place-self-center",
+          "lg:fixed top-0 xl:left-1/2 xl:-translate-x-1/2 w-full z-50 mx-auto place-self-center",
           isSticky ? "border-border border-solid border-b" : "",
         )}
       >
-        <div className="flex flex-col items-cetner gap-4 container">
+        <div className="flex flex-col items-cetner gap-4 container  bg-background ">
           <div className="flex items-center justify-between">
             <Link to="/" className="logo mt-2">
               <img src={Logo} className="w-[9rem] h-auto" alt="Logo" />
@@ -84,6 +92,39 @@ export const Header = () => {
               <Search />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
+              {userData && (
+                <Button className="w-fit p-0 rounded-full" variant={"ghost"}>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <Avatar>
+                        <AvatarImage
+                          className="object-cover"
+                          src="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/duckui%20(1).png"
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>duck</AvatarFallback>
+                      </Avatar>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        onClick={() => navigate({ to: "/account" })}
+                      >
+                        Account
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          route({ to: "/auth/signin" });
+                          setUserData(null);
+                        }}
+                      >
+                        Logout
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </Button>
+              )}
               <Button
                 title={t("languages")}
                 variant={"outline"}
@@ -93,12 +134,14 @@ export const Header = () => {
                   i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
                 }}
               />
-              <Button
-                title={t("login")}
-                variant={"outline"}
-                className="w-full md:w-[130px]"
-                onClick={() => navigate({ to: "/auth/signin" })}
-              />
+              {!userData && (
+                <Button
+                  title={t("login")}
+                  variant={"outline"}
+                  className="w-full md:w-[130px]"
+                  onClick={() => navigate({ to: "/auth/signin" })}
+                />
+              )}
               <Button
                 title={t("sale")}
                 className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px]"

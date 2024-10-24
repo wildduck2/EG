@@ -23,7 +23,7 @@ export const CategorySwiper = () => {
     return <CategorySwiperSkeleton />;
   }
 
-  if (status === "success") {
+  if (status === "success" && data) {
     return (
       <div className="py-4 lg:py-12">
         <div>

@@ -5,14 +5,22 @@ import ReactDOM from "react-dom/client";
 import { RouterProvider, createRouter } from "@tanstack/react-router";
 import "./i18n.ts";
 import { Toaster, TooltipProvider } from "@/components/ui";
-import { store } from "@/context";
-import { Provider } from "react-redux";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
+import { user } from "./components/layouts";
+import { Provider as JotaiProvider } from "jotai";
+import { store } from "@/context";
+import { Provider } from "react-redux";
 
 // Create a new router instance
-const router = createRouter({ routeTree });
+const router = createRouter({
+  routeTree,
+  defaultPreload: "intent",
+  context: {
+    user,
+  },
+});
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
@@ -22,7 +30,7 @@ declare module "@tanstack/react-router" {
 }
 
 // Create a client
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({});
 
 // Render the app
 const rootElement = document.getElementById("root")!;
@@ -30,14 +38,14 @@ if (!rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement);
   root.render(
     <StrictMode>
-      <Provider store={store}>
-        <TooltipProvider>
+      <TooltipProvider>
+        <Provider store={store}>
           <QueryClientProvider client={queryClient}>
             <RouterProvider router={router} />
             <Toaster />
           </QueryClientProvider>
-        </TooltipProvider>
-      </Provider>
+        </Provider>
+      </TooltipProvider>
     </StrictMode>,
   );
 }

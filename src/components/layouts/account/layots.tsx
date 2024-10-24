@@ -3,6 +3,8 @@ import { SidebarNav } from "./SideNav/SideNav";
 import { CustomerServiceForm } from "./customer-service";
 import { useTranslation } from "react-i18next";
 import { AccountForm } from "./user-profile";
+import { UserAds } from "./user-ads";
+import { UserWishlist } from "./user-wishlist";
 
 export default function SettingsLayout() {
   const { t, i18n } = useTranslation();
@@ -33,6 +35,10 @@ export default function SettingsLayout() {
               >
                 {item.title === "account" ? (
                   <AccountForm />
+                ) : item.title === "my ads" ? (
+                  <UserAds />
+                ) : item.title === "my favorites" ? (
+                  <UserWishlist />
                 ) : (
                   item.title === "customer support" && <CustomerServiceForm />
                 )}

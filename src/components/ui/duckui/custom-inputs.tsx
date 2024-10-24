@@ -25,7 +25,6 @@ export const FormTextInput = ({
 }: FormTextInputProps) => {
   const { states, errors, inputError, type = "raw" } = error ?? {};
   const { className, ...inputProps } = input;
-  console.log(error);
 
   return (
     <div className="space-y-2 w-full">
