@@ -1,18 +1,20 @@
+import { User } from "@/types";
 import { redirect, UseNavigateResult } from "@tanstack/react-router";
 import axios from "axios";
 import { toast } from "sonner";
-import { ReqResponseType } from "../../home";
 
-export const onSubmitVerification = async (
-  data: { phone: string; otp: string },
+export const onSubmitResetPassword = async (
+  data: { password: string; password_confirmation: string },
+  phone_number: string,
   route: UseNavigateResult<string>,
 ) => {
   try {
-    const { data: res_data } = await axios.post<VerificationResType>(
-      process.env.BACKEND__BASE_URL + "/user/password-confirm",
+    const { data: res_data } = await axios.post(
+      process.env.BACKEND__BASE_URL + "/user/password/reset",
       {
-        phone_number: data.phone,
-        otp: data.otp,
+        phone_number,
+        password: data.password,
+        password_confirmation: data.password_confirmation,
       },
       {
         headers: {
@@ -26,8 +28,8 @@ export const onSubmitVerification = async (
       return null;
     }
 
-    route({ to: "/auth/change-password" });
-    toast.success("Account verified successfully");
+    route({ to: "/auth/signin" });
+    toast.success("Account password reset successfully");
     return res_data;
   } catch (error) {
     toast.error("Something went wrong");

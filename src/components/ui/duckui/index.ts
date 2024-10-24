@@ -35,3 +35,6 @@ export * from "./skeleton";
 export * from "./custom-inputs";
 export * from "./search";
 export * from "./input-otp";
+export * from "./upload";
+export * from "./context-menu";
+export * from "./alert-dialog";

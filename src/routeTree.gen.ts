@@ -18,12 +18,15 @@ import { Route as CategoriesCategoriesImport } from './routes/categories/_catego
 import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as CategoriesCategoriesIndexImport } from './routes/categories/_categories.index'
 import { Route as AccountAccountIndexImport } from './routes/account/_account.index'
+import { Route as CategoriesProductProductImport } from './routes/categories/product/_product'
 import { Route as AuthAuthVerificationImport } from './routes/auth/_auth.verification'
+import { Route as AuthAuthChangePasswordImport } from './routes/auth/_auth.change-password'
 
 // Create Virtual Routes
 
 const CategoriesImport = createFileRoute('/categories')()
 const AuthImport = createFileRoute('/auth')()
+const CategoriesProductImport = createFileRoute('/categories/product')()
 const CategoriesCategoriesIdLazyImport = createFileRoute(
   '/categories/_categories/$id',
 )()
@@ -54,6 +57,11 @@ const AuthRoute = AuthImport.update({
 const IndexRoute = IndexImport.update({
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const CategoriesProductRoute = CategoriesProductImport.update({
+  path: '/product',
+  getParentRoute: () => CategoriesRoute,
 } as any)
 
 const CategoriesCategoriesRoute = CategoriesCategoriesImport.update({
@@ -118,15 +126,25 @@ const AuthAuthForgetPasswordLazyRoute = AuthAuthForgetPasswordLazyImport.update(
   import('./routes/auth/_auth.forget-password.lazy').then((d) => d.Route),
 )
 
+const CategoriesProductProductRoute = CategoriesProductProductImport.update({
+  id: '/_product',
+  getParentRoute: () => CategoriesProductRoute,
+} as any)
+
 const AuthAuthVerificationRoute = AuthAuthVerificationImport.update({
   path: '/verification',
   getParentRoute: () => AuthAuthRoute,
 } as any)
 
+const AuthAuthChangePasswordRoute = AuthAuthChangePasswordImport.update({
+  path: '/change-password',
+  getParentRoute: () => AuthAuthRoute,
+} as any)
+
 const CategoriesProductProductIdLazyRoute =
   CategoriesProductProductIdLazyImport.update({
-    path: '/product/$id',
-    getParentRoute: () => CategoriesRoute,
+    path: '/$id',
+    getParentRoute: () => CategoriesProductProductRoute,
   } as any).lazy(() =>
     import('./routes/categories/product/_product.$id.lazy').then(
       (d) => d.Route,
@@ -172,12 +190,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoriesImport
       parentRoute: typeof CategoriesRoute
     }
+    '/auth/_auth/change-password': {
+      id: '/auth/_auth/change-password'
+      path: '/change-password'
+      fullPath: '/auth/change-password'
+      preLoaderRoute: typeof AuthAuthChangePasswordImport
+      parentRoute: typeof AuthAuthImport
+    }
     '/auth/_auth/verification': {
       id: '/auth/_auth/verification'
       path: '/verification'
       fullPath: '/auth/verification'
       preLoaderRoute: typeof AuthAuthVerificationImport
       parentRoute: typeof AuthAuthImport
+    }
+    '/categories/product': {
+      id: '/categories/product'
+      path: '/product'
+      fullPath: '/categories/product'
+      preLoaderRoute: typeof CategoriesProductImport
+      parentRoute: typeof CategoriesImport
+    }
+    '/categories/product/_product': {
+      id: '/categories/product/_product'
+      path: '/product'
+      fullPath: '/categories/product'
+      preLoaderRoute: typeof CategoriesProductProductImport
+      parentRoute: typeof CategoriesProductRoute
     }
     '/auth/_auth/forget-password': {
       id: '/auth/_auth/forget-password'
@@ -230,10 +269,10 @@ declare module '@tanstack/react-router' {
     }
     '/categories/product/_product/$id': {
       id: '/categories/product/_product/$id'
-      path: '/product/$id'
+      path: '/$id'
       fullPath: '/categories/product/$id'
       preLoaderRoute: typeof CategoriesProductProductIdLazyImport
-      parentRoute: typeof CategoriesImport
+      parentRoute: typeof CategoriesProductProductImport
     }
   }
 }
@@ -241,6 +280,7 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 interface AuthAuthRouteChildren {
+  AuthAuthChangePasswordRoute: typeof AuthAuthChangePasswordRoute
   AuthAuthVerificationRoute: typeof AuthAuthVerificationRoute
   AuthAuthForgetPasswordLazyRoute: typeof AuthAuthForgetPasswordLazyRoute
   AuthAuthSigninLazyRoute: typeof AuthAuthSigninLazyRoute
@@ -249,6 +289,7 @@ interface AuthAuthRouteChildren {
 }
 
 const AuthAuthRouteChildren: AuthAuthRouteChildren = {
+  AuthAuthChangePasswordRoute: AuthAuthChangePasswordRoute,
   AuthAuthVerificationRoute: AuthAuthVerificationRoute,
   AuthAuthForgetPasswordLazyRoute: AuthAuthForgetPasswordLazyRoute,
   AuthAuthSigninLazyRoute: AuthAuthSigninLazyRoute,
@@ -284,14 +325,39 @@ const CategoriesCategoriesRouteChildren: CategoriesCategoriesRouteChildren = {
 const CategoriesCategoriesRouteWithChildren =
   CategoriesCategoriesRoute._addFileChildren(CategoriesCategoriesRouteChildren)
 
+interface CategoriesProductProductRouteChildren {
+  CategoriesProductProductIdLazyRoute: typeof CategoriesProductProductIdLazyRoute
+}
+
+const CategoriesProductProductRouteChildren: CategoriesProductProductRouteChildren =
+  {
+    CategoriesProductProductIdLazyRoute: CategoriesProductProductIdLazyRoute,
+  }
+
+const CategoriesProductProductRouteWithChildren =
+  CategoriesProductProductRoute._addFileChildren(
+    CategoriesProductProductRouteChildren,
+  )
+
+interface CategoriesProductRouteChildren {
+  CategoriesProductProductRoute: typeof CategoriesProductProductRouteWithChildren
+}
+
+const CategoriesProductRouteChildren: CategoriesProductRouteChildren = {
+  CategoriesProductProductRoute: CategoriesProductProductRouteWithChildren,
+}
+
+const CategoriesProductRouteWithChildren =
+  CategoriesProductRoute._addFileChildren(CategoriesProductRouteChildren)
+
 interface CategoriesRouteChildren {
   CategoriesCategoriesRoute: typeof CategoriesCategoriesRouteWithChildren
-  CategoriesProductProductIdLazyRoute: typeof CategoriesProductProductIdLazyRoute
+  CategoriesProductRoute: typeof CategoriesProductRouteWithChildren
 }
 
 const CategoriesRouteChildren: CategoriesRouteChildren = {
   CategoriesCategoriesRoute: CategoriesCategoriesRouteWithChildren,
-  CategoriesProductProductIdLazyRoute: CategoriesProductProductIdLazyRoute,
+  CategoriesProductRoute: CategoriesProductRouteWithChildren,
 }
 
 const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
@@ -302,7 +368,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesCategoriesRouteWithChildren
+  '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
+  '/categories/product': typeof CategoriesProductProductRouteWithChildren
   '/auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/signup': typeof AuthAuthSignupLazyRoute
@@ -317,7 +385,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesCategoriesIndexRoute
+  '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
+  '/categories/product': typeof CategoriesProductProductRouteWithChildren
   '/auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/signup': typeof AuthAuthSignupLazyRoute
@@ -334,7 +404,10 @@ export interface FileRoutesById {
   '/auth/_auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesRouteWithChildren
   '/categories/_categories': typeof CategoriesCategoriesRouteWithChildren
+  '/auth/_auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/_auth/verification': typeof AuthAuthVerificationRoute
+  '/categories/product': typeof CategoriesProductRouteWithChildren
+  '/categories/product/_product': typeof CategoriesProductProductRouteWithChildren
   '/auth/_auth/forget-password': typeof AuthAuthForgetPasswordLazyRoute
   '/auth/_auth/signin': typeof AuthAuthSigninLazyRoute
   '/auth/_auth/signup': typeof AuthAuthSignupLazyRoute
@@ -351,7 +424,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/categories'
+    | '/auth/change-password'
     | '/auth/verification'
+    | '/categories/product'
     | '/auth/forget-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -365,7 +440,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/categories'
+    | '/auth/change-password'
     | '/auth/verification'
+    | '/categories/product'
     | '/auth/forget-password'
     | '/auth/signin'
     | '/auth/signup'
@@ -380,7 +457,10 @@ export interface FileRouteTypes {
     | '/auth/_auth'
     | '/categories'
     | '/categories/_categories'
+    | '/auth/_auth/change-password'
     | '/auth/_auth/verification'
+    | '/categories/product'
+    | '/categories/product/_product'
     | '/auth/_auth/forget-password'
     | '/auth/_auth/signin'
     | '/auth/_auth/signup'
@@ -437,6 +517,7 @@ export const routeTree = rootRoute
       "filePath": "auth/_auth.tsx",
       "parent": "/auth",
       "children": [
+        "/auth/_auth/change-password",
         "/auth/_auth/verification",
         "/auth/_auth/forget-password",
         "/auth/_auth/signin",
@@ -448,7 +529,7 @@ export const routeTree = rootRoute
       "filePath": "categories",
       "children": [
         "/categories/_categories",
-        "/categories/product/_product/$id"
+        "/categories/product"
       ]
     },
     "/categories/_categories": {
@@ -459,9 +540,27 @@ export const routeTree = rootRoute
         "/categories/_categories/"
       ]
     },
+    "/auth/_auth/change-password": {
+      "filePath": "auth/_auth.change-password.tsx",
+      "parent": "/auth/_auth"
+    },
     "/auth/_auth/verification": {
       "filePath": "auth/_auth.verification.tsx",
       "parent": "/auth/_auth"
+    },
+    "/categories/product": {
+      "filePath": "categories/product",
+      "parent": "/categories",
+      "children": [
+        "/categories/product/_product"
+      ]
+    },
+    "/categories/product/_product": {
+      "filePath": "categories/product/_product.tsx",
+      "parent": "/categories/product",
+      "children": [
+        "/categories/product/_product/$id"
+      ]
     },
     "/auth/_auth/forget-password": {
       "filePath": "auth/_auth.forget-password.lazy.tsx",
@@ -492,7 +591,7 @@ export const routeTree = rootRoute
     },
     "/categories/product/_product/$id": {
       "filePath": "categories/product/_product.$id.lazy.tsx",
-      "parent": "/categories"
+      "parent": "/categories/product/_product"
     }
   }
 }

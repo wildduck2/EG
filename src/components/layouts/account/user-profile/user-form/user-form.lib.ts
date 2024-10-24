@@ -8,16 +8,27 @@ export async function getUser(user: User | null) {
   // Simulate API call
   try {
     if (!user) return null;
-    const { data: res_data } = await axios.post(
-      process.env.BACKEND__BASE_URL + "/user/user-data",
+
+    // const { data: res_data } = await axios.request({
+    //   method: "GET",
+    //   url: process.env.BACKEND__BASE_URL + "/user/user-data",
+    //   data: {
+    //     phone_number: user.phone_number,
+    //   },
+    //   withCredentials: true,
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    const { data: res_data } = await axios.get(
+      process.env.BACKEND__BASE_URL +
+      "/user/user-data" +
+      "?phone_number=" +
+      user.phone_number,
       {
-        phone_number: user.phone_number,
-        user_type: "client",
-      },
-      {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
       },
     );

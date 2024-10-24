@@ -5,9 +5,11 @@ import { user } from "@/components/layouts/auth";
 import { AdItemCard } from "../../home";
 import { UserWishlistSkeleton } from "./user-wishlist.skeleton";
 import { get_user_wishlist } from "./user-wishlist.lib";
+import { useTranslation } from "react-i18next";
 
 export const UserWishlist = () => {
   const [userData, setUserData] = useAtom(user);
+  const { t } = useTranslation();
 
   const { data, status } = useQuery({
     queryKey: ["ads"],
@@ -35,6 +37,8 @@ export const UserWishlist = () => {
   }
 
   if (status === "error" || !data) {
-    return <h2 className="text-lg mx-auto mt-8 text-center">There's no ads</h2>;
+    return (
+      <h2 className="text-lg mx-auto mt-8 text-center">{t("theresNoAds")}</h2>
+    );
   }
 };

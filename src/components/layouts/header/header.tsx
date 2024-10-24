@@ -29,7 +29,7 @@ import { cn } from "@/lib/utils";
 
 import shape from "../../../assets/shape.png";
 import { useAtom } from "jotai";
-import { user } from "../auth";
+import { signoutAsync, user } from "../auth";
 
 export const Header = () => {
   const location = useLocation();
@@ -114,8 +114,8 @@ export const Header = () => {
                         Account
                       </DropdownMenuItem>
                       <DropdownMenuItem
-                        onClick={() => {
-                          route({ to: "/auth/signin" });
+                        onClick={async () => {
+                          const res = signoutAsync({ route });
                           setUserData(null);
                         }}
                       >

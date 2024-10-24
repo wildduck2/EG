@@ -22,6 +22,7 @@ i18n
     resources: {
       en: {
         translation: {
+          theresNoAds: "There's no ads",
           viewMore: "View More",
           login: "Login",
           sale: "Sale",
@@ -214,6 +215,7 @@ i18n
       },
       ar: {
         translation: {
+          theresNoAds: "لا يوجد اعلانات",
           login: "تسجيل الدخول",
           sale: "بيع",
           languages: "الانجليزية",

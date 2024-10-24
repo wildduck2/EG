@@ -3,7 +3,7 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { LucideIcon, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useForm } from "react-hook-form";
-import { FormTextInput } from "@/components/ui/duckui/custom-inputs";
+import { FormInput } from "@/components/ui/duckui/custom-inputs";
 import { useTranslation } from "react-i18next";
 import { signinFormSchema, SigninFormType, user } from "./auth-signin.dto";
 import {
@@ -72,7 +72,7 @@ export const AuthSignin = () => {
           >
             <div>
               <div className="flex flex-col gap-2">
-                <FormTextInput
+                <FormInput
                   name="phone"
                   register={register("phone")}
                   error={{
@@ -92,7 +92,7 @@ export const AuthSignin = () => {
                   }}
                 />
 
-                <FormTextInput
+                <FormInput
                   name="password"
                   register={register("password")}
                   error={{

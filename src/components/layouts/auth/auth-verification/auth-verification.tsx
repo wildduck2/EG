@@ -8,22 +8,25 @@ import {
 import { verification_icons } from "./auth-verification.constants";
 import { Check, LucideIcon } from "lucide-react";
 import React from "react";
-import { useNavigate } from "@tanstack/react-router";
 import { onSubmitVerification } from "./auth-verification.lib";
 import { cn } from "@/lib/utils";
+import { useNavigate } from "@tanstack/react-router";
+import { phone_number } from "@/context";
+import { useAtom } from "jotai";
 
 export const AuthVerification = () => {
   const validClass = "valid";
   const [otp, setOtp] = React.useState<string>("");
   const [error, setError] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [phoneNumber] = useAtom(phone_number);
 
   const route = useNavigate();
   async function onSubmit(data: string) {
     const res = await onSubmitVerification(
       {
-        phone: "+201285971377",
-        otp: "999999",
+        phone: phoneNumber,
+        otp: data,
       },
       route,
     );

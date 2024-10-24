@@ -118,7 +118,7 @@ export const AuthSignup = () => {
 };
 
 import { LucideIcon, Mail } from "lucide-react";
-import { FormTextInput } from "@/components/ui/duckui/custom-inputs";
+import { FormInput } from "@/components/ui/duckui/custom-inputs";
 
 import {
   passwordErrorsArray,
@@ -154,7 +154,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
       >
         <div>
           <div className="flex flex-col gap-2">
-            <FormTextInput
+            <FormInput
               name="username"
               register={register("username")}
               error={{
@@ -174,7 +174,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
             />
 
             {type === "trader" && (
-              <FormTextInput
+              <FormInput
                 name="companyname"
                 register={register("companyname")}
                 error={{
@@ -193,7 +193,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
                 }}
               />
             )}
-            <FormTextInput
+            <FormInput
               name="email"
               register={register("email")}
               error={{
@@ -212,7 +212,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
             />
 
-            <FormTextInput
+            <FormInput
               name="phone"
               register={register("phone")}
               error={{
@@ -232,7 +232,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
             />
 
-            <FormTextInput
+            <FormInput
               name="password"
               register={register("password")}
               error={{
@@ -250,7 +250,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
                 required: true,
               }}
             />
-            <FormTextInput
+            <FormInput
               name="confirm_password"
               register={register("password_confirmation")}
               error={{

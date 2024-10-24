@@ -1,4 +1,4 @@
-import { Button, FormTextInput, zodResolver } from "@/components/ui";
+import { Button, FormInput, zodResolver } from "@/components/ui";
 import { useForm } from "react-hook-form";
 import {
   updatePasswordFormSchema,
@@ -35,7 +35,7 @@ export const UpdatePasswordForm = () => {
       onSubmit={handleSubmit((data) => update_password({ data: data }))}
       className="space-y-8 p-4 border-border border border-solid rounded-md md:w-[70%] "
     >
-      <FormTextInput
+      <FormInput
         name="oldpassword"
         register={register("oldpassword")}
         error={{
@@ -53,7 +53,7 @@ export const UpdatePasswordForm = () => {
           required: true,
         }}
       />
-      <FormTextInput
+      <FormInput
         name="newpassword"
         register={register("newpassword")}
         error={{
@@ -74,7 +74,7 @@ export const UpdatePasswordForm = () => {
           required: true,
         }}
       />
-      <FormTextInput
+      <FormInput
         name="newpassword"
         register={register("confirmpassword")}
         error={{

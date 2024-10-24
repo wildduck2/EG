@@ -7,7 +7,7 @@ import {
   Checkbox,
   Label,
   zodResolver,
-  FormTextInput,
+  FormInput,
 } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { LucideIcon, Phone } from "lucide-react";
@@ -18,6 +18,8 @@ import {
 } from "./auth-forget-password.dto";
 import { onSubmitForgetPassword } from "./auth-forget-password.lib";
 import { ForgetPasswordI18n } from "./auth-forget-password.types";
+import { useAtom } from "jotai";
+import { phone_number } from "@/context";
 
 export const AuthForgetPassword = () => {
   const { t, i18n } = useTranslation();
@@ -35,6 +37,8 @@ export const AuthForgetPassword = () => {
 
   const { register, formState, handleSubmit } = methods;
   const route = useNavigate();
+
+  const [_, setPhoneNumber] = useAtom(phone_number);
 
   return (
     <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">
@@ -65,9 +69,10 @@ export const AuthForgetPassword = () => {
 
         <div className="w-full">
           <form
-            onSubmit={handleSubmit((data) =>
-              onSubmitForgetPassword(data, route),
-            )}
+            onSubmit={handleSubmit(async (data) => {
+              await onSubmitForgetPassword(data, route);
+              setPhoneNumber(data.phone);
+            })}
           >
             <div className="flex flex-col gap-2">
               <div className="flex flex-col gap-2">
@@ -75,7 +80,7 @@ export const AuthForgetPassword = () => {
                   {forgetpassword.phonenumber}
                 </Label>
 
-                <FormTextInput
+                <FormInput
                   name="phone"
                   register={register("phone")}
                   error={{
@@ -110,17 +115,6 @@ export const AuthForgetPassword = () => {
               </Button>
             </div>
           </form>
-        </div>
-
-        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
-          <Checkbox />
-          <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
-            {forgetpassword.agree}
-            <Link className="underline underline-offset-2 px-1 text-red-600">
-              {forgetpassword.link}
-            </Link>
-            .
-          </p>
         </div>
       </div>
     </div>

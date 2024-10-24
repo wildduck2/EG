@@ -19,11 +19,11 @@ export const HomeBannerSwiper = () => {
   if (status === "success" && data) {
     return (
       <CustomCarousel showIndicators={false}>
-        {Array.from({ length: 1 }).map((_) => (
-          <CarouselItem>
+        {data.map((item, idx) => (
+          <CarouselItem key={idx}>
             <div className="relative rounded-2xl">
               <img
-                src={HomeBanner}
+                src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + item.image}
                 alt="slide1"
                 className="object-cover rounded-2xl w-full h-[400px]"
               />

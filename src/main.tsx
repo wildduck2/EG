@@ -9,9 +9,8 @@ import { Toaster, TooltipProvider } from "@/components/ui";
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 import { user } from "./components/layouts";
-import { Provider as JotaiProvider } from "jotai";
-import { store } from "@/context";
 import { Provider } from "react-redux";
+import { store } from "./context";
 
 // Create a new router instance
 const router = createRouter({
@@ -39,12 +38,10 @@ if (!rootElement.innerHTML) {
   root.render(
     <StrictMode>
       <TooltipProvider>
-        <Provider store={store}>
-          <QueryClientProvider client={queryClient}>
-            <RouterProvider router={router} />
-            <Toaster />
-          </QueryClientProvider>
-        </Provider>
+        <QueryClientProvider client={queryClient}>
+          <RouterProvider router={router} />
+          <Toaster />
+        </QueryClientProvider>
       </TooltipProvider>
     </StrictMode>,
   );

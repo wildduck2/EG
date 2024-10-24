@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
-import { Button, FormTextInput, zodResolver } from "@/components/ui";
+import { Button, FormInput, zodResolver } from "@/components/ui";
 import { userInfoFormSchema, UserInfoFormSchemaType } from "./user-form.dto";
 import { update_user_data } from "./user-form.lib";
 import { UserInfoFormProps } from "./user-form.types";
@@ -37,7 +37,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
       className="space-y-8 p-4 border-border border border-solid rounded-md w-full"
     >
       <div className="flex items-start gap-4">
-        <FormTextInput
+        <FormInput
           name="username"
           register={register("username")}
           error={{
@@ -56,7 +56,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
           }}
         />
 
-        <FormTextInput
+        <FormInput
           name="companyname"
           register={register("companyname")}
           error={{
@@ -76,7 +76,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
         />
       </div>
       <div className="flex items-start gap-4">
-        <FormTextInput
+        <FormInput
           name="email"
           register={register("email")}
           error={{
@@ -94,7 +94,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
           }}
         />
 
-        <FormTextInput
+        <FormInput
           name="phone"
           register={register("phone")}
           error={{

@@ -37,6 +37,8 @@ export const onSubmitSignin = async (
 
     route({ to: "/" });
     toast.success("Sign in successfully");
+
+    localStorage.setItem("user-info", JSON.stringify(res_data.data.user));
     return res_data;
   } catch (error) {
     toast.error("Sign in failed");
