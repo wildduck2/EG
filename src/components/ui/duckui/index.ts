@@ -38,3 +38,4 @@ export * from "./input-otp";
 export * from "./upload";
 export * from "./context-menu";
 export * from "./alert-dialog";
+export * from './combobox'

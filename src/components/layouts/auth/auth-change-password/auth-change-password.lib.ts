@@ -5,14 +5,14 @@ import { toast } from "sonner";
 
 export const onSubmitResetPassword = async (
   data: { password: string; password_confirmation: string },
-  phone_number: string,
   route: UseNavigateResult<string>,
 ) => {
+  const phone: number = JSON.parse(localStorage.getItem("phone") as string);
   try {
     const { data: res_data } = await axios.post(
       process.env.BACKEND__BASE_URL + "/user/password/reset",
       {
-        phone_number,
+        phone_number: phone,
         password: data.password,
         password_confirmation: data.password_confirmation,
       },
@@ -24,7 +24,7 @@ export const onSubmitResetPassword = async (
     );
 
     if (!res_data.success) {
-      toast.error("Something went wrong");
+      toast.error("Failed to reset password");
       return null;
     }
 
@@ -32,7 +32,8 @@ export const onSubmitResetPassword = async (
     toast.success("Account password reset successfully");
     return res_data;
   } catch (error) {
-    toast.error("Something went wrong");
+    console.log(error);
+    toast.error("Failed to reset password");
     return null;
   }
 };

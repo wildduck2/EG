@@ -65,6 +65,9 @@ export const Search = () => {
         >
           <CommandInput
             placeholder={dir === "ltr" ? "Type a command or search..." : "ابحث"}
+            onSubmit={(value) => {
+              console.log(value);
+            }}
           />
           <CommandList className="min-h-[270px]">
             <CommandEmpty>No results found.</CommandEmpty>

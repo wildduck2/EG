@@ -2,6 +2,8 @@
 
 import { TabsList, TabsTrigger } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import { useAtom } from "jotai";
+import { user } from "../../auth";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
@@ -11,6 +13,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
+  const [userData] = useAtom(user);
   return (
     <TabsList
       className={cn(
@@ -19,14 +22,24 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       )}
       {...props}
     >
-      {items.map((item) => (
-        <TabsTrigger
-          className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground capitalize"
-          value={item.title}
-        >
-          {item.children}
-        </TabsTrigger>
-      ))}
+      {items
+        .filter((item) => {
+          if (item.title !== "verify your account") {
+            return item;
+          }
+
+          if (item.title === "verify your account" && !userData?.verify) {
+            return item;
+          }
+        })
+        .map((item) => (
+          <TabsTrigger
+            className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground capitalize"
+            value={item.title}
+          >
+            {item.children}
+          </TabsTrigger>
+        ))}
     </TabsList>
   );
 }

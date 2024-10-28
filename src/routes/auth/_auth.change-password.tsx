@@ -1,19 +1,17 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useAtom } from "jotai";
-import { user } from "@/components/layouts";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { AuthChangePasswordPage } from "@/components/pages";
+import { getUser } from "@/components/layouts/account/user-profile";
 
 export const Route = createFileRoute("/auth/_auth/change-password")({
-  component: () => {
-    const [_user] = useAtom(user);
-    const route = useNavigate();
-
+  beforeLoad: async () => {
+    const _user = await getUser();
     if (_user) {
-      return route({
+      return redirect({
         to: "/",
       });
     }
-
+  },
+  component: () => {
     return (
       <>
         <AuthChangePasswordPage />

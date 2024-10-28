@@ -20,16 +20,17 @@ import {
   UploadProvider,
   UploadTrigger,
   zodResolver,
+  useUploadContext,
 } from "@/components/ui";
 import { AlertDialogCustom } from "@/components/ui/duckui/alert";
 import { cn } from "@/lib/utils";
-import { watch } from "fs";
 import { Plus, UploadIcon } from "lucide-react";
 import React from "react";
 import {
+  FieldErrors,
   useForm,
   UseFormRegister,
-  UseFormRegisterReturn,
+  UseFormSetValue,
 } from "react-hook-form";
 import { z } from "zod";
 
@@ -37,6 +38,15 @@ import { z } from "zod";
 const locationSchema = z.object({
   lat: z.string().nonempty("Latitude is required"),
   lng: z.string().nonempty("Longitude is required"),
+});
+
+const fileSchema = z.object({
+  id: z.string().uuid(),
+  file: z.object({}).optional(),
+  name: z.string(),
+  url: z.string().url().nullable(),
+  type: z.string(),
+  size: z.string().transform((val) => parseInt(val, 10)),
 });
 
 // Define the Zod schema for adding an advertisement
@@ -47,12 +57,9 @@ export const addAdSchema = z.object({
   note: z.string().min(1, "Note is required"),
   negotiate: z.enum(["yes", "no"], { message: "Negotiatable is required" }),
   status: z.enum(["new", "used"], { message: "Status is required" }),
-  location: locationSchema.refine(
-    (data) => data.lat !== undefined && data.lng !== undefined,
-    {
-      message: "Location is required",
-    },
-  ),
+  location: locationSchema,
+  select: z.string().nonempty("Governorate is required"),
+  attachment: z.array(fileSchema).min(1, "Attachment is required"),
 });
 
 // Define the TypeScript type based on the schema
@@ -69,16 +76,13 @@ export const UserAddAd = () => {
         price: "",
         note: "",
         location: { lat: "", lng: "" },
+        attachment: [],
       },
       criteriaMode: "all",
       mode: "all",
     });
 
-  React.useEffect(() => {
-    const hj = setValue("location", { lat: "234", lng: "324234" });
-    console.log(hj);
-    const hi = register("location.lat");
-  }, []);
+  console.log(watch("attachment"), "asdfasfasfd", formState.errors);
 
   return (
     <>
@@ -100,6 +104,8 @@ export const UserAddAd = () => {
               onClick={handleSubmit((data) => {
                 console.log(data);
               })}
+              disabled={!formState.isValid || formState.isSubmitting}
+              loading={formState.isSubmitting}
             >
               Submit
             </Button>
@@ -130,15 +136,17 @@ export const UserAddAd = () => {
                 <div className="flex gap-4">
                   <UploadProvider>
                     <div className="flex flex-col w-full">
-                      <Label className="text-sm flex" children="Pictures" />
-                      <UploadAdPictures />
+                      <UploadAdPictures
+                        setValue={setValue}
+                        register={register}
+                        errors={formState.errors}
+                      />
                     </div>
                   </UploadProvider>
                   <FormInput
                     className="w-full"
                     register={register("name")}
                     error={{
-                      states: formState.errors.name?.types,
                       inputError: formState.errors.name?.message,
                     }}
                     input={{
@@ -153,10 +161,9 @@ export const UserAddAd = () => {
                 <div className="flex gap-4">
                   <FormInput
                     className="w-full"
-                    register={register("name")}
+                    register={register("price")}
                     error={{
-                      states: formState.errors.name?.types,
-                      inputError: formState.errors.name?.message,
+                      inputError: formState.errors.price?.message,
                     }}
                     input={{
                       placeholder: "Enter Ad price.",
@@ -168,10 +175,9 @@ export const UserAddAd = () => {
                   />
                   <FormInput
                     className="w-full"
-                    register={register("name")}
+                    register={register("price")}
                     error={{
-                      states: formState.errors.name?.types,
-                      inputError: formState.errors.name?.message,
+                      inputError: formState.errors.price?.message,
                     }}
                     input={{
                       placeholder: "Enter Ad price.",
@@ -188,7 +194,6 @@ export const UserAddAd = () => {
                     className="w-full"
                     register={register("status")}
                     error={{
-                      states: formState.errors.negotiate?.types,
                       inputError: formState.errors.negotiate?.message,
                     }}
                     input={{
@@ -232,7 +237,6 @@ export const UserAddAd = () => {
                     className="w-full"
                     register={register("status")}
                     error={{
-                      states: formState.errors.status?.types,
                       inputError: formState.errors.status?.message,
                     }}
                     input={{
@@ -276,9 +280,7 @@ export const UserAddAd = () => {
                   <FormInput
                     className="w-full"
                     error={{
-                      states: formState.errors.description?.types,
                       inputError: formState.errors.description?.message,
-                      type: "raw",
                     }}
                     input_label={{
                       children: "Description",
@@ -301,9 +303,7 @@ export const UserAddAd = () => {
                   <FormInput
                     className="w-full"
                     error={{
-                      states: formState.errors.note?.types,
                       inputError: formState.errors.note?.message,
-                      type: "raw",
                     }}
                     input_label={{
                       children: "Note",
@@ -326,8 +326,9 @@ export const UserAddAd = () => {
                   <FormInput
                     className="w-full"
                     error={{
-                      states: formState.errors.location?.types,
-                      inputError: formState.errors.location?.message,
+                      inputError:
+                        formState.errors.location?.lng?.message ||
+                        formState.errors.location?.lat?.message,
                       type: "raw",
                     }}
                     input_label={{
@@ -337,38 +338,17 @@ export const UserAddAd = () => {
                   >
                     <GetLocation
                       register={register}
-                      error={formState.errors.note?.message}
+                      errors={formState.errors}
+                      value={watch("location")}
+                      setValue={setValue}
                     />
                   </FormInput>
 
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      states: formState.errors.note?.types,
-                      inputError: formState.errors.note?.message,
-                      type: "raw",
-                    }}
-                    input_label={{
-                      children: "Note",
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Select>
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="Select a fruit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Fruits</SelectLabel>
-                          <SelectItem value="apple">Apple</SelectItem>
-                          <SelectItem value="banana">Banana</SelectItem>
-                          <SelectItem value="blueberry">Blueberry</SelectItem>
-                          <SelectItem value="grapes">Grapes</SelectItem>
-                          <SelectItem value="pineapple">Pineapple</SelectItem>
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                  </FormInput>
+                  <SelectAdInput
+                    register={register}
+                    errors={formState.errors}
+                    setValue={setValue}
+                  />
                 </div>
               </form>
             </ScrollArea>
@@ -379,52 +359,139 @@ export const UserAddAd = () => {
   );
 };
 
-export const UploadAdPictures = () => {
+export type SelectAdInputProps = {
+  register: UseFormRegister<AddAdFormType>;
+  errors: FieldErrors<AddAdFormType>;
+  setValue: UseFormSetValue<AddAdFormType>;
+};
+
+export const SelectAdInput = ({
+  errors,
+  setValue,
+  register,
+}: SelectAdInputProps) => {
+  return (
+    <FormInput
+      className="w-full"
+      error={{
+        inputError: errors.select?.message,
+      }}
+      input_label={{
+        children: "Governate",
+        className: "text-sm flex",
+      }}
+    >
+      <Select
+        onValueChange={(value) => setValue("select", value)}
+        {...register("select")}
+      >
+        <SelectTrigger
+          className={cn(
+            "w-full",
+            errors.select?.message && "border-red-400 bg-red-100 ring-red-400",
+          )}
+        >
+          <SelectValue placeholder="Select a governorate" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Governorates</SelectLabel>
+            <SelectItem value="kafr">Kafr</SelectItem>
+            <SelectItem value="cairo">Cairo</SelectItem>
+            <SelectItem value="giza">Giza</SelectItem>
+            <SelectItem value="alex">Alex</SelectItem>
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+    </FormInput>
+  );
+};
+
+export type UploadAdInput = {
+  register: UseFormRegister<AddAdFormType>;
+  setValue: UseFormSetValue<AddAdFormType>;
+  errors: FieldErrors<AddAdFormType>;
+};
+
+export const UploadAdPictures = ({
+  register,
+  setValue,
+  errors,
+}: UploadAdInput) => {
+  const { attachments } = useUploadContext();
+
+  React.useEffect(() => {
+    setValue(
+      "attachment",
+      attachments as unknown as z.infer<typeof fileSchema>[],
+    );
+  }, [attachments]);
+
   return (
     <>
-      <Upload
-        _content={{
-          footer: {
-            className: "w-full [&_button]:w-[100px]",
-          },
+      <FormInput
+        className="w-full"
+        register={register("attachment")}
+        error={{
+          inputError: errors.attachment?.message,
         }}
-        trigger={
-          <UploadTrigger className="w-full">
-            <Button
-              variant="outline"
-              type="button"
-              className="bg-secondary/20 w-full"
-              icon={{ icon: UploadIcon, className: "h-4 w-4" }}
-            >
-              Upload Ad Pictures
-            </Button>
-          </UploadTrigger>
-        }
-        content={
-          <div className="flex flex-col h-full gap-4">
-            <UploadInput
-              input={{
-                accept: "image/*",
-              }}
-            />
-            <UploadContent />
-          </div>
-        }
-      />
+        input_label={{
+          children: "attachment",
+          className: "text-sm flex",
+        }}
+      >
+        <Upload
+          _content={{
+            footer: {
+              className: "w-full [&_button]:w-[100px]",
+            },
+          }}
+          trigger={
+            <UploadTrigger className="w-full">
+              <Button
+                variant="outline"
+                type="button"
+                className={cn(
+                  "bg-secondary/20 w-full",
+                  errors.attachment?.message &&
+                    "border-red-400 bg-red-100 ring-red-400",
+                )}
+                icon={{ icon: UploadIcon, className: "h-4 w-4" }}
+              >
+                Upload Ad Pictures
+              </Button>
+            </UploadTrigger>
+          }
+          content={
+            <div className="flex flex-col h-full gap-4">
+              <UploadInput
+                input={{
+                  accept: "image/*",
+                  // ...register("attachment"),
+                }}
+              />
+              <UploadContent />
+            </div>
+          }
+        />
+      </FormInput>
     </>
   );
 };
 
 interface GetLocationProps {
   register: UseFormRegister<AddAdFormType>;
-  error: string;
+  errors: FieldErrors<AddAdFormType>;
+  setValue: UseFormSetValue<AddAdFormType>;
+  value: Partial<AddAdFormType["location"]>;
 }
 
 export const GetLocation: React.FC<GetLocationProps> = ({
   register,
-  error: input_error,
+  errors,
+  value,
+  setValue,
 }) => {
-  const [location, setLocation] = React.useState<LocationType | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
   const getLocation = () => {
@@ -432,28 +499,16 @@ export const GetLocation: React.FC<GetLocationProps> = ({
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          // Set the location state
-          const newLocation: LocationType = {
-            lat: latitude.toString(),
-            lng: longitude.toString(),
-          };
-          setLocation(newLocation);
+          setValue("location.lat", latitude.toString(), {
+            shouldValidate: true,
+          });
+          setValue("location.lng", longitude.toString(), {
+            shouldValidate: true,
+          });
           setError(null);
         },
         (err) => {
-          switch (err.code) {
-            case err.PERMISSION_DENIED:
-              setError("User denied the request for Geolocation.");
-              break;
-            case err.POSITION_UNAVAILABLE:
-              setError("Location information is unavailable.");
-              break;
-            case err.TIMEOUT:
-              setError("The request to get user location timed out.");
-              break;
-            default:
-              setError("An error occurred.");
-          }
+          setError(getGeolocationErrorMessage(err));
         },
       );
     } else {
@@ -461,40 +516,47 @@ export const GetLocation: React.FC<GetLocationProps> = ({
     }
   };
 
-  // Effect to update the form with the location
-  React.useEffect(() => {
-    if (location) {
-      // Register location to the form
-      register("location", { value: location });
-    }
-  }, [location, register]);
-
   return (
     <div>
-      <div className="flex items-center gap-2">
-        <Input
-          // {...register("location.lat")}
-          value={location?.lat ?? ""}
-          className={cn(input_error && "border-red-400 bg-red-100")}
-          placeholder="Latitude"
-          // disabled
-        />
-        <Input
-          // {...register("location.lng")}
-          value={location?.lng ?? ""}
-          className={cn(input_error && "border-red-400 bg-red-100")}
-          placeholder="Longitude"
-          // disabled
-        />
-      </div>
-      <Button
-        type="button"
-        onClick={getLocation}
-        className={`w-full max-w-full ${error ? "bg-red-400" : ""}`}
-      >
-        Get Location
-      </Button>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {value.lat && value.lng ? (
+        <div className="flex items-center gap-2">
+          <Input
+            {...register("location.lat")}
+            placeholder="Latitude"
+            disabled
+            className={errors.location?.lat ? "border-red-400 bg-red-100" : ""}
+          />
+          <Input
+            {...register("location.lng")}
+            placeholder="Longitude"
+            disabled
+            className={errors.location?.lng ? "border-red-400 bg-red-100" : ""}
+          />
+        </div>
+      ) : (
+        <Button
+          type="button"
+          // variant="outline"
+          onClick={getLocation}
+          className={`w-full max-w-full border-2 ${error ? "border-red-400" : ""}`}
+        >
+          Get Location
+        </Button>
+      )}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 };
+
+function getGeolocationErrorMessage(error: GeolocationPositionError): string {
+  switch (error.code) {
+    case error.PERMISSION_DENIED:
+      return "User denied the request for Geolocation.";
+    case error.POSITION_UNAVAILABLE:
+      return "Location information is unavailable.";
+    case error.TIMEOUT:
+      return "The request to get user location timed out.";
+    default:
+      return "An unknown error occurred.";
+  }
+}

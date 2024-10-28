@@ -36,7 +36,11 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
       <div className={cn("relative", className)} {...props}>
         <div className="relative">
           <Label
-            className={cn("hidden", states && "text-red-600", labelClassName)}
+            className={cn(
+              "hidden",
+              (states || inputError) && "text-red-600",
+              labelClassName,
+            )}
             {...labelProps}
           >
             {labelChildren}
@@ -47,14 +51,15 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
             ) : (
               <Input
                 className={cn(
-                  states && "border-red-400 bg-red-100 ring-red-400",
+                  (states || inputError) &&
+                    "border-red-400 bg-red-100 ring-red-400",
                   inputClassName,
                 )}
                 {...inputProps}
                 {...register}
               />
             )}
-            {states && (
+            {inputError && (
               <Badge
                 variant="ghost"
                 size="icon"
@@ -76,9 +81,7 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
           <p
             className={cn(
               "text-red-600 text-sm transition-all duration-300 ease-in-out py-1",
-              states && Object.values(states).length > 0
-                ? "h-5 opacity-100 mb-1"
-                : "h-0 opacity-0 mb-0 py-0",
+              inputError ? "h-5 opacity-100 mb-1" : "h-0 opacity-0 mb-0 py-0",
             )}
           >
             {inputError}

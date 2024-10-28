@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { PasswordRules, PhoneInputError } from "./auth-signin.constants";
 import { atom } from "jotai";
-import { User } from "../../account/user-profile";
+import { User } from "../../home/ad-item-card";
 
 export const phoneSchema = z
   .string()

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -12,7 +13,6 @@ import {
   SelectValue,
   Separator,
   Button,
-  Search,
   Avatar,
   AvatarFallback,
   AvatarImage,
@@ -22,6 +22,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuItem,
+  Input,
 } from "@/components/ui";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/assets";
@@ -30,6 +31,7 @@ import { cn } from "@/lib/utils";
 import shape from "../../../assets/shape.png";
 import { useAtom } from "jotai";
 import { signoutAsync, user } from "../auth";
+import { Search } from "lucide-react";
 
 export const Header = () => {
   const location = useLocation();
@@ -38,7 +40,7 @@ export const Header = () => {
   const t_languages = t("languages");
 
   const route = useNavigate();
-  const [userData, setUserData] = useAtom(user);
+  const [userData] = useAtom(user);
   const [isSticky, setIsSticky] = React.useState(false);
 
   React.useEffect(() => {
@@ -50,8 +52,6 @@ export const Header = () => {
       }
     };
   }, [location.pathname]);
-
-  console.log(userData);
 
   return (
     <>
@@ -89,7 +89,14 @@ export const Header = () => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <Search />
+              <SearchInput
+                variant="default"
+                size="default"
+                className="lg:max-w-[700px] md:w-full !w-full"
+                searchPlaceholder={t("search")}
+                searchIcon={true}
+                dir="ltr"
+              />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
               {userData && (
@@ -115,8 +122,7 @@ export const Header = () => {
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={async () => {
-                          const res = signoutAsync({ route });
-                          setUserData(null);
+                          signoutAsync({ route });
                         }}
                       >
                         Logout
@@ -224,3 +230,27 @@ const data: ButtonProps[] = [
     children: "معادن",
   },
 ];
+
+const SearchInput = () => {
+  const { i18n } = useTranslation();
+  const route = useNavigate();
+
+  return (
+    <form
+      className="relative flex w-full"
+      onSubmit={(e) => {
+        e.preventDefault();
+        route({
+          to: "/categories/search/$id",
+          params: { id: e.target[0].value },
+        });
+      }}
+    >
+      {<Search className="absolute top-1/2 -translate-y-1/2 left-3  h-4 w-4" />}
+      <Input
+        placeholder={i18n.dir() === "rtl" ? "ابحث" : "Search..."}
+        className="w-full max-w-[700px] pl-8"
+      />
+    </form>
+  );
+};

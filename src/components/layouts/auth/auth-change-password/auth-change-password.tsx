@@ -34,8 +34,6 @@ export const AuthChangePassword = () => {
     },
   );
 
-  const [userData] = useAtom(user);
-  const [phoneNumber] = useAtom(phone_number);
   const route = useNavigate();
 
   return (
@@ -48,13 +46,7 @@ export const AuthChangePassword = () => {
 
         <form
           className="space-y-2"
-          onSubmit={handleSubmit((data) =>
-            onSubmitResetPassword(
-              data,
-              userData?.phone_number ? userData.phone_number : phoneNumber,
-              route,
-            ),
-          )}
+          onSubmit={handleSubmit((data) => onSubmitResetPassword(data, route))}
         >
           <div className="space-y-2">
             <FormInput

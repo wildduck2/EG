@@ -134,10 +134,6 @@ i18n
                 children: "account",
               },
               {
-                title: "make your ads special",
-                children: "make your ads special",
-              },
-              {
                 title: "customer support",
                 children: "customer support",
               },
@@ -336,10 +332,7 @@ i18n
                 title: "account",
                 children: "الحساب",
               },
-              {
-                title: "make your ads special",
-                children: "ميز إعلاناتك",
-              },
+
               {
                 title: "customer support",
                 children: "دعم العملاء",

@@ -12,10 +12,12 @@ export const UserWishlist = () => {
   const { t } = useTranslation();
 
   const { data, status } = useQuery({
-    queryKey: ["ads"],
+    queryKey: ["user_wishlist"],
     queryFn: () => get_user_wishlist(userData),
     refetchOnWindowFocus: false,
   });
+
+  console.log(data);
 
   if (status === "pending") {
     return <UserWishlistSkeleton />;
@@ -23,10 +25,11 @@ export const UserWishlist = () => {
 
   if (status === "success" && data) {
     return (
-      <div className="flex items-start 2xl:gap-24 gap-8 flex-col xl:flex-row w-full">
+      <div className="space-y-4">
+        <h2 className="capitalize text-lg">Your wishlist</h2>
+
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
-          {// @ts-expect-error
-          data?.map((item, idx) => (
+          {data?.map((item, idx) => (
             <div className="" key={idx}>
               <AdItemCard {...item} />
             </div>

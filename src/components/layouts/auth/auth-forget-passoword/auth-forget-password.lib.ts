@@ -27,6 +27,7 @@ export const onSubmitForgetPassword = async (
     }
 
     route({ to: "/auth/verification" });
+    localStorage.setItem("phone", JSON.stringify(data.phone));
     toast.success("OTP sent successfully");
     return res_data;
   } catch (error) {

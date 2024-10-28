@@ -5,12 +5,13 @@ import { QueryKeyMutateType } from "./user-wishlist.hook";
 
 export async function get_user_wishlist(user: User | null) {
   try {
-    const { data: res_data } = await axios.post(
-      process.env.BACKEND__BASE_URL + "/client/wishlist",
+    const { data: res_data } = await axios.get(
+      process.env.BACKEND__BASE_URL +
+        "/client/wishlist" +
+        "?phone_number=" +
+        user?.phone_number,
       {
-        phone_number: user?.phone_number,
-      },
-      {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
@@ -21,7 +22,7 @@ export async function get_user_wishlist(user: User | null) {
       toast.error("Failed to get wishlist");
     }
 
-    toast.success("Account created successfully");
+    return res_data.data;
   } catch (error) {
     toast.error("Failed to get wishlist");
     return null;

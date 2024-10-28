@@ -1,17 +1,17 @@
-interface Governorate {
+export interface Governorate {
   id: number;
   name: string;
   notes: string | null;
 }
 
-interface Region {
+export interface Region {
   id: number;
   name: string;
   governorate_id: number;
   notes: string | null;
 }
 
-interface User {
+export interface User {
   id: number;
   name: string;
   name_company: string;
@@ -19,15 +19,16 @@ interface User {
   phone_verified_at: string;
   email: string | null;
   verify: number;
+  is_trader: number;
   image: string | null;
 }
 
-interface Image {
+export interface Image {
   id: number;
   image_path: string;
 }
 
-interface Category {
+export interface Category {
   id: number;
   name: string;
   name_en: string;
@@ -35,7 +36,7 @@ interface Category {
   image: string;
 }
 
-interface Subcategory {
+export interface Subcategory {
   id: number;
   name: string;
   name_en: string;
@@ -43,7 +44,7 @@ interface Subcategory {
   image: string;
 }
 
-interface BrandCountry {
+export interface BrandCountry {
   id: number;
   subcategory_id: number;
   name: string;

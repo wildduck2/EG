@@ -8,10 +8,12 @@ export const signoutAsync = async ({
   route: UseNavigateResult<string>;
 }) => {
   try {
-    const response = await axios.post(
+    const user = JSON.parse(localStorage.getItem("user-info") || "{}");
+    console.log(user);
+    const { data } = await axios.post(
       `${process.env.BACKEND__BASE_URL}/user/logout`,
       {
-        phone_number: "+201285971377",
+        phone_number: user.phone_number,
       },
       {
         withCredentials: true,
@@ -21,13 +23,14 @@ export const signoutAsync = async ({
       },
     );
 
-    if (!response.success) {
+    console.log(data.success);
+    if (!data.success) {
       toast.error("The User is not Signed out");
       return;
     }
-    route({ to: "/" });
 
     localStorage.setItem("user-info", JSON.stringify(null));
+    route({ to: "/auth/signin" });
     toast.success("The User is Signed out successfully");
     return true;
   } catch (error) {

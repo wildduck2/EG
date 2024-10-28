@@ -11,25 +11,16 @@ import React from "react";
 import { onSubmitVerification } from "./auth-verification.lib";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
-import { phone_number } from "@/context";
-import { useAtom } from "jotai";
 
 export const AuthVerification = () => {
   const validClass = "valid";
   const [otp, setOtp] = React.useState<string>("");
   const [error, setError] = React.useState<boolean>(false);
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [phoneNumber] = useAtom(phone_number);
 
   const route = useNavigate();
   async function onSubmit(data: string) {
-    const res = await onSubmitVerification(
-      {
-        phone: phoneNumber,
-        otp: data,
-      },
-      route,
-    );
+    const res = await onSubmitVerification({ otp: data }, route);
     if (!res) {
       setError(true);
     }

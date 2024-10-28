@@ -5,8 +5,8 @@ export const Route = createFileRoute("/categories/_categories")({
   component: () => (
     <div>
       <Header />
-      <Footer />
       <Outlet />
+      <Footer />
     </div>
   ),
 });

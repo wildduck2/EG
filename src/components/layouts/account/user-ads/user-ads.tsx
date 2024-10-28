@@ -1,18 +1,13 @@
-import { Skeleton } from "@/components/ui";
 import { useQuery } from "@tanstack/react-query";
 import { get_user_ads } from "./user-ads.lib";
-import { useAtom } from "jotai";
-import { user } from "@/components/layouts/auth";
 import { AdItemCard } from "../../home";
 import { UserAdsSkeleton } from "./user-ads.skeleton";
 import { UserAddAd } from "./user-add-ad";
 
 export const UserAds = () => {
-  const [userData, setUserData] = useAtom(user);
-
   const { data, status } = useQuery({
-    queryKey: ["ads"],
-    queryFn: () => get_user_ads(userData),
+    queryKey: ["use-ads"],
+    queryFn: () => get_user_ads(),
     refetchOnWindowFocus: false,
   });
 
@@ -20,7 +15,19 @@ export const UserAds = () => {
     return <UserAdsSkeleton />;
   }
 
-  if (status === "success" && data) {
+  if (status === "error" || data.ads.length === 0) {
+    return (
+      <div className="space-y-4">
+        <h2 className="capitalize text-lg">Your Ads</h2>
+        <div className="flex items-center justify-between gap-4">
+          <UserAddAd />
+        </div>
+        <h2 className="text-lg mx-auto mt-8 text-center">There's no ads</h2>
+      </div>
+    );
+  }
+
+  if (status === "success" && data.ads.length > 0) {
     return (
       <div className="flex items-start 2xl:gap-24 gap-8 flex-col xl:flex-row w-full">
         <div>
@@ -29,27 +36,13 @@ export const UserAds = () => {
           <UserAddAd />
         </div>
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
-          {// @ts-expect-error
-          data?.map((item, idx) => (
+          {data?.map((item, idx) => (
             <div className="" key={idx}>
               <AdItemCard {...item} />
             </div>
           ))}
         </div>
       </div>
-    );
-  }
-
-  if (status === "error" || !data) {
-    // <h2 className="text-lg mx-auto mt-8 text-center">There's no ads</h2>
-    return (
-      <>
-        <div className="flex items-center justify-between gap-4">
-          <h2>Your Ads</h2>
-
-          <UserAddAd />
-        </div>
-      </>
     );
   }
 };

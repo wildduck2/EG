@@ -71,7 +71,6 @@ export const AuthForgetPassword = () => {
           <form
             onSubmit={handleSubmit(async (data) => {
               await onSubmitForgetPassword(data, route);
-              setPhoneNumber(data.phone);
             })}
           >
             <div className="flex flex-col gap-2">

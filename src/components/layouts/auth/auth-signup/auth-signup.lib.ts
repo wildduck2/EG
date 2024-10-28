@@ -6,7 +6,7 @@ import {
   EmailRules,
   UserNameRules,
 } from "./auth-signup.constants";
-import { CustomerValues, TraderValues } from "./auth-signup.dto";
+import { TraderValues } from "./auth-signup.dto";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -18,6 +18,7 @@ export const confirmPasswordErrorsArray = enumToArray(ConfirmPasswordRules);
 export const onSubmitSignup = async <T extends TraderValues>(
   data: T,
   route: UseNavigateResult<string>,
+  type: string,
 ) => {
   try {
     const { data: res_data } = await axios.post(
@@ -29,8 +30,10 @@ export const onSubmitSignup = async <T extends TraderValues>(
         password_confirmation: data.password_confirmation,
         phone_number: data.phone,
         password: data.password,
+        user_type: type,
       },
       {
+        withCredentials: true,
         headers: {
           "Content-Type": "application/json",
         },
@@ -38,13 +41,13 @@ export const onSubmitSignup = async <T extends TraderValues>(
     );
 
     if (!res_data.success) {
-      return toast.error("Something went wrong");
+      return toast.error("Something went wrong, already exists");
     }
 
     route({ to: "/auth/verification" });
     return toast.success("Account created successfully");
   } catch (error) {
-    return toast.error("Something went wrong");
+    return toast.error("Something went wrong, already exists");
     return null;
   }
 };

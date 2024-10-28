@@ -149,7 +149,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
     <div className="md:w-[350px]">
       <form
         onSubmit={handleSubmit((data) =>
-          onSubmitSignup<TraderValues>(data, route),
+          onSubmitSignup<TraderValues>(data, route, type),
         )}
       >
         <div>

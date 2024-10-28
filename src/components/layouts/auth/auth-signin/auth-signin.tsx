@@ -19,7 +19,7 @@ export const AuthSignin = () => {
     resolver: zodResolver(signinFormSchema),
     defaultValues: {
       phone: "+201285971377",
-      password: "123456",
+      password: "12341234",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
