@@ -9,7 +9,7 @@ import { ProductPageWrapperProps } from "./product-page-wrapper.types";
 export const ProductPageWrapper = ({ id, state }: ProductPageWrapperProps) => {
   // Query get Product Item
   const { data, status } = useQuery({
-    queryKey: ["product"],
+    queryKey: ["product", id],
     queryFn: () => get_product_item({ category_id: id }),
   });
   // console.log(data);

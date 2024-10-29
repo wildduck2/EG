@@ -1,11 +1,5 @@
+import { FilterSchema, FilterSlector } from "@/components/layouts";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
   Button,
   Input,
   FormInput,
@@ -14,17 +8,23 @@ import {
   RadioGroupItem,
   ScrollArea,
   Textarea,
-  Upload,
-  UploadContent,
-  UploadInput,
-  UploadProvider,
-  UploadTrigger,
   zodResolver,
-  useUploadContext,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  CommentClose,
 } from "@/components/ui";
 import { AlertDialogCustom } from "@/components/ui/duckui/alert";
+import { filterData } from "@/context";
 import { cn } from "@/lib/utils";
-import { Plus, UploadIcon } from "lucide-react";
+import { useAtom } from "jotai";
+import {
+  FileImage,
+  LucideIcon,
+  Paperclip,
+  Plus,
+  UploadIcon,
+} from "lucide-react";
 import React from "react";
 import {
   FieldErrors,
@@ -32,21 +32,15 @@ import {
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
+import { filesize } from "filesize";
+import { useTranslation } from "react-i18next";
 
 // Define the Zod schema for location validation
 const locationSchema = z.object({
   lat: z.string().nonempty("Latitude is required"),
   lng: z.string().nonempty("Longitude is required"),
-});
-
-const fileSchema = z.object({
-  id: z.string().uuid(),
-  file: z.object({}).optional(),
-  name: z.string(),
-  url: z.string().url().nullable(),
-  type: z.string(),
-  size: z.string().transform((val) => parseInt(val, 10)),
 });
 
 // Define the Zod schema for adding an advertisement
@@ -58,60 +52,106 @@ export const addAdSchema = z.object({
   negotiate: z.enum(["yes", "no"], { message: "Negotiatable is required" }),
   status: z.enum(["new", "used"], { message: "Status is required" }),
   location: locationSchema,
-  select: z.string().nonempty("Governorate is required"),
-  attachment: z.array(fileSchema).min(1, "Attachment is required"),
+  address: z.string().nonempty("Address is required"),
+  attachment: z.any(),
+  category: z.string().nonempty("Category is required"),
+  subcategory: z.string().nonempty("Subcategory is required"),
+  brand_country: z.string().nonempty("Brand country is required"),
+  third_branch: z.string().nonempty("Third branch is required"),
+  region: z.string().nonempty("Region is required"),
+  governorate: z.string().nonempty("Governorate is required"),
 });
 
 // Define the TypeScript type based on the schema
 export type AddAdFormType = z.infer<typeof addAdSchema>;
 export type LocationType = z.infer<typeof locationSchema>;
 
-export const UserAddAd = () => {
-  const { register, watch, formState, handleSubmit, setValue } =
+const default_values: AddAdFormType = {
+  name: "",
+  description: "",
+  price: "",
+  note: "",
+  negotiate: "yes",
+  status: "new",
+  location: {
+    lat: "",
+    lng: "",
+  },
+  address: "",
+  attachment: [],
+  category: "",
+  subcategory: "",
+  brand_country: "",
+  third_branch: "",
+  region: "",
+  governorate: "",
+};
+
+export const UserAddAd = ({
+  onSubmit,
+  defaultValues = default_values,
+  default_input,
+}: {
+  onSubmit?: (attachments: File[], data: AddAdFormType) => void;
+  defaultValues?: AddAdFormType;
+  default_input?: {
+    title: string;
+    sheet_title: string;
+    sheet_desc: string;
+  };
+}) => {
+  const { register, watch, formState, handleSubmit, setValue, control } =
     useForm<AddAdFormType>({
       resolver: zodResolver(addAdSchema),
-      defaultValues: {
-        name: "",
-        description: "",
-        price: "",
-        note: "",
-        location: { lat: "", lng: "" },
-        attachment: [],
-      },
+      defaultValues: defaultValues,
       criteriaMode: "all",
       mode: "all",
     });
 
-  console.log(watch("attachment"), "asdfasfasfd", formState.errors);
+  const [filter_data] = useAtom(filterData);
+  console.log(formState.isDirty);
+
+  const [attachments, setAttachments] = React.useState<File[]>([]);
+  // console.log(attachments, "attachments");
+
+  const { t, i18n } = useTranslation();
 
   return (
     <>
       <AlertDialogCustom<boolean>
         type="sheet"
-        drawerData={true}
+        state={formState.isDirty}
+        actions={{
+          cancel: () => {
+            control._reset();
+          },
+          continue: () => {
+            control._reset();
+          },
+        }}
         header={{
-          head: "Add Ad",
-          description: "Fill out this form and submit to add an ad.",
+          head: default_input?.sheet_title || t("add_ad_title"),
+          description: default_input?.sheet_desc || t("add_ad_desc"),
         }}
         footer={{
           className:
-            "flex w-full place-content-start justify-end items-start gap-2 [&__button]:w-32",
-          cancel: <Button variant="outline">Cancel</Button>,
-          submit: (
-            <Button
-              variant="default"
-              type="submit"
-              onClick={handleSubmit((data) => {
-                console.log(data);
-              })}
-              disabled={!formState.isValid || formState.isSubmitting}
-              loading={formState.isSubmitting}
-            >
-              Submit
-            </Button>
-          ),
+            "flex w-full place-content-start justify-end items-start gap-2 [&__button]:w-32 pr-4 pt-4",
+          cancel: {
+            children: <Button variant="outline">{t("cancel")}</Button>,
+          },
+          submit: {
+            onClick: handleSubmit((data) => {
+              onSubmit?.(attachments, data);
+            }),
+            disabled: !formState.isValid || formState.isSubmitting,
+            loading: formState.isSubmitting,
+            children: (
+              <Button variant="default" type="submit">
+                {t("submit")}
+              </Button>
+            ),
+          },
         }}
-        state={true}
         trigger={{
           children: (
             <Button
@@ -122,27 +162,28 @@ export const UserAddAd = () => {
                 icon: Plus,
               }}
             >
-              Add Ad
+              {default_input?.title || t("add_ad")}
             </Button>
           ),
         }}
         content={{
           // dir: "rtl",
           className:
-            "flex flex-col gap-4 sm:max-w-[650px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full",
+            "flex flex-col gap-4 sm:max-w-[650px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full  pb-2",
           children: (
             <ScrollArea className="flex flex-col items-start w-full h-full space-y-4">
-              <form className="w-full flex flex-col space-y-2 p-2">
+              <form className="w-full flex flex-col space-y-2 p-2 mt-4 pr-4">
                 <div className="flex gap-4">
-                  <UploadProvider>
-                    <div className="flex flex-col w-full">
-                      <UploadAdPictures
-                        setValue={setValue}
-                        register={register}
-                        errors={formState.errors}
-                      />
-                    </div>
-                  </UploadProvider>
+                  <div className="flex flex-col w-full">
+                    <UploadAdPictures
+                      attachments={attachments}
+                      setAttachments={setAttachments}
+                      value={watch("attachment")}
+                      setValue={setValue}
+                      register={register}
+                      errors={formState.errors}
+                    />
+                  </div>
                   <FormInput
                     className="w-full"
                     register={register("name")}
@@ -150,10 +191,10 @@ export const UserAddAd = () => {
                       inputError: formState.errors.name?.message,
                     }}
                     input={{
-                      placeholder: "Enter Ad name.",
+                      placeholder: t("add_name"),
                     }}
                     input_label={{
-                      children: "Name",
+                      children: t("name"),
                       className: "text-sm flex",
                     }}
                   />
@@ -166,24 +207,26 @@ export const UserAddAd = () => {
                       inputError: formState.errors.price?.message,
                     }}
                     input={{
-                      placeholder: "Enter Ad price.",
+                      placeholder: t("add_price"),
+                      type: "number",
                     }}
                     input_label={{
-                      children: "Price",
+                      children: t("price"),
                       className: "text-sm flex",
                     }}
                   />
                   <FormInput
                     className="w-full"
-                    register={register("price")}
+                    register={register("address")}
                     error={{
-                      inputError: formState.errors.price?.message,
+                      inputError: formState.errors.address?.message,
                     }}
                     input={{
-                      placeholder: "Enter Ad price.",
+                      placeholder: t("add_address"),
+                      type: "text",
                     }}
                     input_label={{
-                      children: "Price",
+                      children: t("address"),
                       className: "text-sm flex",
                     }}
                   />
@@ -196,39 +239,38 @@ export const UserAddAd = () => {
                     error={{
                       inputError: formState.errors.negotiate?.message,
                     }}
-                    input={{
-                      type: "text",
-                      placeholder: "Enter Ad price.",
-                    }}
                     input_label={{
-                      children: "Negotiatable",
+                      children: t("negotiable"),
                       className: "text-sm flex",
                     }}
                   >
                     <RadioGroup
-                      // defaultValue="new"
+                      defaultValue="yes"
                       {...register("negotiate")}
+                      onValueChange={(value) => {
+                        setValue("negotiate", value as "yes" | "no");
+                      }}
                       className="flex gap-8 h-[40px]"
                     >
                       <div
                         className={cn(
                           "flex items-center space-x-2",
-                          formState.errors.status?.types &&
+                          formState.errors.negotiate?.types &&
                             "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
                         )}
                       >
-                        <RadioGroupItem value="yes" id="r1" />
-                        <Label htmlFor="r1">Yes</Label>
+                        <RadioGroupItem value="yes" id="yes" />
+                        <Label htmlFor="yes">{t("yes")}</Label>
                       </div>
                       <div
                         className={cn(
                           "flex items-center space-x-2",
-                          formState.errors.status?.types &&
+                          formState.errors.negotiate?.types &&
                             "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
                         )}
                       >
-                        <RadioGroupItem value="no" id="r2" />
-                        <Label htmlFor="r2">No</Label>
+                        <RadioGroupItem value="no" id="r1" />
+                        <Label htmlFor="r1">{t("no")}</Label>
                       </div>
                     </RadioGroup>
                   </FormInput>
@@ -239,18 +281,17 @@ export const UserAddAd = () => {
                     error={{
                       inputError: formState.errors.status?.message,
                     }}
-                    input={{
-                      type: "text",
-                      placeholder: "Enter Ad price.",
-                    }}
                     input_label={{
-                      children: "Status",
+                      children: t("status"),
                       className: "text-sm flex",
                     }}
                   >
                     <RadioGroup
-                      // defaultValue="new"
+                      defaultValue="used"
                       {...register("status")}
+                      onValueChange={(value) => {
+                        setValue("status", value as "new" | "used");
+                      }}
                       className="flex gap-8 h-[40px]"
                     >
                       <div
@@ -261,7 +302,7 @@ export const UserAddAd = () => {
                         )}
                       >
                         <RadioGroupItem value="new" id="r1" />
-                        <Label htmlFor="r1">New</Label>
+                        <Label htmlFor="r1">{t("new")}</Label>
                       </div>
                       <div
                         className={cn(
@@ -271,7 +312,7 @@ export const UserAddAd = () => {
                         )}
                       >
                         <RadioGroupItem value="used" id="r2" />
-                        <Label htmlFor="r2">Used</Label>
+                        <Label htmlFor="r2">{t("used")}</Label>
                       </div>
                     </RadioGroup>
                   </FormInput>
@@ -283,7 +324,7 @@ export const UserAddAd = () => {
                       inputError: formState.errors.description?.message,
                     }}
                     input_label={{
-                      children: "Description",
+                      children: t("description"),
                       className: "text-sm flex",
                     }}
                   >
@@ -292,7 +333,7 @@ export const UserAddAd = () => {
                         formState.errors.description?.types &&
                           "border-red-400 bg-red-100 ring-red-400",
                       )}
-                      placeholder="Write a description for the ad."
+                      placeholder={t("add_description")}
                       rows={3}
                       {...register("description")}
                     />
@@ -306,7 +347,7 @@ export const UserAddAd = () => {
                       inputError: formState.errors.note?.message,
                     }}
                     input_label={{
-                      children: "Note",
+                      children: t("note"),
                       className: "text-sm flex",
                     }}
                   >
@@ -315,14 +356,87 @@ export const UserAddAd = () => {
                         formState.errors.note?.types &&
                           "border-red-400 bg-red-100 ring-red-400",
                       )}
-                      placeholder="Write a note for the ad."
+                      placeholder={t("add_note")}
                       rows={3}
                       {...register("note")}
                     />
                   </FormInput>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex items-center gap-2 w-full">
+                  <FilterSlector
+                    filter_data={filter_data.governorates}
+                    value={{ id: +watch("governorate") } as any}
+                    name={t("governorate")}
+                    setValue={(item: FilterSchema["governorates"]) => {
+                      setValue("governorate", item?.id.toString() ?? "");
+                    }}
+                  />
+                  <FilterSlector
+                    filter_data={filter_data.regions}
+                    value={{ id: +watch("region") } as any}
+                    name={t("regions")}
+                    setValue={(item: FilterSchema["regions"]) => {
+                      setValue("region", item?.id.toString() ?? "");
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 w-full">
+                  <FilterSlector
+                    filter_data={filter_data.categories}
+                    value={
+                      {
+                        id: +watch("category"),
+                      } as any
+                    }
+                    name={t("categories")}
+                    setValue={(item: FilterSchema["categories"]) => {
+                      setValue("category", item?.id.toString() ?? "");
+                    }}
+                  />
+                  <FilterSlector
+                    filter_data={filter_data.subcategories}
+                    value={
+                      {
+                        id: +watch("subcategory"),
+                      } as any
+                    }
+                    name={t("subcategories")}
+                    disabled={!watch("category") ? true : false}
+                    setValue={(item: FilterSchema["subcategories"]) => {
+                      setValue("subcategory", item?.id.toString() ?? "");
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 w-full">
+                  <FilterSlector
+                    filter_data={filter_data.brand_countries}
+                    name={t("brand_countries")}
+                    disabled={!watch("subcategory") ? true : false}
+                    value={
+                      {
+                        id: +watch("brand_country"),
+                      } as any
+                    }
+                    setValue={(item: FilterSchema["brand_countries"]) => {
+                      setValue("brand_country", item?.id.toString() ?? "");
+                    }}
+                  />
+                  <FilterSlector
+                    disabled={!watch("brand_country") ? true : false}
+                    filter_data={filter_data.third_branches}
+                    value={
+                      {
+                        id: +watch("third_branch"),
+                      } as any
+                    }
+                    name={t("third_branches")}
+                    setValue={(item: FilterSchema["third_branches"]) => {
+                      setValue("third_branch", item?.id.toString() ?? "");
+                    }}
+                  />
+                </div>
+                <div className="flex items-center gap-2 w-full">
                   <FormInput
                     className="w-full"
                     error={{
@@ -332,7 +446,7 @@ export const UserAddAd = () => {
                       type: "raw",
                     }}
                     input_label={{
-                      children: "Location",
+                      children: t("location"),
                       className: "text-sm flex",
                     }}
                   >
@@ -343,12 +457,6 @@ export const UserAddAd = () => {
                       setValue={setValue}
                     />
                   </FormInput>
-
-                  <SelectAdInput
-                    register={register}
-                    errors={formState.errors}
-                    setValue={setValue}
-                  />
                 </div>
               </form>
             </ScrollArea>
@@ -359,123 +467,144 @@ export const UserAddAd = () => {
   );
 };
 
-export type SelectAdInputProps = {
-  register: UseFormRegister<AddAdFormType>;
-  errors: FieldErrors<AddAdFormType>;
-  setValue: UseFormSetValue<AddAdFormType>;
-};
-
-export const SelectAdInput = ({
-  errors,
-  setValue,
-  register,
-}: SelectAdInputProps) => {
-  return (
-    <FormInput
-      className="w-full"
-      error={{
-        inputError: errors.select?.message,
-      }}
-      input_label={{
-        children: "Governate",
-        className: "text-sm flex",
-      }}
-    >
-      <Select
-        onValueChange={(value) => setValue("select", value)}
-        {...register("select")}
-      >
-        <SelectTrigger
-          className={cn(
-            "w-full",
-            errors.select?.message && "border-red-400 bg-red-100 ring-red-400",
-          )}
-        >
-          <SelectValue placeholder="Select a governorate" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Governorates</SelectLabel>
-            <SelectItem value="kafr">Kafr</SelectItem>
-            <SelectItem value="cairo">Cairo</SelectItem>
-            <SelectItem value="giza">Giza</SelectItem>
-            <SelectItem value="alex">Alex</SelectItem>
-          </SelectGroup>
-        </SelectContent>
-      </Select>
-    </FormInput>
-  );
-};
-
 export type UploadAdInput = {
   register: UseFormRegister<AddAdFormType>;
   setValue: UseFormSetValue<AddAdFormType>;
   errors: FieldErrors<AddAdFormType>;
+  value: File[] | undefined;
+  attachments: File[] | undefined;
+  setAttachments: React.Dispatch<React.SetStateAction<File[] | undefined>>;
 };
 
 export const UploadAdPictures = ({
+  value,
   register,
   setValue,
+  attachments,
+  setAttachments,
   errors,
 }: UploadAdInput) => {
-  const { attachments } = useUploadContext();
-
-  React.useEffect(() => {
-    setValue(
-      "attachment",
-      attachments as unknown as z.infer<typeof fileSchema>[],
-    );
-  }, [attachments]);
-
   return (
-    <>
+    <div className="relative">
+      <div className={cn("absolute bottom-6 w-full")}>
+        <Popover>
+          <PopoverTrigger className={cn("")}>
+            <Button
+              size={"sm"}
+              type="button"
+              className={cn(
+                "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
+                [...(value ?? [])].length > 0
+                  ? "bottom-[2rem] opacity-100 pointer-events-all z-50"
+                  : "-bottom-4 opacity-0 pointer-events-none",
+              )}
+              icon={{
+                icon: Paperclip as LucideIcon,
+                className: "!size-[.8rem]",
+              }}
+              label={{
+                children: [...(value ?? [])].length,
+              }}
+            >
+              <span className="text-xs">Attachments</span>
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            side="top"
+            className={cn("p-2 mb-1 w-full")}
+          >
+            <ScrollArea>
+              <div className="grid items justify-start gap-2 shrink-0 w-full grid-cols-2 max-h-[104px]">
+                {(attachments?.length ?? 0) > 0 &&
+                  attachments?.map((attachment, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className={cn(
+                          "rounded-md bg-secondary/50 h-fit flex items-center justify-start gap-2 w-[152px] p-2 relative",
+                        )}
+                      >
+                        <CommentClose
+                          className="absolute top-1/2 -translate-y-1/2 right-2"
+                          onClick={() => {
+                            setAttachments(
+                              attachments?.filter(
+                                (item) => item !== attachment,
+                              ),
+                            );
+                            setValue(
+                              "attachment",
+                              value?.filter((item) => item !== attachment),
+                            );
+                          }}
+                        />
+                        <>
+                          <div className="relative">
+                            <FileImage className="w-8 h-8" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {attachment.type.split("/").shift()}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate">
+                              {filesize(+attachment.size, { round: 0 })}
+                            </p>
+                          </div>
+                        </>
+                      </div>
+                    );
+                  })}
+              </div>
+            </ScrollArea>
+          </PopoverContent>
+        </Popover>
+      </div>
       <FormInput
         className="w-full"
         register={register("attachment")}
         error={{
-          inputError: errors.attachment?.message,
+          inputError: errors.attachment?.message as string,
         }}
         input_label={{
           children: "attachment",
           className: "text-sm flex",
         }}
       >
-        <Upload
-          _content={{
-            footer: {
-              className: "w-full [&_button]:w-[100px]",
-            },
-          }}
-          trigger={
-            <UploadTrigger className="w-full">
-              <Button
-                variant="outline"
-                type="button"
-                className={cn(
-                  "bg-secondary/20 w-full",
-                  errors.attachment?.message &&
-                    "border-red-400 bg-red-100 ring-red-400",
-                )}
-                icon={{ icon: UploadIcon, className: "h-4 w-4" }}
-              >
-                Upload Ad Pictures
-              </Button>
-            </UploadTrigger>
-          }
-          content={
-            <div className="flex flex-col h-full gap-4">
-              <UploadInput
-                input={{
-                  accept: "image/*",
-                  // ...register("attachment"),
-                }}
-              />
-              <UploadContent />
-            </div>
-          }
-        />
+        <div className="relative">
+          <Input
+            placeholder={"Filter files..."}
+            type="file"
+            accept="image/*"
+            multiple
+            className={cn(
+              "absolute w-full h-full opacity-0 cursor-pointer z-50",
+            )}
+            {...register("attachment")}
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0].size > 5 * 1024 * 1024) {
+                return toast.error("File size should be less than 5MB");
+              }
+              setAttachments(e.target.files ? Array.from(e.target.files) : []);
+              setValue("attachment", e.target.files);
+            }}
+          />
+
+          <Button
+            variant="outline"
+            type="button"
+            className={cn(
+              "bg-secondary/20 w-full",
+              errors.attachment?.message &&
+                "border-red-400 bg-red-100 ring-red-400",
+            )}
+            icon={{ icon: UploadIcon, className: "h-4 w-4" }}
+          >
+            Upload Ad Pictures
+          </Button>
+        </div>
       </FormInput>
-    </>
+    </div>
   );
 };
 

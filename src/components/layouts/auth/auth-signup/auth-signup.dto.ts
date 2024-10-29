@@ -27,6 +27,7 @@ const middleSchema = z.object({
   password_confirmation: z.string(),
   email: emailSchema.optional().nullable(),
   username: usernameSchema,
+  agreed: z.boolean().optional().default(false),
 });
 
 export const customerFormSchema = middleSchema.refine(

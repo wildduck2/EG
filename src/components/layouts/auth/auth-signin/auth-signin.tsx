@@ -18,8 +18,8 @@ export const AuthSignin = () => {
   const methods = useForm<SigninFormType>({
     resolver: zodResolver(signinFormSchema),
     defaultValues: {
-      phone: "+201285971377",
-      password: "12341234",
+      phone: "",
+      password: "",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
@@ -43,14 +43,6 @@ export const AuthSignin = () => {
         >
           {signin.createaccount}
         </Link>
-        <Button
-          title={t("languages")}
-          variant={"outline"}
-          className="w-full md:w-[100px] "
-          onClick={() =>
-            i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
-          }
-        />
       </div>
       <div className="flex flex-col items-center gap-3 justify-center mx-auto">
         <div className="flex flex-col gap-2 items-center">

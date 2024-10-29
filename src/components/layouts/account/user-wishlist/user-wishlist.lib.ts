@@ -30,29 +30,39 @@ export async function get_user_wishlist(user: User | null) {
 }
 
 export async function post_mutate_wishlist({
-  user,
   id,
   wish_list_state,
 }: QueryKeyMutateType) {
+  const user: User | null = JSON.parse(
+    localStorage.getItem("user-info") as string,
+  );
+
   try {
-    if (wish_list_state === "remove") {
-      const { data: res_data } = await axios.delete(
-        `${process.env.BACKEND__BASE_URL}/client/wishlist/${id}?phone_number=${user?.phone_number}`,
+    if (wish_list_state === "add") {
+      const { data: res_data } = await axios.post(
+        `${process.env.BACKEND__BASE_URL}/client/wishlist`,
+        {
+          phone_number: user?.phone_number,
+          ad_id: id,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
       );
 
       if (!res_data) {
-        toast.error(
-          `Failed to ${wish_list_state === "remove" ? "remove" : "add"} athe ad to wishlist`,
-        );
+        toast.error(`Failed to add athe ad to wishlist`);
       }
+
+      toast.success(`Successfully added the ad to wishlist`);
     } else {
-      const { data: res_data } = await axios.post(
-        process.env.BACKEND__BASE_URL + "/client/wishlist",
+      const { data: res_data } = await axios.delete(
+        `${process.env.BACKEND__BASE_URL}/client/wishlist/${id}?phone_number=${user?.phone_number}`,
         {
-          ad_id: id,
-          phone_number: user?.phone_number,
-        },
-        {
+          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
@@ -64,11 +74,8 @@ export async function post_mutate_wishlist({
           `Failed to ${wish_list_state === "add" ? "add" : "remove"} athe ad to wishlist`,
         );
       }
+      toast.success(`Successfully removed ad to wishlist`);
     }
-
-    toast.success(
-      `Successfully ${wish_list_state === "remove" ? "removed" : "added"} the ad to wishlist`,
-    );
   } catch (error) {
     toast.error(
       `Failed to ${wish_list_state === "remove" ? "remove" : "add"} athe ad to wishlist`,

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui";
 import { AlertDialogCustom } from "@/components/ui/duckui/alert";
 import { filterData } from "@/context";
-import { useAtom } from "jotai";
+import { atom, useAtom } from "jotai";
 import {
   ArrowDown01,
   Check,
@@ -50,6 +50,7 @@ import { cn } from "@/lib/utils";
 import { Slider } from "@/components/ui/slider";
 import { queryClient } from "@/main";
 import { useParams } from "@tanstack/react-router";
+import { buildCombinedSearchUrl } from "../category-search/category-search.lib";
 
 export type FilterSchema = {
   governorates: Governorate | null;
@@ -62,34 +63,29 @@ export type FilterSchema = {
   order: "asc" | "desc" | null;
   min_price: number;
   max_price: number;
+  negotiate: boolean | null;
 };
+
+export const filter = atom<FilterSchema>({
+  governorates: null,
+  regions: null,
+  categories: null,
+  subcategories: null,
+  brand_countries: null,
+  third_branches: null,
+  type: null,
+  order: null,
+  min_price: null,
+  max_price: null,
+  negotiate: null,
+});
 
 export const CategoryPageFilter = () => {
   const { t, i18n } = useTranslation();
   const products = t("products");
 
   const [filter_data] = useAtom(filterData);
-  const hi = filter_data.categories.map((item) => ({
-    label: item.name,
-    element: item.name,
-    onSelect: () => {},
-  }));
-
-  const [filter_schema, setFilterSchema] = React.useState<FilterSchema>({
-    governorates: null,
-    regions: null,
-    categories: null,
-    subcategories: null,
-    brand_countries: null,
-    third_branches: null,
-    type: null,
-    order: null,
-    min_price: 0,
-    max_price: 0,
-  });
-  // console.log(filter_schema);
-  //
-  // console.log(hi, filter_data);
+  const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
 
   const { id } = useParams({ strict: false });
 
@@ -108,7 +104,6 @@ export const CategoryPageFilter = () => {
           <Button
             variant="default"
             onClick={() => {
-              localStorage.setItem("filter", JSON.stringify(filter_schema));
               queryClient.invalidateQueries({
                 queryKey: ["categories", id],
               });
@@ -195,40 +190,72 @@ export const CategoryPageFilter = () => {
               <div className="flex items-center gap-2 w-full">
                 <FilterSeleector2
                   value={filter_schema.type}
-                  name="Third Branches"
+                  name="Types"
                   setValue={(item: string) => {
-                    console.log("sdf");
                     setFilterSchema({ ...filter_schema, type: item });
                   }}
                 />
 
                 <FilterSeleector
                   value={filter_schema.order}
-                  name="Third Branches"
+                  name="Order"
                   setValue={(item: string) => {
-                    console.log("sdf");
                     setFilterSchema({ ...filter_schema, order: item });
                   }}
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterInput
+                  name="Min Price"
                   value={filter_schema.min_price}
-                  name="Third Branches"
                   setValue={(item) => {
-                    setFilterSchema({ ...filter_schema, type: item as any });
+                    setFilterSchema({
+                      ...filter_schema,
+                      min_price: item as any,
+                    });
                   }}
                 />
                 <FilterInput
+                  name="Max Price"
                   value={filter_schema.max_price}
-                  name="Third Branches"
                   setValue={(item) => {
-                    setFilterSchema({ ...filter_schema, order: item as any });
+                    setFilterSchema({
+                      ...filter_schema,
+                      max_price: item as any,
+                    });
                   }}
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
-                <FilterSwitch />
+                <FilterSwitch
+                  setValue={(item) => {
+                    setFilterSchema({
+                      ...filter_schema,
+                      negotiate: item as any,
+                    });
+                  }}
+                />
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setFilterSchema({
+                      governorates: null,
+                      regions: null,
+                      categories: null,
+                      subcategories: null,
+                      brand_countries: null,
+                      third_branches: null,
+                      type: null,
+                      order: null,
+                      min_price: null,
+                      max_price: null,
+                      negotiate: null,
+                    });
+                  }}
+                  className="w-full"
+                >
+                  Clear
+                </Button>
               </div>
             </div>
           </ScrollArea>
@@ -265,6 +292,7 @@ export function FilterSeleector({
     </div>
   );
 }
+
 export function FilterSeleector2({
   filter_data,
   name,
@@ -293,12 +321,12 @@ export function FilterSeleector2({
   );
 }
 
-export function FilterSwitch() {
+export function FilterSwitch({ setValue }: { setValue: (item: any) => void }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 w-full">
       <Label htmlFor="airplane-mode">Negotiatable</Label>
       <div className="flex items-center space-x-2">
-        <Switch id="airplane-mode" />
+        <Switch id="airplane-mode" onCheckedChange={setValue} />
         <Label htmlFor="airplane-mode">Yes</Label>
       </div>
     </div>
@@ -306,12 +334,12 @@ export function FilterSwitch() {
 }
 
 export const FilterInput = ({
-  value,
   setValue,
+  value,
   name,
 }: {
-  value: number;
   setValue: (item: number) => void;
+  value: string;
   name: string;
 }) => {
   return (
@@ -319,7 +347,7 @@ export const FilterInput = ({
       <Label className="w-full">{name}</Label>
       <Input
         className="w-full"
-        value={value}
+        value={value ?? 0}
         onChange={(e) => {
           setValue(parseInt(e.target.value) ? parseInt(e.target.value) : 0);
         }}
@@ -330,26 +358,34 @@ export const FilterInput = ({
 export const FilterSlector = ({
   value,
   setValue,
+  disabled,
   filter_data,
   name,
 }: {
   value: FilterSchema[keyof FilterSchema];
+  disabled?: boolean;
   setValue: (item: FilterSchema[keyof FilterSchema]) => void;
   filter_data: FilteredData[keyof FilteredData];
   name: string;
 }) => {
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   return (
-    <>
+    <div className="w-full">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <div>
+        <PopoverTrigger
+          asChild
+          className={cn("w-full", disabled && "pointer-events-none opecity-50")}
+        >
+          <div className="w-full">
             <Label className="w-full">{name}</Label>
             <Button
               variant="outline"
               role="combobox"
+              type="button"
               aria-expanded={open}
+              disabled={disabled}
               className="w-full justify-between"
               secondIcon={{
                 icon: ChevronsUpDown,
@@ -357,17 +393,17 @@ export const FilterSlector = ({
               }}
             >
               <span className="w-full">
-                {value
+                {value.id !== 0
                   ? filter_data.find((framework) => framework.id === value.id)
                       ?.name
-                  : "Select Governate..."}
+                  : `${t("select")} ${name}...`}
               </span>
             </Button>
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0  overflow-y-scroll">
           <Command>
-            <CommandInput placeholder="Search framework..." />
+            <CommandInput placeholder={`Search ${name}...`} />
             <CommandList>
               <CommandEmpty>No Governates found.</CommandEmpty>
               <CommandGroup className="">
@@ -398,7 +434,7 @@ export const FilterSlector = ({
           </Command>
         </PopoverContent>
       </Popover>
-    </>
+    </div>
   );
 };
 

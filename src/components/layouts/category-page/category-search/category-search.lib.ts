@@ -5,26 +5,46 @@ import {
 } from "./category-search.types";
 import { User } from "../../home";
 import { toast } from "sonner";
+import { FilterSchema } from "../category-page-filter";
 
-export async function get_category_search(search_term: string) {
+export async function get_category_search(
+  search_term: string,
+  params: FilterSchema,
+) {
   const user: User = JSON.parse(localStorage.getItem("user-info") as string);
 
-  const params = JSON.parse(localStorage.getItem("filter") as string);
+  // if (!user) {
+  //   return null;
+  // }
+  //
 
-  if (!user) {
-    return null;
-  }
-
-  console.log(buildCombinedSearchUrl({ search_term, ...params }));
+  console.log(params);
   try {
     const { data } = await axios.get<
       Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
-    >(buildCombinedSearchUrl({ search_term, ...params }), {
-      withCredentials: true,
-      headers: {
-        "Content-Type": "application/json",
+    >(
+      buildCombinedSearchUrl({
+        search_term,
+        gov_id: params.governorates?.id,
+        min_price: params.min_price,
+        max_price: params.max_price,
+        price_order: params.order as string,
+        type: params.type as string,
+        region_id: params.regions?.id,
+        category_id: params.categories?.id,
+        subcategory_id: params.subcategories?.id,
+        brand_country_id: params.brand_countries?.id,
+        // third_branch_id: params.third_branches?.id,
+        negotiable: params.negotiate as boolean,
+        page: 1,
+      }),
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
       },
-    });
+    );
 
     if (!data.success) {
       toast.error("Failed to get category search");
@@ -38,7 +58,7 @@ export async function get_category_search(search_term: string) {
   }
 }
 
-function buildCombinedSearchUrl({
+export function buildCombinedSearchUrl({
   search_term,
   gov_id,
   region_id,
@@ -67,7 +87,7 @@ function buildCombinedSearchUrl({
   if (brand_country_id !== undefined)
     params.append("brand_country_id", brand_country_id.toString());
   if (type) params.append("type", type);
-  if (negotiable !== undefined)
+  if (negotiable !== null && negotiable !== undefined)
     params.append("negotiable", negotiable.toString());
   if (page) params.append("page", page.toString());
 

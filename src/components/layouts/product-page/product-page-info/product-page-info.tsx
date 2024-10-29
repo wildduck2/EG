@@ -25,12 +25,14 @@ import {
 } from "@/components/ui";
 import { get_product_hazards } from "./product-page-info.libs";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "@tanstack/react-router";
 
 export const ProductPreviewInfo = React.forwardRef<
   HTMLDivElement,
   ProductPreviewInfoProps
 >(({ className, data, children, ...props }, ref) => {
   const { t, i18n } = useTranslation();
+  const route = useNavigate();
 
   const products = t("product");
   return (
@@ -46,7 +48,8 @@ export const ProductPreviewInfo = React.forwardRef<
         variant="secondary"
         size="sm"
         className={cn(
-          "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100 absolute right-[1.1rem] top-[1.1rem]",
+          "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100 absolute top-[1.1rem]",
+          i18n.dir() === "ltr" ? "right-[1.1rem]" : "left-[1.1rem]",
           // "bg-red-400 hover:bg-red-500/70",
         )}
         label={{
@@ -149,6 +152,15 @@ export const ProductPreviewInfo = React.forwardRef<
             className="flex items-start gap-2 w-full h-fit justify-start p-4"
             variant={"ghost"}
             size={"lg"}
+            onClick={() => {
+              route({
+                to: `/account/trader/$id`,
+                params: { id: data.user.id.toString() },
+                state: {
+                  user: data.user,
+                } as any,
+              });
+            }}
           >
             <div className="relative">
               <AvatarCustom
@@ -234,7 +246,9 @@ export const SafetyAccordion = () => {
           <AccordionContent className="flex flex-wrap gap-2 px-2">
             <ul className="flex flex-col gap-2">
               {[...data.map((item) => item.title)].map((item, i) => (
-                <li className="text-md text-primary/60">{item} </li>
+                <li key={i} className="text-md text-primary/60">
+                  {item}{" "}
+                </li>
               ))}
             </ul>
           </AccordionContent>

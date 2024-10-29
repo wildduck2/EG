@@ -4,6 +4,8 @@ import {
   FileImage,
   FileText,
   FileVideo,
+  LucideIcon,
+  Paperclip,
   X,
 } from "lucide-react";
 import React from "react";
@@ -17,6 +19,7 @@ import { filesize } from "filesize";
 import { cn } from "@/lib/utils";
 import { Button } from "./button";
 import { Upload as UploadIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 // Define an enum for file types
 export enum FileType {
@@ -222,11 +225,81 @@ export interface UploadTriggerProps extends React.HTMLProps<HTMLDivElement> {}
 export const UploadTrigger = React.forwardRef<
   HTMLDivElement,
   UploadTriggerProps
->(({ className, children, ...props }, ref) => (
-  <div className={cn(className)} ref={ref} {...props}>
-    {children}
-  </div>
-));
+>(({ className, children, ...props }, ref) => {
+  // const { attachments } = useUploadContext();
+  return (
+    <div className={cn("relative", className)} ref={ref} {...props}>
+      {children}
+    </div>
+  );
+});
+
+// Comment Attachment Item
+export interface CommentAttachmentItemProps
+  extends React.HTMLProps<HTMLDivElement> {
+  attachment?: AttachmentType;
+}
+
+export const CommentAttachmentItem = React.forwardRef<
+  HTMLDivElement,
+  CommentAttachmentItemProps
+>(({ className, attachment, key, children, ...props }, ref) => {
+  const { setAttachments } = useUploadContext();
+
+  const fileType = getFileType(attachment?.file! ?? "image");
+  return (
+    <div
+      className={cn(
+        "rounded-md bg-secondary/50 h-fit flex items-center justify-start gap-2 w-[152px] p-2 relative",
+        className,
+      )}
+      ref={ref}
+      {...props}
+    >
+      <CommentClose
+        className="absolute top-1/2 -translate-y-1/2 right-2"
+        onClick={() => {
+          setAttachments((prev) => prev.filter((item) => item !== attachment));
+        }}
+      />
+      {children ? (
+        children
+      ) : (
+        <>
+          <div className="relative">{fileTypeIcons[fileType]}</div>
+          <div>
+            <p className="text-xs text-muted-foreground truncate">
+              {attachment.type.split("/").shift()}
+            </p>
+            <p className="text-xs text-muted-foreground truncate">
+              {filesize(+attachment.size, { round: 0 })}
+            </p>
+          </div>
+        </>
+      )}
+    </div>
+  );
+});
+
+// Comment Colse
+export interface CommentCloseProps extends React.HTMLProps<HTMLDivElement> {}
+
+export const CommentClose = React.forwardRef<HTMLDivElement, CommentCloseProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        className={cn(
+          "size-4 rounded-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1 cursor-pointer",
+          className,
+        )}
+        ref={ref}
+        {...props}
+      >
+        <X className="w-4 h-4" />
+      </div>
+    );
+  },
+);
 
 // Upload Input
 export interface UploadInputProps extends React.HTMLProps<HTMLDivElement> {

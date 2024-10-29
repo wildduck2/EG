@@ -1,4 +1,4 @@
-import { CategoryPageWrapper } from "@/components/layouts";
+import { CategoriesWrapper } from "@/components/layouts";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,11 +7,9 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui";
-import { Link, useParams } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 
-export const Categories = () => {
-  const { category } = useParams({ strict: false });
-  console.log(category);
+export const CategoriesPage = () => {
   return (
     <main className="flex flex-col py-8 container min-h-screen lg:mt-[17rem]">
       <Breadcrumb className="mx-auto">
@@ -23,20 +21,14 @@ export const Categories = () => {
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbLink>
-              <Link to="/categories">Categories</Link>
-            </BreadcrumbLink>
-          </BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
             <BreadcrumbPage className="text-red-400 font-bold">
-              {category}
+              <Link to="/categories">Categories</Link>
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
       </Breadcrumb>
 
-      <CategoryPageWrapper id={category ?? ""} />
+      <CategoriesWrapper />
     </main>
   );
 };

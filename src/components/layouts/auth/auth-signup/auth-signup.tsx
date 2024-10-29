@@ -29,11 +29,11 @@ export const AuthSignup = () => {
   const customerMethods = useForm<CustomerValues>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
-      phone: "1234567891239",
-      password: "123456",
-      password_confirmation: "123456",
-      email: "duck1@duck.com",
-      username: "duck-ui-[1]",
+      phone: "",
+      password: "",
+      password_confirmation: "",
+      email: "",
+      username: "",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
@@ -64,14 +64,6 @@ export const AuthSignup = () => {
         >
           {signup.signin}
         </Link>
-        <Button
-          title={t("languages")}
-          variant={"outline"}
-          className="w-full md:w-[100px] "
-          onClick={() =>
-            i18n.changeLanguage(i18n.language === "en" ? "ar" : "en")
-          }
-        />
       </div>
       <div className="flex flex-col items-center gap-3 justify-center mx-auto">
         <div className="flex flex-col gap-2 items-center">
@@ -101,17 +93,6 @@ export const AuthSignup = () => {
             />
           </TabsContent>
         </Tabs>
-
-        <div className="flex gap-2 items-center ml-6 lmr-6 max-w-[200px] sm:max-w-full">
-          <Checkbox />
-          <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
-            {signup.agree}
-            <Link className="underline underline-offset-2 px-1 text-red-600">
-              {signup.link}
-            </Link>
-            .
-          </p>
-        </div>
       </div>
     </div>
   );
@@ -137,11 +118,11 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
   type,
   methods,
 }: AuthSignupProps<T>) => {
-  const { register, formState, handleSubmit } =
+  const { register, formState, handleSubmit, setValue } =
     methods as unknown as UseFormReturn<TraderValues>;
   const route = useNavigate();
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const signup = t("signup") as unknown as SignupI18n;
 
@@ -269,10 +250,29 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
             />
           </div>
+
+          <div
+            className="flex gap-2 items-center  max-w-[200px] sm:max-w-full my-2"
+            dir={i18n.dir()}
+          >
+            <Checkbox
+              onCheckedChange={(value) => {
+                setValue("agreed", value as boolean);
+              }}
+            />
+            <p className="text-[.9rem] text-accent-foreground w-[350px] text-start">
+              {signup.agree}
+              <Link className="underline underline-offset-2 px-1 text-red-600">
+                {signup.link}
+              </Link>
+              .
+            </p>
+          </div>
+
           <Button
             variant="default"
             type="submit"
-            className="w-full bg-red-600 hover:bg-red-700 mb-2"
+            className="w-full bg-red-600 hover:bg-red-700 my-2"
             icon={{
               className: "w-5 h-5",
               icon: Mail as LucideIcon,

@@ -6,36 +6,32 @@ import { post_mutate_wishlist } from "./user-wishlist.lib";
 import { user } from "../../auth";
 import { useAtom } from "jotai";
 import { User } from "../user-profile";
+import { ProductType } from "../../home";
 
 export type UseMutateProps = {
   id: number;
   wish_list_state: "add" | "remove";
 };
+
 export type QueryKeyMutateType = {
   wish_list_state: "add" | "remove";
   id: number;
-  user: User | null;
 };
 
 export const useMutate = ({ id, wish_list_state }: UseMutateProps) => {
-  const [userData] = useAtom(user);
-  const querykey: QueryKeyMutateType = {
-    wish_list_state,
-    user: userData,
-    id,
-  };
+  const mutationFn = () => post_mutate_wishlist({ id, wish_list_state });
 
   const startMutation = useMutation({
-    mutationKey: ["wishlist", querykey],
-    mutationFn: () => post_mutate_wishlist(querykey),
+    mutationFn,
     onSuccess: () => {
-      toast.success(
-        `Successfully ${wish_list_state === "remove" ? "removed" : "added"} the ad to wishlist`,
-      );
-    },
-    onError: () => {
-      toast.error(
-        `Failed to ${wish_list_state === "remove" ? "remove" : "add"} athe ad to wishlist`,
+      return queryClient.setQueryData<ProductType[]>(
+        ["user_wishlist"],
+        (old) => {
+          if (!old) return [];
+
+          // Filter out the item with the specified id
+          return old.filter((item) => item.id !== id);
+        },
       );
     },
   });

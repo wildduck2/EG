@@ -22,46 +22,61 @@ i18n
     resources: {
       en: {
         translation: {
+          my_account: "My Account",
+          logout: "Logout",
+          account: "Account",
+
+          verify_account: "verify your account",
+          yourWishlist: "Your Wishlist",
+          not_wishlist: "No ads in your wishlist",
+          load_more: "Load More",
+
+          add_ad: "Add Ad",
+          add_ad_title: "Add Ad",
+          add_ad_desc: "Fill out this form and submit to add an ad.",
+          cancel: "Cancel",
+          continue: "Continue",
+          submit: "Submit",
+          name: "Name",
+          add_name: "Enter Name",
+          price: "Price",
+          add_price: "Enter Price",
+          address: "Address",
+          add_address: "Enter Address",
+          description: "Description",
+          add_description: "Enter Description",
+          image: "Image",
+          add_image: "Choose Image",
+          add_image_desc: "Choose image to add ad",
+          note: "Note",
+          add_note: "Enter Note",
+          yes: "Yes",
+          no: "No",
+          used: "Used",
+          new: "New",
+          negotiable: "Negotiable",
+          status: "Status",
+
+          governates: "Governates",
+          regions: "Regions",
+          cattegories: "Categories",
+          subcategories: "Subcategories",
+          brand_countries: "Brand Countries",
+          third_branches: "Third Branches",
+          location: "Location",
+          select: "Select",
+
+          edit_ad_title: "Edit Ad",
+          edit_ad_desc: "Edit the form to change your ad",
+          your_ads: "Your Ads",
+
           theresNoAds: "There's no ads",
           viewMore: "View More",
           login: "Login",
           sale: "Sale",
           languages: "Arabic",
           search: "What are you looking for?",
-          navigation: [
-            {
-              route: "/home/categories/my-ads",
-              children: "More",
-            },
-            {
-              route: "/home/categories/",
-              children: "Fire Fighting",
-            },
-            {
-              route: "/home/categories/categories",
-              children: "Central Air Conditioning",
-            },
-            {
-              route: "/home/categories/my-ads",
-              children: "Real Estate",
-            },
-            {
-              route: "/home/categories/my-ads",
-              children: "Construction Materials",
-            },
-            {
-              route: "/home/categories/my-ads",
-              children: "Electricity",
-            },
-            {
-              route: "/home/categories/my-ads",
-              children: "Metals",
-            },
-            {
-              route: "/home/categories/my-ads",
-              children: "Security Systems",
-            },
-          ],
+
           categoriesTitle: "Categories",
           specialOffers: "Special Offers",
           filters: [
@@ -211,54 +226,59 @@ i18n
       },
       ar: {
         translation: {
+          my_account: "حسابي",
+          accounty: "الحساب",
+          logout: "تسجيل الخروج",
+
+          verify_account: "تحقق من حسابك",
+          yourWishlist: "قائمة رغباتك",
+          not_wishlist: "لا توجد إعلانات في قائمة الرغبات",
+          load_more: "تحميل المزيد",
+
+          add_ad: "إضافة إعلان",
+          add_ad_title: "إضافة إعلان",
+          add_ad_desc: "املأ هذا النموذج وقم بإرساله لإضافة إعلان.",
+          cancel: "إلغاء",
+          continue: "متابعة",
+          submit: "إرسال",
+          name: "الاسم",
+          add_name: "أدخل الاسم",
+          price: "السعر",
+          add_price: "أدخل السعر",
+          address: "العنوان",
+          add_address: "أدخل العنوان",
+          description: "الوصف",
+          add_description: "أدخل الوصف",
+          image: "صورة",
+          add_image: "اختر صورة",
+          add_image_desc: "اختر صورة لإضافة الإعلان",
+          note: "ملاحظة",
+          add_note: "أدخل ملاحظة",
+          yes: "نعم",
+          no: "لا",
+          used: "مستعمل",
+          new: "جديد",
+          negotiable: "قابل للتفاوض",
+          status: "الحالة",
+
+          governates: "المحافظات",
+          regions: "المناطق",
+          cattegories: "التصنيفات",
+          subcategories: "الفئات الفرعية",
+          brand_countries: "دول العلامة التجارية",
+          third_branches: "الفروع الثانوية",
+          location: "الموقع",
+          select: "اختر",
+
+          edit_ad_title: "تعديل الإعلان",
+          edit_ad_desc: "عدل النموذج لتغيير إعلانك",
+          your_ads: "إعلاناتك",
+
           theresNoAds: "لا يوجد اعلانات",
           login: "تسجيل الدخول",
           sale: "بيع",
           languages: "الانجليزية",
           search: "بتدور على ايه",
-          navigation: [
-            {
-              title: "المزيد",
-              route: "/home/categories/my-ads",
-              children: "المزيد",
-            },
-            {
-              title: "مكافحة الحريق",
-              route: "/home/categories/",
-              children: "مكافحة الحريق",
-            },
-            {
-              title: "التكييف المركزي",
-              route: "/home/categories/categories",
-              children: "التكييف المركزي",
-            },
-
-            {
-              title: "عقارات",
-              route: "/home/categories/my-ads",
-              children: "عقارات",
-            },
-            {
-              title: "موارد البناء",
-              route: "/home/categories/my-ads",
-              children: "موارد البناء",
-            },
-            {
-              title: "الكهرباء",
-              route: "/home/categories/my-ads",
-              children: "الكهرباء",
-            },
-            {
-              title: "معادن",
-              route: "/home/categories/my-ads",
-              children: "معادن",
-            },
-            {
-              title: "انظمه امنيه",
-              route: "/home/categories/my-ads",
-              children: "انظمه امنيه",
-            },
-          ],
           categoriesTitle: "الفئات",
           specialOffers: "المنتجات المميزة",
 

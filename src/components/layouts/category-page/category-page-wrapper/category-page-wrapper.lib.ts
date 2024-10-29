@@ -4,13 +4,16 @@ import {
   GetCategoryPageAdsType,
 } from "./category-page-wrapper.types";
 import { ProductType } from "../../home";
+import {
+  GetCatgegorySearchResponse,
+  ReqResponseWithPageType,
+} from "../category-search/category-search.types";
+import { toast } from "sonner";
 
-export async function get_gategory_page_ads({}: GetCategoryPageAdsType): Promise<
-  ProductType[] | null
-> {
+export async function get_gategory_page_ads({}: GetCategoryPageAdsType) {
   try {
-    const { data: res_data } = await axios.post<
-      Awaited<GetCategoryPageAdsRes<ProductType[]>>
+    const { data } = await axios.post<
+      Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
     >(
       process.env.BACKEND__BASE_URL + "/client/ads/getAdsByParameters",
       {
@@ -26,14 +29,14 @@ export async function get_gategory_page_ads({}: GetCategoryPageAdsType): Promise
         },
       },
     );
-
-    if (res_data.success && res_data.data) {
-      return res_data.data;
+    if (!data.success) {
+      toast.error("Failed to get category ad");
+      return null;
     }
 
-    return null;
+    return data;
   } catch (error) {
-    console.log(error);
+    toast.error("Failed to get category ad");
     return null;
   }
 }

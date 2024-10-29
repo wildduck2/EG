@@ -48,7 +48,7 @@ export const CategorySwiper = () => {
                 <CarouselItem
                   onClick={() => {
                     route({
-                      to: `/home/categories/$id`,
+                      to: `/categories/$id`,
                       params: { id: e.name },
                     });
                   }}

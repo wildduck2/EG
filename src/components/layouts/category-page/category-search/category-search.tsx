@@ -18,12 +18,19 @@ import {
   SelectValue,
   Separator,
 } from "@/components/ui";
-import { CategoryPageFilter, get_filter_data } from "../category-page-filter";
+import {
+  CategoryPageFilter,
+  filter,
+  get_filter_data,
+} from "../category-page-filter";
 import { CategoryPageProducts } from "../category-page-products";
 import { get_category_search } from "./category-search.lib";
+import { useAtom } from "jotai";
 
 export const CategorySearch = ({ id }: { id: string | undefined }) => {
   const { t, i18n } = useTranslation();
+  const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
+
   // Query Categories
   const {
     data,
@@ -33,15 +40,17 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
     hasNextPage,
     isFetching,
     isFetchingNextPage,
+    isRefetching,
   } = useInfiniteQuery({
     queryKey: ["categories", id],
-    queryFn: () => get_category_search(id ?? ""),
+    queryFn: () => get_category_search(id ?? "", filter_schema),
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) =>
       (lastPage?.pagination.current_page ?? 0) + 1,
+    refetchOnWindowFocus: false,
   });
 
-  if (status === "pending") {
+  if (status === "pending" || isRefetching) {
     return <CategoryPageWrapperSkeleton />;
   }
 
@@ -52,7 +61,11 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
           <h2 className="text-3xl font-semibold capitalize">{id}</h2>
           <Separator className="px-2" />
         </div>
-        <h2 className="text-sm mx-auto">Failed to get data related to {id}</h2>
+        <Separator className="px-2" />
+        <div className="flex items-center justify-between">
+          <CategoryPageFilter />
+        </div>
+        <Separator className="px-2" />
       </section>
     );
   }
@@ -62,6 +75,10 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
       <section className="flex gap-8 items-start my-8 min-h-[63vh] flex-col">
         <div className="flex flex-col gap-4 w-full">
           <h2 className="text-3xl font-semibold capitalize">{id}</h2>
+          <Separator className="px-2" />
+          <div className="flex items-center justify-between">
+            <CategoryPageFilter />
+          </div>
           <Separator className="px-2" />
         </div>
         <h2 className="text-sm mx-auto">There's not data related to {id}</h2>
@@ -91,7 +108,7 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
               loading={isFetchingNextPage}
               onClick={() => fetchNextPage()}
             >
-              Load More
+              {t("load_more")}
             </Button>
           )}
         </div>

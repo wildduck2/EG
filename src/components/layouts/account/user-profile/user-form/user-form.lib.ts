@@ -24,6 +24,7 @@ export async function getUser() {
     );
 
     if (res_data.success) {
+      localStorage.setItem("user-info", JSON.stringify(res_data.data.user));
       return res_data.data.user;
     }
     return null;

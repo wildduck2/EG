@@ -9,6 +9,7 @@ import {
 import { AdGridSectionProps } from "./ad-grid-section.types";
 import { AdItemCard } from "../ad-item-card";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "@tanstack/react-router";
 
 export const AdGridSection: React.FC<AdGridSectionProps> = ({
   ads,
@@ -19,6 +20,7 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
   buttonContent,
 }) => {
   const { t, i18n } = useTranslation();
+  const route = useNavigate();
   return (
     <CardPreview>
       <CardPreviewHeader>
@@ -28,6 +30,14 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
         <Button
           variant="outline"
           className="border-red-400 text-red-400 hover:bg-red-400 hover:text-white"
+          onClick={() => {
+            route({
+              to: `/categories/${category_id}`,
+              params: {
+                id: category_id.toString(),
+              },
+            });
+          }}
         >
           {buttonContent}
         </Button>

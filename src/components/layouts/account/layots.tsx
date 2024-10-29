@@ -27,7 +27,7 @@ export default function SettingsLayout() {
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Tabs
-            dir="ltr"
+            dir={i18n.dir()}
             defaultValue={settings.header[0].title}
             className="flex flex-col md:flex-row space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 w-full gap-4"
           >
@@ -61,6 +61,7 @@ export default function SettingsLayout() {
 export const VerifyAccountBtn = () => {
   const route = useNavigate();
   const [loadiong, setLoadiong] = React.useState<boolean>(false);
+  const { t } = useTranslation();
 
   return (
     <div className="w-full place-center">
@@ -72,7 +73,7 @@ export const VerifyAccountBtn = () => {
           verifyAccount({ route, setLoadiong });
         }}
       >
-        verify your account
+        {t("verify_account")}
       </Button>
     </div>
   );

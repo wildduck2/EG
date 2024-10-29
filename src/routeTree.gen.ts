@@ -19,29 +19,29 @@ import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as AccountAccountImport } from './routes/account/_account'
 import { Route as CategoriesCategoriesIndexImport } from './routes/categories/_categories.index'
 import { Route as AccountAccountIndexImport } from './routes/account/_account.index'
-import { Route as CategoriesProductProductImport } from './routes/categories/product/_product'
 import { Route as AuthAuthVerificationConfirmedImport } from './routes/auth/_auth.verification-confirmed'
 import { Route as AuthAuthVerificationImport } from './routes/auth/_auth.verification'
 import { Route as AuthAuthSigninImport } from './routes/auth/_auth.signin'
 import { Route as AuthAuthForgetPasswordImport } from './routes/auth/_auth.forget-password'
 import { Route as AuthAuthChangePasswordImport } from './routes/auth/_auth.change-password'
 import { Route as CategoriesCategoriesSearchIdImport } from './routes/categories/_categories.search.$id'
+import { Route as CategoriesCategoryProductProductImport } from './routes/categories/$category.product/_product'
+import { Route as AccountAccountTraderIdImport } from './routes/account/_account.trader.$id'
 
 // Create Virtual Routes
 
 const CategoriesImport = createFileRoute('/categories')()
 const AuthImport = createFileRoute('/auth')()
 const AccountImport = createFileRoute('/account')()
-const CategoriesProductImport = createFileRoute('/categories/product')()
-const CategoriesCategoriesIdLazyImport = createFileRoute(
-  '/categories/_categories/$id',
+const CategoriesCategoryProductImport = createFileRoute(
+  '/categories/$category/product',
+)()
+const CategoriesCategoriesCategoryLazyImport = createFileRoute(
+  '/categories/_categories/$category',
 )()
 const AuthAuthSignupLazyImport = createFileRoute('/auth/_auth/signup')()
-const CategoriesProductProductIdLazyImport = createFileRoute(
-  '/categories/product/_product/$id',
-)()
-const AccountAccountTraderIdLazyImport = createFileRoute(
-  '/account/_account/trader/$id',
+const CategoriesCategoryProductProductProductLazyImport = createFileRoute(
+  '/categories/$category/product/_product/$product',
 )()
 
 // Create/Update Routes
@@ -66,11 +66,6 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const CategoriesProductRoute = CategoriesProductImport.update({
-  path: '/product',
-  getParentRoute: () => CategoriesRoute,
-} as any)
-
 const CategoriesCategoriesRoute = CategoriesCategoriesImport.update({
   id: '/_categories',
   getParentRoute: () => CategoriesRoute,
@@ -86,6 +81,11 @@ const AccountAccountRoute = AccountAccountImport.update({
   getParentRoute: () => AccountRoute,
 } as any)
 
+const CategoriesCategoryProductRoute = CategoriesCategoryProductImport.update({
+  path: '/$category/product',
+  getParentRoute: () => CategoriesRoute,
+} as any)
+
 const CategoriesCategoriesIndexRoute = CategoriesCategoriesIndexImport.update({
   path: '/',
   getParentRoute: () => CategoriesCategoriesRoute,
@@ -96,14 +96,15 @@ const AccountAccountIndexRoute = AccountAccountIndexImport.update({
   getParentRoute: () => AccountAccountRoute,
 } as any)
 
-const CategoriesCategoriesIdLazyRoute = CategoriesCategoriesIdLazyImport.update(
-  {
-    path: '/$id',
+const CategoriesCategoriesCategoryLazyRoute =
+  CategoriesCategoriesCategoryLazyImport.update({
+    path: '/$category',
     getParentRoute: () => CategoriesCategoriesRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/categories/_categories.$id.lazy').then((d) => d.Route),
-)
+  } as any).lazy(() =>
+    import('./routes/categories/_categories.$category.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 const AuthAuthSignupLazyRoute = AuthAuthSignupLazyImport.update({
   path: '/signup',
@@ -111,11 +112,6 @@ const AuthAuthSignupLazyRoute = AuthAuthSignupLazyImport.update({
 } as any).lazy(() =>
   import('./routes/auth/_auth.signup.lazy').then((d) => d.Route),
 )
-
-const CategoriesProductProductRoute = CategoriesProductProductImport.update({
-  id: '/_product',
-  getParentRoute: () => CategoriesProductRoute,
-} as any)
 
 const AuthAuthVerificationConfirmedRoute =
   AuthAuthVerificationConfirmedImport.update({
@@ -143,30 +139,32 @@ const AuthAuthChangePasswordRoute = AuthAuthChangePasswordImport.update({
   getParentRoute: () => AuthAuthRoute,
 } as any)
 
-const CategoriesProductProductIdLazyRoute =
-  CategoriesProductProductIdLazyImport.update({
-    path: '/$id',
-    getParentRoute: () => CategoriesProductProductRoute,
-  } as any).lazy(() =>
-    import('./routes/categories/product/_product.$id.lazy').then(
-      (d) => d.Route,
-    ),
-  )
-
-const AccountAccountTraderIdLazyRoute = AccountAccountTraderIdLazyImport.update(
-  {
-    path: '/trader/$id',
-    getParentRoute: () => AccountAccountRoute,
-  } as any,
-).lazy(() =>
-  import('./routes/account/_account.trader.$id.lazy').then((d) => d.Route),
-)
-
 const CategoriesCategoriesSearchIdRoute =
   CategoriesCategoriesSearchIdImport.update({
     path: '/search/$id',
     getParentRoute: () => CategoriesCategoriesRoute,
   } as any)
+
+const CategoriesCategoryProductProductRoute =
+  CategoriesCategoryProductProductImport.update({
+    id: '/_product',
+    getParentRoute: () => CategoriesCategoryProductRoute,
+  } as any)
+
+const AccountAccountTraderIdRoute = AccountAccountTraderIdImport.update({
+  path: '/trader/$id',
+  getParentRoute: () => AccountAccountRoute,
+} as any)
+
+const CategoriesCategoryProductProductProductLazyRoute =
+  CategoriesCategoryProductProductProductLazyImport.update({
+    path: '/$product',
+    getParentRoute: () => CategoriesCategoryProductProductRoute,
+  } as any).lazy(() =>
+    import('./routes/categories/$category.product/_product.$product.lazy').then(
+      (d) => d.Route,
+    ),
+  )
 
 // Populate the FileRoutesByPath interface
 
@@ -256,20 +254,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthVerificationConfirmedImport
       parentRoute: typeof AuthAuthImport
     }
-    '/categories/product': {
-      id: '/categories/product'
-      path: '/product'
-      fullPath: '/categories/product'
-      preLoaderRoute: typeof CategoriesProductImport
-      parentRoute: typeof CategoriesImport
-    }
-    '/categories/product/_product': {
-      id: '/categories/product/_product'
-      path: '/product'
-      fullPath: '/categories/product'
-      preLoaderRoute: typeof CategoriesProductProductImport
-      parentRoute: typeof CategoriesProductRoute
-    }
     '/auth/_auth/signup': {
       id: '/auth/_auth/signup'
       path: '/signup'
@@ -277,11 +261,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthSignupLazyImport
       parentRoute: typeof AuthAuthImport
     }
-    '/categories/_categories/$id': {
-      id: '/categories/_categories/$id'
-      path: '/$id'
-      fullPath: '/categories/$id'
-      preLoaderRoute: typeof CategoriesCategoriesIdLazyImport
+    '/categories/_categories/$category': {
+      id: '/categories/_categories/$category'
+      path: '/$category'
+      fullPath: '/categories/$category'
+      preLoaderRoute: typeof CategoriesCategoriesCategoryLazyImport
       parentRoute: typeof CategoriesCategoriesImport
     }
     '/account/_account/': {
@@ -298,6 +282,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoriesIndexImport
       parentRoute: typeof CategoriesCategoriesImport
     }
+    '/account/_account/trader/$id': {
+      id: '/account/_account/trader/$id'
+      path: '/trader/$id'
+      fullPath: '/account/trader/$id'
+      preLoaderRoute: typeof AccountAccountTraderIdImport
+      parentRoute: typeof AccountAccountImport
+    }
+    '/categories/$category/product': {
+      id: '/categories/$category/product'
+      path: '/$category/product'
+      fullPath: '/categories/$category/product'
+      preLoaderRoute: typeof CategoriesCategoryProductImport
+      parentRoute: typeof CategoriesImport
+    }
+    '/categories/$category/product/_product': {
+      id: '/categories/$category/product/_product'
+      path: '/$category/product'
+      fullPath: '/categories/$category/product'
+      preLoaderRoute: typeof CategoriesCategoryProductProductImport
+      parentRoute: typeof CategoriesCategoryProductRoute
+    }
     '/categories/_categories/search/$id': {
       id: '/categories/_categories/search/$id'
       path: '/search/$id'
@@ -305,19 +310,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoriesSearchIdImport
       parentRoute: typeof CategoriesCategoriesImport
     }
-    '/account/_account/trader/$id': {
-      id: '/account/_account/trader/$id'
-      path: '/trader/$id'
-      fullPath: '/account/trader/$id'
-      preLoaderRoute: typeof AccountAccountTraderIdLazyImport
-      parentRoute: typeof AccountAccountImport
-    }
-    '/categories/product/_product/$id': {
-      id: '/categories/product/_product/$id'
-      path: '/$id'
-      fullPath: '/categories/product/$id'
-      preLoaderRoute: typeof CategoriesProductProductIdLazyImport
-      parentRoute: typeof CategoriesProductProductImport
+    '/categories/$category/product/_product/$product': {
+      id: '/categories/$category/product/_product/$product'
+      path: '/$product'
+      fullPath: '/categories/$category/product/$product'
+      preLoaderRoute: typeof CategoriesCategoryProductProductProductLazyImport
+      parentRoute: typeof CategoriesCategoryProductProductImport
     }
   }
 }
@@ -326,12 +324,12 @@ declare module '@tanstack/react-router' {
 
 interface AccountAccountRouteChildren {
   AccountAccountIndexRoute: typeof AccountAccountIndexRoute
-  AccountAccountTraderIdLazyRoute: typeof AccountAccountTraderIdLazyRoute
+  AccountAccountTraderIdRoute: typeof AccountAccountTraderIdRoute
 }
 
 const AccountAccountRouteChildren: AccountAccountRouteChildren = {
   AccountAccountIndexRoute: AccountAccountIndexRoute,
-  AccountAccountTraderIdLazyRoute: AccountAccountTraderIdLazyRoute,
+  AccountAccountTraderIdRoute: AccountAccountTraderIdRoute,
 }
 
 const AccountAccountRouteWithChildren = AccountAccountRoute._addFileChildren(
@@ -382,13 +380,13 @@ const AuthRouteChildren: AuthRouteChildren = {
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface CategoriesCategoriesRouteChildren {
-  CategoriesCategoriesIdLazyRoute: typeof CategoriesCategoriesIdLazyRoute
+  CategoriesCategoriesCategoryLazyRoute: typeof CategoriesCategoriesCategoryLazyRoute
   CategoriesCategoriesIndexRoute: typeof CategoriesCategoriesIndexRoute
   CategoriesCategoriesSearchIdRoute: typeof CategoriesCategoriesSearchIdRoute
 }
 
 const CategoriesCategoriesRouteChildren: CategoriesCategoriesRouteChildren = {
-  CategoriesCategoriesIdLazyRoute: CategoriesCategoriesIdLazyRoute,
+  CategoriesCategoriesCategoryLazyRoute: CategoriesCategoriesCategoryLazyRoute,
   CategoriesCategoriesIndexRoute: CategoriesCategoriesIndexRoute,
   CategoriesCategoriesSearchIdRoute: CategoriesCategoriesSearchIdRoute,
 }
@@ -396,39 +394,44 @@ const CategoriesCategoriesRouteChildren: CategoriesCategoriesRouteChildren = {
 const CategoriesCategoriesRouteWithChildren =
   CategoriesCategoriesRoute._addFileChildren(CategoriesCategoriesRouteChildren)
 
-interface CategoriesProductProductRouteChildren {
-  CategoriesProductProductIdLazyRoute: typeof CategoriesProductProductIdLazyRoute
+interface CategoriesCategoryProductProductRouteChildren {
+  CategoriesCategoryProductProductProductLazyRoute: typeof CategoriesCategoryProductProductProductLazyRoute
 }
 
-const CategoriesProductProductRouteChildren: CategoriesProductProductRouteChildren =
+const CategoriesCategoryProductProductRouteChildren: CategoriesCategoryProductProductRouteChildren =
   {
-    CategoriesProductProductIdLazyRoute: CategoriesProductProductIdLazyRoute,
+    CategoriesCategoryProductProductProductLazyRoute:
+      CategoriesCategoryProductProductProductLazyRoute,
   }
 
-const CategoriesProductProductRouteWithChildren =
-  CategoriesProductProductRoute._addFileChildren(
-    CategoriesProductProductRouteChildren,
+const CategoriesCategoryProductProductRouteWithChildren =
+  CategoriesCategoryProductProductRoute._addFileChildren(
+    CategoriesCategoryProductProductRouteChildren,
   )
 
-interface CategoriesProductRouteChildren {
-  CategoriesProductProductRoute: typeof CategoriesProductProductRouteWithChildren
+interface CategoriesCategoryProductRouteChildren {
+  CategoriesCategoryProductProductRoute: typeof CategoriesCategoryProductProductRouteWithChildren
 }
 
-const CategoriesProductRouteChildren: CategoriesProductRouteChildren = {
-  CategoriesProductProductRoute: CategoriesProductProductRouteWithChildren,
-}
+const CategoriesCategoryProductRouteChildren: CategoriesCategoryProductRouteChildren =
+  {
+    CategoriesCategoryProductProductRoute:
+      CategoriesCategoryProductProductRouteWithChildren,
+  }
 
-const CategoriesProductRouteWithChildren =
-  CategoriesProductRoute._addFileChildren(CategoriesProductRouteChildren)
+const CategoriesCategoryProductRouteWithChildren =
+  CategoriesCategoryProductRoute._addFileChildren(
+    CategoriesCategoryProductRouteChildren,
+  )
 
 interface CategoriesRouteChildren {
   CategoriesCategoriesRoute: typeof CategoriesCategoriesRouteWithChildren
-  CategoriesProductRoute: typeof CategoriesProductRouteWithChildren
+  CategoriesCategoryProductRoute: typeof CategoriesCategoryProductRouteWithChildren
 }
 
 const CategoriesRouteChildren: CategoriesRouteChildren = {
   CategoriesCategoriesRoute: CategoriesCategoriesRouteWithChildren,
-  CategoriesProductRoute: CategoriesProductRouteWithChildren,
+  CategoriesCategoryProductRoute: CategoriesCategoryProductRouteWithChildren,
 }
 
 const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
@@ -445,14 +448,14 @@ export interface FileRoutesByFullPath {
   '/auth/signin': typeof AuthAuthSigninRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
-  '/categories/product': typeof CategoriesProductProductRouteWithChildren
   '/auth/signup': typeof AuthAuthSignupLazyRoute
-  '/categories/$id': typeof CategoriesCategoriesIdLazyRoute
+  '/categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
   '/account/': typeof AccountAccountIndexRoute
   '/categories/': typeof CategoriesCategoriesIndexRoute
+  '/account/trader/$id': typeof AccountAccountTraderIdRoute
+  '/categories/$category/product': typeof CategoriesCategoryProductProductRouteWithChildren
   '/categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
-  '/account/trader/$id': typeof AccountAccountTraderIdLazyRoute
-  '/categories/product/$id': typeof CategoriesProductProductIdLazyRoute
+  '/categories/$category/product/$product': typeof CategoriesCategoryProductProductProductLazyRoute
 }
 
 export interface FileRoutesByTo {
@@ -465,12 +468,12 @@ export interface FileRoutesByTo {
   '/auth/signin': typeof AuthAuthSigninRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
-  '/categories/product': typeof CategoriesProductProductRouteWithChildren
   '/auth/signup': typeof AuthAuthSignupLazyRoute
-  '/categories/$id': typeof CategoriesCategoriesIdLazyRoute
+  '/categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
+  '/account/trader/$id': typeof AccountAccountTraderIdRoute
+  '/categories/$category/product': typeof CategoriesCategoryProductProductRouteWithChildren
   '/categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
-  '/account/trader/$id': typeof AccountAccountTraderIdLazyRoute
-  '/categories/product/$id': typeof CategoriesProductProductIdLazyRoute
+  '/categories/$category/product/$product': typeof CategoriesCategoryProductProductProductLazyRoute
 }
 
 export interface FileRoutesById {
@@ -487,15 +490,15 @@ export interface FileRoutesById {
   '/auth/_auth/signin': typeof AuthAuthSigninRoute
   '/auth/_auth/verification': typeof AuthAuthVerificationRoute
   '/auth/_auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
-  '/categories/product': typeof CategoriesProductRouteWithChildren
-  '/categories/product/_product': typeof CategoriesProductProductRouteWithChildren
   '/auth/_auth/signup': typeof AuthAuthSignupLazyRoute
-  '/categories/_categories/$id': typeof CategoriesCategoriesIdLazyRoute
+  '/categories/_categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
   '/account/_account/': typeof AccountAccountIndexRoute
   '/categories/_categories/': typeof CategoriesCategoriesIndexRoute
+  '/account/_account/trader/$id': typeof AccountAccountTraderIdRoute
+  '/categories/$category/product': typeof CategoriesCategoryProductRouteWithChildren
+  '/categories/$category/product/_product': typeof CategoriesCategoryProductProductRouteWithChildren
   '/categories/_categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
-  '/account/_account/trader/$id': typeof AccountAccountTraderIdLazyRoute
-  '/categories/product/_product/$id': typeof CategoriesProductProductIdLazyRoute
+  '/categories/$category/product/_product/$product': typeof CategoriesCategoryProductProductProductLazyRoute
 }
 
 export interface FileRouteTypes {
@@ -510,14 +513,14 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/verification'
     | '/auth/verification-confirmed'
-    | '/categories/product'
     | '/auth/signup'
-    | '/categories/$id'
+    | '/categories/$category'
     | '/account/'
     | '/categories/'
-    | '/categories/search/$id'
     | '/account/trader/$id'
-    | '/categories/product/$id'
+    | '/categories/$category/product'
+    | '/categories/search/$id'
+    | '/categories/$category/product/$product'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -529,12 +532,12 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/verification'
     | '/auth/verification-confirmed'
-    | '/categories/product'
     | '/auth/signup'
-    | '/categories/$id'
-    | '/categories/search/$id'
+    | '/categories/$category'
     | '/account/trader/$id'
-    | '/categories/product/$id'
+    | '/categories/$category/product'
+    | '/categories/search/$id'
+    | '/categories/$category/product/$product'
   id:
     | '__root__'
     | '/'
@@ -549,15 +552,15 @@ export interface FileRouteTypes {
     | '/auth/_auth/signin'
     | '/auth/_auth/verification'
     | '/auth/_auth/verification-confirmed'
-    | '/categories/product'
-    | '/categories/product/_product'
     | '/auth/_auth/signup'
-    | '/categories/_categories/$id'
+    | '/categories/_categories/$category'
     | '/account/_account/'
     | '/categories/_categories/'
-    | '/categories/_categories/search/$id'
     | '/account/_account/trader/$id'
-    | '/categories/product/_product/$id'
+    | '/categories/$category/product'
+    | '/categories/$category/product/_product'
+    | '/categories/_categories/search/$id'
+    | '/categories/$category/product/_product/$product'
   fileRoutesById: FileRoutesById
 }
 
@@ -632,14 +635,14 @@ export const routeTree = rootRoute
       "filePath": "categories",
       "children": [
         "/categories/_categories",
-        "/categories/product"
+        "/categories/$category/product"
       ]
     },
     "/categories/_categories": {
       "filePath": "categories/_categories.tsx",
       "parent": "/categories",
       "children": [
-        "/categories/_categories/$id",
+        "/categories/_categories/$category",
         "/categories/_categories/",
         "/categories/_categories/search/$id"
       ]
@@ -664,26 +667,12 @@ export const routeTree = rootRoute
       "filePath": "auth/_auth.verification-confirmed.tsx",
       "parent": "/auth/_auth"
     },
-    "/categories/product": {
-      "filePath": "categories/product",
-      "parent": "/categories",
-      "children": [
-        "/categories/product/_product"
-      ]
-    },
-    "/categories/product/_product": {
-      "filePath": "categories/product/_product.tsx",
-      "parent": "/categories/product",
-      "children": [
-        "/categories/product/_product/$id"
-      ]
-    },
     "/auth/_auth/signup": {
       "filePath": "auth/_auth.signup.lazy.tsx",
       "parent": "/auth/_auth"
     },
-    "/categories/_categories/$id": {
-      "filePath": "categories/_categories.$id.lazy.tsx",
+    "/categories/_categories/$category": {
+      "filePath": "categories/_categories.$category.lazy.tsx",
       "parent": "/categories/_categories"
     },
     "/account/_account/": {
@@ -694,17 +683,31 @@ export const routeTree = rootRoute
       "filePath": "categories/_categories.index.tsx",
       "parent": "/categories/_categories"
     },
+    "/account/_account/trader/$id": {
+      "filePath": "account/_account.trader.$id.tsx",
+      "parent": "/account/_account"
+    },
+    "/categories/$category/product": {
+      "filePath": "categories/$category.product",
+      "parent": "/categories",
+      "children": [
+        "/categories/$category/product/_product"
+      ]
+    },
+    "/categories/$category/product/_product": {
+      "filePath": "categories/$category.product/_product.tsx",
+      "parent": "/categories/$category/product",
+      "children": [
+        "/categories/$category/product/_product/$product"
+      ]
+    },
     "/categories/_categories/search/$id": {
       "filePath": "categories/_categories.search.$id.tsx",
       "parent": "/categories/_categories"
     },
-    "/account/_account/trader/$id": {
-      "filePath": "account/_account.trader.$id.lazy.tsx",
-      "parent": "/account/_account"
-    },
-    "/categories/product/_product/$id": {
-      "filePath": "categories/product/_product.$id.lazy.tsx",
-      "parent": "/categories/product/_product"
+    "/categories/$category/product/_product/$product": {
+      "filePath": "categories/$category.product/_product.$product.lazy.tsx",
+      "parent": "/categories/$category/product/_product"
     }
   }
 }

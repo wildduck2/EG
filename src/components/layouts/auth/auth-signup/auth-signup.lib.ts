@@ -44,6 +44,7 @@ export const onSubmitSignup = async <T extends TraderValues>(
       return toast.error("Something went wrong, already exists");
     }
 
+    localStorage.setItem("phone", JSON.stringify(data.phone));
     route({ to: "/auth/verification" });
     return toast.success("Account created successfully");
   } catch (error) {

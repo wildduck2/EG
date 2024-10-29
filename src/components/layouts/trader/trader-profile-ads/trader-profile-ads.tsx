@@ -5,7 +5,7 @@ import { get_trader_ads } from "./trader-profile-ads.lib";
 
 export const TraderProfileAds = ({ id }: { id: string }) => {
   const { data, status } = useQuery({
-    queryKey: ["trader_ads"],
+    queryKey: ["trader_ads", id],
     queryFn: () => get_trader_ads({ id }),
     refetchOnWindowFocus: false,
   });

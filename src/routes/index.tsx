@@ -8,25 +8,6 @@ import { useEffect } from "react";
 
 export const Route = createFileRoute("/")({
   component: () => {
-    const [_user] = useAtom(user);
-    const route = useNavigate();
-
-    if (!_user) {
-      return route({
-        to: "/auth/signin",
-      });
-    }
-    useEffect(() => {
-      (async () => {
-        const res = await getUser(_user);
-        if (!res) {
-          throw redirect({
-            to: "/auth/signin",
-          });
-        }
-      })();
-    });
-
     return (
       <>
         <Header />

@@ -4,7 +4,7 @@ import * as React from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 
 import { cn } from "@/lib/utils";
-import { buttonVariants } from "./button";
+import { Button, buttonVariants } from "./button";
 import {
   Dialog,
   DialogClose,
@@ -36,6 +36,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./sheet";
+import { DialogCloseProps } from "@radix-ui/react-dialog";
 
 //NOTE: Alert Dialog Primitive
 const AlertDialog = AlertDialogPrimitive.Root;
@@ -187,8 +188,8 @@ interface AlertDialogDrawerHeaderType
 
 interface AlertDialogDrawerFooterType
   extends Partial<React.ComponentPropsWithoutRef<typeof DrawerFooter>> {
-  cancel?: React.ReactNode;
-  submit?: React.ReactNode;
+  cancel?: React.HTMLProps<HTMLButtonElement> & DialogCloseProps;
+  submit?: React.ComponentPropsWithoutRef<typeof Button>;
 }
 interface AlertDialogCustomProps<C> {
   type: "drawer" | "dialog" | "sheet";
@@ -240,6 +241,7 @@ const AlertDialogCustom = <C,>({
     ComponentHeader,
     ComponentContent,
     ComponentDescription,
+    setState,
   } = useAlertCustom({
     trigger,
     header,
@@ -251,6 +253,19 @@ const AlertDialogCustom = <C,>({
     type,
   });
 
+  const {
+    className: submitClassName,
+    onClick: submitOnClick,
+    children: submitChildren,
+    ...submitProps
+  } = submit ?? {};
+  const {
+    className: cancelClassName,
+    children: cancelChildren,
+    ...cancelProps
+  } = cancel ?? {};
+
+  console.log(changeState);
   return (
     <>
       <AlertDialog open={changeState.alert}>
@@ -266,10 +281,13 @@ const AlertDialogCustom = <C,>({
             {triggerChildren}
           </ComponentTrigger>
           <ComponentContent
-            className={cn("", contentClassName)}
+            className={cn("flex flex-col w-full h-full", contentClassName)}
             {...contentProps}
           >
-            <div data-role-wrapper>
+            <div
+              data-role-wrapper
+              className="flex flex-col gap-4 w-full h-full"
+            >
               {header && (
                 <ComponentHeader
                   className={cn("", headerClassName)}
@@ -291,11 +309,27 @@ const AlertDialogCustom = <C,>({
                   footerChildren
                 ) : (
                   <ComponentFooter
-                    className={cn("", footerClassName)}
+                    className={cn("gap-2", footerClassName)}
                     {...footerProps}
                   >
-                    <ComponentClose asChild>{cancel}</ComponentClose>
-                    {submit}
+                    <ComponentClose
+                      asChild
+                      className={cn(cancelClassName)}
+                      {...cancelProps}
+                    >
+                      {cancelChildren}
+                    </ComponentClose>
+                    <Button
+                      onClick={(e) => {
+                        setState({ drawer: false, alert: false });
+                        submitOnClick?.(e);
+                      }}
+                      // asChild
+                      className={cn("ml-0")}
+                      {...submitProps}
+                    >
+                      {submitChildren}
+                    </Button>
                   </ComponentFooter>
                 ))}
             </div>
@@ -369,7 +403,7 @@ const useAlertCustom = <C,>({
 
   React.useEffect(() => {
     changeStateRef.current = changeState;
-  }, [changeState]);
+  }, []);
 
   const handleAlertCancel = React.useCallback(() => {
     actions?.cancel && actions.cancel();
@@ -387,6 +421,7 @@ const useAlertCustom = <C,>({
         !drawerState &&
         (drawerData || true) &&
         changeStateRef.current !== changeState;
+      console.log(showAlert, "asdfasfasdf");
 
       setState(() => ({
         alert: showAlert as boolean,

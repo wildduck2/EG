@@ -13,6 +13,7 @@ export async function get_categories(): Promise<GetCategories<CategoryItemType> 
     });
 
     if (res_data.success && res_data.data) {
+      localStorage.setItem("categories", JSON.stringify(res_data.data));
       return res_data.data;
     }
 

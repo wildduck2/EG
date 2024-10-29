@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -32,6 +31,8 @@ import shape from "../../../assets/shape.png";
 import { useAtom } from "jotai";
 import { signoutAsync, user } from "../auth";
 import { Search } from "lucide-react";
+import { Category } from "../home";
+import { User } from "../account/user-profile";
 
 export const Header = () => {
   const location = useLocation();
@@ -53,6 +54,10 @@ export const Header = () => {
     };
   }, [location.pathname]);
 
+  const categories: Category[] = JSON.parse(
+    localStorage.getItem("categories") || "{}",
+  );
+
   return (
     <>
       <header
@@ -66,7 +71,13 @@ export const Header = () => {
             <Link to="/" className="logo mt-2">
               <img src={Logo} className="w-[9rem] h-auto" alt="Logo" />
             </Link>
-            <img src={shape} className="w-[300px] -mt-4 hidden lg:block" />
+            <img
+              src={shape}
+              className={cn("w-[300px] -mt-4 hidden lg:block")}
+              style={{
+                transform: i18n.dir() === "ltr" ? "rotateY(180deg)" : "",
+              }}
+            />
           </div>
 
           <nav
@@ -92,10 +103,10 @@ export const Header = () => {
               <SearchInput
                 variant="default"
                 size="default"
-                className="lg:max-w-[700px] md:w-full !w-full"
+                className="lg:max-w-[700px] md:w-full !w-full relative"
                 searchPlaceholder={t("search")}
                 searchIcon={true}
-                dir="ltr"
+                dir={i18n.dir()}
               />
             </div>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
@@ -109,23 +120,23 @@ export const Header = () => {
                           src="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/duckui%20(1).png"
                           alt="@shadcn"
                         />
-                        <AvatarFallback>duck</AvatarFallback>
+                        <AvatarFallback>{userData.name}</AvatarFallback>
                       </Avatar>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                      <DropdownMenuLabel>{t("my_account")}</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         onClick={() => navigate({ to: "/account" })}
                       >
-                        Account
+                        {t("accounty")}
                       </DropdownMenuItem>
                       <DropdownMenuItem
                         onClick={async () => {
                           signoutAsync({ route });
                         }}
                       >
-                        Logout
+                        {t("logout")}
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
@@ -168,7 +179,18 @@ export const Header = () => {
                 isCollabsed: false,
               }}
               navigationKeys={{
-                data: t("navigation"),
+                data: [
+                  ...categories.splice(0, 6).map((item) => ({
+                    title: item.name_en,
+                    route: `/categories/${item.name_en}`,
+                    children: i18n.language === "en" ? item.name_en : item.name,
+                  })),
+                  {
+                    title: "more",
+                    route: `/categories/`,
+                    children: i18n.language === "en" ? "More" : "المزيد",
+                  },
+                ],
               }}
             />
           </div>
@@ -246,10 +268,20 @@ const SearchInput = () => {
         });
       }}
     >
-      {<Search className="absolute top-1/2 -translate-y-1/2 left-3  h-4 w-4" />}
+      {
+        <Search
+          className={cn(
+            "absolute top-1/2 -translate-y-1/2   h-4 w-4",
+            i18n.dir() === "ltr" ? "left-3" : "right-3",
+          )}
+        />
+      }
       <Input
         placeholder={i18n.dir() === "rtl" ? "ابحث" : "Search..."}
-        className="w-full max-w-[700px] pl-8"
+        className={cn(
+          "w-full max-w-[700px]",
+          i18n.dir() === "rtl" ? "pr-8" : " pl-8",
+        )}
       />
     </form>
   );

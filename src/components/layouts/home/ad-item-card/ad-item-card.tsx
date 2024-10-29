@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { useNavigate, useParams } from "@tanstack/react-router";
 import { AddItemCardProps } from "./ad-item-card.types";
 import {
   Button,
@@ -22,17 +22,20 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
   age,
   region,
   wishlist,
-  brand_image,
+  // brand_image,
 }) => {
+  const { category } = useParams({ strict: false });
   const route = useNavigate();
+
   return (
     <Card className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer">
       <CardHeader
         className="p-0 relative h-[250px] overflow-hidden"
         onClick={() => {
           route({
-            to: "/categories/product/$id",
-            params: { id: `${id}` },
+            to: "/categories/$category/product/$product",
+            params: { category: `${category}`, product: `${id}` },
+            search: { name: `${name}` },
           });
           window.scrollTo(0, 0);
         }}
@@ -52,8 +55,9 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
           className="flex justify-between items-start mb-2 flex-col"
           onClick={() => {
             route({
-              to: "/categories/product/$id",
-              params: { id: `${id}` },
+              to: "/categories/$category/product/$product",
+              params: { category: `${category}`, product: `${id}` },
+              search: { name: `${name}` },
             });
             window.scrollTo(0, 0);
           }}
@@ -120,8 +124,10 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
   const [wishlistState, setWishlistState] = React.useState<boolean>(wishlist);
   const { startMutation } = useMutate({
     id,
-    wish_list_state: wishlistState ? "remove" : "add",
+    wish_list_state: wishlistState ? "add" : "remove",
   });
+
+  console.log(wishlistState ? "add" : "remove");
 
   return (
     <Button
@@ -146,7 +152,9 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
       <Heart
         className={cn(
           "size-4",
-          // !offers ? "text-red-400 fill-red-400" : "text-white fill-white",
+          !wishlistState
+            ? "text-red-400 fill-red-400"
+            : "text-white fill-white",
         )}
       />
     </Button>
