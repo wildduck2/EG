@@ -28,7 +28,7 @@ export default function SettingsLayout() {
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
           <Tabs
             dir={i18n.dir()}
-            defaultValue={settings.header[0].title}
+            defaultValue={"my ads"}
             className="flex flex-col md:flex-row space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0 w-full gap-4"
           >
             <SidebarNav items={settings.header} />

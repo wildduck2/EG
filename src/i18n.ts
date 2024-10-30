@@ -22,6 +22,8 @@ i18n
     resources: {
       en: {
         translation: {
+          home: "Home",
+          categories: "Categories",
           my_account: "My Account",
           logout: "Logout",
           account: "Account",
@@ -427,6 +429,8 @@ i18n
             copyright: "جميع الحقوق محفوظه لدي البضاعه @ 2024",
           },
 
+          home: "الرئيسية",
+          categories: "التصنيفات",
           viewMore: "اظهار المزيد",
         },
       },

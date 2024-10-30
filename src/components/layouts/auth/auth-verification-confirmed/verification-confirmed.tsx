@@ -18,7 +18,7 @@ export const AuthVerificationConfirmed = () => {
         <Button
           variant="default"
           type="submit"
-          onClick={() => route({ to: "/" })}
+          onClick={() => route({ to: "/auth/signin" })}
           className="w-full bg-red-600 hover:bg-red-700 mb-2"
         >
           Continue

@@ -12,7 +12,11 @@ import { onSubmitVerification } from "./auth-verification.lib";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
 
-export const AuthVerification = () => {
+export const AuthVerification = ({
+  verify_register,
+}: {
+  verify_register?: boolean;
+}) => {
   const validClass = "valid";
   const [otp, setOtp] = React.useState<string>("");
   const [error, setError] = React.useState<boolean>(false);
@@ -20,7 +24,11 @@ export const AuthVerification = () => {
 
   const route = useNavigate();
   async function onSubmit(data: string) {
-    const res = await onSubmitVerification({ otp: data }, route);
+    const res = await onSubmitVerification(
+      { otp: data },
+      route,
+      verify_register,
+    );
     if (!res) {
       setError(true);
     }

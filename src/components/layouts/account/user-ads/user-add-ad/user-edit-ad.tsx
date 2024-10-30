@@ -37,6 +37,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { filesize } from "filesize";
 import { useTranslation } from "react-i18next";
+import { user_edit_ad } from "./user-add-ad.lib";
 
 // Define the Zod schema for location validation
 const locationSchema = z.object({
@@ -45,7 +46,7 @@ const locationSchema = z.object({
 });
 
 // Define the Zod schema for adding an advertisement
-export const addAdSchema = z.object({
+const addAdSchema = z.object({
   name: z.string().min(1, "Name is required"),
   description: z.string().min(1, "Description is required"),
   price: z.string().min(1, "Price is required"),
@@ -64,8 +65,8 @@ export const addAdSchema = z.object({
 });
 
 // Define the TypeScript type based on the schema
-export type AddAdFormType = z.infer<typeof addAdSchema>;
-export type LocationType = z.infer<typeof locationSchema>;
+type AddAdFormType = z.infer<typeof addAdSchema>;
+type LocationType = z.infer<typeof locationSchema>;
 
 const default_values: AddAdFormType = {
   name: "",
@@ -88,7 +89,7 @@ const default_values: AddAdFormType = {
   governorate: "",
 };
 
-export const UserAddAd = ({
+export const UserEditdAd = ({
   onSubmit,
   defaultValues = default_values,
   default_input,
@@ -103,20 +104,18 @@ export const UserAddAd = ({
 }) => {
   const { register, watch, formState, handleSubmit, setValue, control } =
     useForm<AddAdFormType>({
-      resolver: zodResolver(addAdSchema),
       defaultValues: defaultValues,
       criteriaMode: "all",
       mode: "all",
     });
 
+  console.log(defaultValues);
+
   const [filter_data] = useAtom(filterData);
-  // console.log(defaultValues.attachment);
-  //   console.log(formState.errors);
 
   const [attachments, setAttachments] = React.useState<File[]>(
     defaultValues.attachment,
   );
-  // console.log(attachments, "attachments");
 
   const { t, i18n } = useTranslation();
 
@@ -146,6 +145,7 @@ export const UserAddAd = ({
           },
           submit: {
             onClick: handleSubmit((data) => {
+              console.log(data);
               onSubmit?.(attachments, data);
             }),
             disabled: !formState.isValid || formState.isSubmitting,
@@ -472,7 +472,7 @@ export const UserAddAd = ({
   );
 };
 
-export type UploadAdInput = {
+type UploadAdInput = {
   register: UseFormRegister<AddAdFormType>;
   setValue: UseFormSetValue<AddAdFormType>;
   errors: FieldErrors<AddAdFormType>;
@@ -481,7 +481,7 @@ export type UploadAdInput = {
   setAttachments: React.Dispatch<React.SetStateAction<File[] | undefined>>;
 };
 
-export const UploadAdPictures = ({
+const UploadAdPictures = ({
   value,
   register,
   setValue,
@@ -494,75 +494,82 @@ export const UploadAdPictures = ({
   return (
     <div className="relative">
       <div className={cn("absolute bottom-6 w-full")}>
-        <Popover>
-          <PopoverTrigger className={cn("")}>
-            <Button
-              size={"sm"}
-              type="button"
-              className={cn(
-                "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
-                [...(value ?? [])].length > 0
-                  ? "bottom-[1.5rem] opacity-100 pointer-events-all z-50"
-                  : "-bottom-4 opacity-0 pointer-events-none",
-              )}
-              icon={{
-                icon: Paperclip as LucideIcon,
-                className: "!size-[.8rem]",
-              }}
-              label={{
-                children: [...(value ?? [])].length,
-              }}
+        {attachments && (
+          <Popover>
+            <PopoverTrigger className={cn("")}>
+              <Button
+                size={"sm"}
+                type="button"
+                className={cn(
+                  "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
+                  [...(value ?? [])].length > 0
+                    ? "bottom-[1.5rem] opacity-100 pointer-events-all z-50"
+                    : "-bottom-4 opacity-0 pointer-events-none",
+                )}
+                icon={{
+                  icon: Paperclip as LucideIcon,
+                  className: "!size-[.8rem]",
+                }}
+                label={{
+                  children: [...(value ?? [])].length,
+                }}
+              >
+                <span className="text-xs">Attachments</span>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              align="start"
+              side="top"
+              className={cn("p-2 mb-1 w-full")}
             >
-              <span className="text-xs">Attachments</span>
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            side="top"
-            className={cn("p-2 mb-1 w-full")}
-          >
-            <ScrollArea>
-              <div className="grid items justify-start gap-2 shrink-0 w-full grid-cols-2 max-h-[104px]">
-                {attachments?.map((attachment, idx) => {
-                  return (
-                    <div
-                      key={idx}
-                      className={cn(
-                        "rounded-md bg-secondary/50 h-fit flex items-center justify-start gap-2 w-[152px] p-2 relative",
-                      )}
-                    >
-                      <CommentClose
-                        className="absolute top-1/2 -translate-y-1/2 right-2"
-                        onClick={() => {
-                          setAttachments(
-                            attachments?.filter((item) => item !== attachment),
-                          );
-                          setValue(
-                            "attachment",
-                            value?.filter((item) => item !== attachment),
-                          );
-                        }}
-                      />
-                      <>
-                        <div className="relative">
-                          <FileImage className="w-8 h-8" />
+              <ScrollArea>
+                <div className="grid items justify-start gap-2 shrink-0 w-full grid-cols-2 max-h-[104px]">
+                  {attachments &&
+                    attachments?.map((attachment, idx) => {
+                      return (
+                        <div
+                          key={idx}
+                          className={cn(
+                            "rounded-md bg-secondary/50 h-fit flex items-center justify-start gap-2 w-[152px] p-2 relative",
+                          )}
+                        >
+                          <CommentClose
+                            className="absolute top-1/2 -translate-y-1/2 right-2"
+                            onClick={() => {
+                              setAttachments(
+                                attachments?.filter(
+                                  (item) => item !== attachment,
+                                ),
+                              );
+                              setValue(
+                                "attachment",
+                                value?.filter((item) => item !== attachment),
+                              );
+                            }}
+                          />
+                          <>
+                            <div className="relative">
+                              <FileImage className="w-8 h-8" />
+                            </div>
+                            <div>
+                              <p className="text-xs text-muted-foreground truncate">
+                                {attachment?.type?.split("/").shift() ??
+                                  "image"}
+                              </p>
+                              <p className="text-xs text-muted-foreground truncate">
+                                {attachment?.size &&
+                                  filesize(+attachment?.size, { round: 0 })}
+                              </p>
+                            </div>
+                          </>
                         </div>
-                        <div>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {attachment.type.split("/").shift()}
-                          </p>
-                          <p className="text-xs text-muted-foreground truncate">
-                            {filesize(+attachment.size, { round: 0 })}
-                          </p>
-                        </div>
-                      </>
-                    </div>
-                  );
-                })}
-              </div>
-            </ScrollArea>
-          </PopoverContent>
-        </Popover>
+                      );
+                    })}
+                </div>
+              </ScrollArea>
+            </PopoverContent>
+          </Popover>
+        )}
       </div>
       <FormInput
         className="w-full"
@@ -619,7 +626,7 @@ interface GetLocationProps {
   value: Partial<AddAdFormType["location"]>;
 }
 
-export const GetLocation: React.FC<GetLocationProps> = ({
+const GetLocation: React.FC<GetLocationProps> = ({
   register,
   errors,
   value,

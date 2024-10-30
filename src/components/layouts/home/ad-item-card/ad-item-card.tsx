@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
-import { AddItemCardProps } from "./ad-item-card.types";
+import { AddItemCardProps, ProductType } from "./ad-item-card.types";
 import {
   Button,
   Card,
@@ -8,13 +8,23 @@ import {
   CardHeader,
 } from "@/components/ui";
 import { Logo } from "@/assets";
-import { BadgeCheck, Heart, MapPin, Star } from "lucide-react";
+import { BadgeCheck, Heart, MapPin, Pencil, Star, Trash } from "lucide-react";
 import { cn } from "@/lib/utils";
 import i18next from "i18next";
 import { useMutate } from "../../account/user-wishlist/user-wishlist.hook";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { AddAdFormType, UserAddAd, UserEditdAd } from "../../account";
+import { useMutation } from "@tanstack/react-query";
+import {
+  delete_ad,
+  user_edit_ad,
+} from "../../account/user-ads/user-add-ad/user-add-ad.lib";
+import { queryClient } from "@/main";
+import { paginationType } from "../../account/user-ads/user-ads.lib";
 
-export const AdItemCard: React.FC<AddItemCardProps> = ({
+export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
+  edit = false,
   name,
   price,
   id,
@@ -22,8 +32,28 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
   age,
   region,
   wishlist,
-  // brand_image,
+  is_featured,
+  images,
+  brand_image,
+  user,
+  gov_id,
+  status,
+  address,
+  brand_id,
+  latitude,
+  longitude,
+  region_id,
+  created_at,
+  negotiable,
+  updated_at,
+  description,
+  governorate,
+  subcategory,
+  brandcountry,
+  multi_features,
+  category: _category,
 }) => {
+  const { t, i18n } = useTranslation();
   const { category } = useParams({ strict: false });
   const route = useNavigate();
 
@@ -35,7 +65,11 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
           route({
             to: "/categories/$category/product/$product",
             params: { category: `${category}`, product: `${id}` },
-            search: { name: `${name}` },
+            state: {
+              name: i18n.dir() == "rtl" ? name : name,
+              category:
+                i18n.dir() === "rtl" ? _category.name : _category.name_en,
+            } as any,
           });
           window.scrollTo(0, 0);
         }}
@@ -57,7 +91,7 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
             route({
               to: "/categories/$category/product/$product",
               params: { category: `${category}`, product: `${id}` },
-              search: { name: `${name}` },
+              state: { name: name, category: _category.name } as any,
             });
             window.scrollTo(0, 0);
           }}
@@ -65,7 +99,7 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
           <h4 className="text-[14px] font-medium m-0 truncate">{name}</h4>
           <div className="flex justify-start items-center gap-1 mt-1 text-gray-500">
             <MapPin className="w-[15px]" />
-            <span className=" text-[10px] font-medium truncate">
+            <span className="text-[10px] font-medium truncate">
               {region?.name}
             </span>
           </div>
@@ -81,38 +115,108 @@ export const AdItemCard: React.FC<AddItemCardProps> = ({
             <p className="text-gray-500 text-[12px]">{age}</p>
           </div>
         </div>
+
         <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="size-7 rounded-full bg-blue-100/70 border-blue-200 border hover:bg-blue-100/70 cursor-default"
-            label={{
-              children: "موثق",
-              showLabel: true,
-              className:
-                "bg-blue-100/70 border-blue-200 border hover:bg-blue-100/70 [&_span]:text-blue-400 [&_span]:mt-[-.4rem]",
-              side: "top",
-            }}
-          >
-            <BadgeCheck className={cn("size-5", "text-white fill-blue-400")} />
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            label={{
-              children: "مميز",
-              showLabel: true,
-              className:
-                "bg-yellow-100/70 border-yellow-200 border hover:bg-yellow-100/70 [&_span]:text-yellow-400 [&_span]:mt-[-.4rem]",
-              side: "top",
-            }}
-            className="size-7 rounded-full bg-yellow-100/70 border-yellow-200 border cursor-default hover:bg-yellow-100/70"
-          >
-            <Star className={cn("size-4", "text-yellow-400 fill-yellow-400")} />
-          </Button>
+          {edit && (
+            <UserEditdAd
+              defaultValues={{
+                name,
+                description,
+                price,
+                note: "",
+                negotiate: negotiable === 1 ? "yes" : "no",
+                status: status as "new" | "used",
+                location: {
+                  lat: latitude,
+                  lng: longitude,
+                },
+                address: address ?? "",
+                attachment: images,
+                category: _category?.id.toString(),
+                subcategory: subcategory?.id.toString(),
+                brand_country: brandcountry?.id.toString() ?? "",
+                third_branch: gov_id?.toString(),
+                region: region_id?.toString(),
+                governorate: gov_id?.toString(),
+              }}
+              default_input={{
+                title: t("edit_ad_title"),
+                sheet_title: t("edit_ad_title"),
+                sheet_desc: t("edit_ad_desc"),
+              }}
+              onSubmit={(attachments: File[], data: AddAdFormType) => {
+                user_edit_ad({
+                  ad_data: {
+                    ...data,
+                    attachment: attachments,
+                  },
+                  id: id.toString(),
+                });
+              }}
+            />
+          )}
+
+          {edit && <DeleteButton id={id} />}
+
+          {is_featured === 1 ? (
+            <Button
+              variant="secondary"
+              size="sm"
+              label={{
+                children: "مميز",
+                showLabel: true,
+                className:
+                  "bg-yellow-100/70 border-yellow-200 border hover:bg-yellow-100/70 [&_span]:text-yellow-400 [&_span]:mt-[-.4rem]",
+                side: "top",
+              }}
+              className="size-7 rounded-full bg-yellow-100/70 border-yellow-200 border cursor-default hover:bg-yellow-100/70"
+            >
+              <Star
+                className={cn("size-4", "text-yellow-400 fill-yellow-400")}
+              />
+            </Button>
+          ) : null}
         </div>
       </CardFooter>
     </Card>
+  );
+};
+
+export const DeleteButton = ({ id }: { id: number }) => {
+  const startMutation = useMutation({
+    mutationFn: () => delete_ad(id.toString()),
+    onSuccess: () => {
+      queryClient.setQueryData<{
+        pages: { ads: ProductType[]; pagination: paginationType }[];
+        pageParams: any[]; // This holds parameters for each page if used
+      }>(["user-ads"], (old) => {
+        if (!old) return { pages: [], pageParams: [] }; // Fallback for empty structure
+
+        // Map through each page in the infinite cache and filter out the item with the specified id
+        return {
+          ...old,
+          pages: old.pages.map((page) => ({
+            ...page,
+            ads: page.ads.filter((ad) => ad.id !== id), // Remove the ad with matching id
+          })),
+        };
+      });
+    },
+  });
+
+  return (
+    <Button
+      variant="destructive"
+      size={"icon"}
+      className=""
+      onClick={() => {
+        startMutation.mutate();
+      }}
+      icon={{
+        icon: Trash,
+        className: "size-4",
+      }}
+    ></Button>
   );
 };
 
@@ -120,14 +224,13 @@ export type AddWishlistButtonType = {
   id: number;
   wishlist: boolean;
 };
+
 export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
   const [wishlistState, setWishlistState] = React.useState<boolean>(wishlist);
   const { startMutation } = useMutate({
     id,
     wish_list_state: wishlistState ? "add" : "remove",
   });
-
-  console.log(wishlistState ? "add" : "remove");
 
   return (
     <Button

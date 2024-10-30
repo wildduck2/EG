@@ -1,4 +1,9 @@
-import { CategoryPageWrapper } from "@/components/layouts";
+import {
+  Category,
+  CategoryItemType,
+  CategoryPageWrapper,
+  ProductType,
+} from "@/components/layouts";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -7,30 +12,33 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui";
-import { Link, useParams } from "@tanstack/react-router";
+import { Link, useLocation, useParams } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 export const Categories = () => {
   const { category } = useParams({ strict: false });
-  console.log(category);
+  const { state }: { state: CategoryItemType } = useLocation();
+  const { t, i18n } = useTranslation();
+
   return (
     <main className="flex flex-col py-8 container min-h-screen lg:mt-[17rem]">
       <Breadcrumb className="mx-auto">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink>
-              <Link to="/">Home</Link>
+              <Link to="/">{t("home")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink>
-              <Link to="/categories">Categories</Link>
+              <Link to="/categories">{t("categories")}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbPage className="text-red-400 font-bold">
-              {category}
+              {i18n.dir() === "rtl" ? state.name : state.name_en}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>

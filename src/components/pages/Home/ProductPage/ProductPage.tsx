@@ -17,9 +17,9 @@ import { ProductType } from "@/components/layouts";
 
 export const ProductPage = () => {
   const { product, category } = useParams({ strict: false });
-  const hi = useParams({ strict: false });
-  console.log(hi);
-  const { state } = useLocation();
+  const { state }: { state: { name: string; category: string } } =
+    useLocation();
+  console.log(state);
 
   useGSAP(() => {
     const mm = gsap.matchMedia();
@@ -63,21 +63,21 @@ export const ProductPage = () => {
                     to="/categories/$category"
                     params={{ category: category ?? "" }}
                   >
-                    {category}
+                    {state.category}
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-red-400 font-bold">
-                  {product}
+                  {state.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         }
 
-        <ProductPageWrapper id={Number(product)} state={state as ProductType} />
+        <ProductPageWrapper id={Number(product)} state={state} />
       </main>
     </>
   );

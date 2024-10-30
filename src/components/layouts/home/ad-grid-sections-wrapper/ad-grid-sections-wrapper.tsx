@@ -30,7 +30,7 @@ export const AdGridSectionsWrapper = () => {
     );
   }
 
-  if (status === "success") {
+  if (status === "success" && data) {
     return (
       <>
         {data.map((item, idx) => (

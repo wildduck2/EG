@@ -1,18 +1,11 @@
-//@ts-nocheck
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
   Button,
-  Combobox,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-  CommandListGroupDataType,
   Input,
   Label,
   Popover,
@@ -25,18 +18,10 @@ import {
   SelectTrigger,
   SelectValue,
   Switch,
-  Toggle,
 } from "@/components/ui";
-import { AlertDialogCustom } from "@/components/ui/duckui/alert";
-import { filterData } from "@/context";
+import { AlertDialogCustom } from "@/components/ui/duckui";
 import { atom, useAtom } from "jotai";
-import {
-  ArrowDown01,
-  Check,
-  ChevronsUpDown,
-  CirclePlus,
-  Home,
-} from "lucide-react";
+import { ArrowDown01, Check, ChevronsUpDown } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -47,10 +32,9 @@ import {
   Subcategory,
 } from "./category-page-filter.lib";
 import { cn } from "@/lib/utils";
-import { Slider } from "@/components/ui/slider";
 import { queryClient } from "@/main";
 import { useParams } from "@tanstack/react-router";
-import { buildCombinedSearchUrl } from "../category-search/category-search.lib";
+import { filterData } from "@/context";
 
 export type FilterSchema = {
   governorates: Governorate | null;
@@ -61,8 +45,8 @@ export type FilterSchema = {
   third_branches: City | null;
   type: "new" | "used" | null;
   order: "asc" | "desc" | null;
-  min_price: number;
-  max_price: number;
+  min_price: number | null;
+  max_price: number | null;
   negotiate: boolean | null;
 };
 
@@ -80,18 +64,21 @@ export const filter = atom<FilterSchema>({
   negotiate: null,
 });
 
-export const CategoryPageFilter = () => {
-  const { t, i18n } = useTranslation();
+export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
+  const { t } = useTranslation();
   const products = t("products");
 
   const [filter_data] = useAtom(filterData);
   const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
+  const [filter_schema_state, setFilterSchema_state] =
+    React.useState<FilterSchema>(filter_schema);
 
   const { id } = useParams({ strict: false });
 
   return (
-    <AlertDialogCustom<boolean>
+    <AlertDialogCustom
       type="sheet"
+      state={true}
       drawerData={products.length > 0}
       header={{
         head: "Filter",
@@ -100,21 +87,24 @@ export const CategoryPageFilter = () => {
       footer={{
         className:
           "flex w-full place-content-end justify-end items-end gap-2 [&__button]:w-32",
-        submit: (
-          <Button
-            variant="default"
-            onClick={() => {
-              queryClient.invalidateQueries({
-                queryKey: ["categories", id],
-              });
-            }}
-          >
-            Submit
-          </Button>
-        ),
-        cancel: <Button variant="outline">Cancel</Button>,
+        submit: {
+          children: (
+            <Button
+              variant="default"
+              onClick={() => {
+                setFilterSchema(filter_schema_state);
+                queryClient.invalidateQueries({
+                  queryKey: ["categories", id],
+                });
+                cb?.();
+              }}
+            >
+              Submit
+            </Button>
+          ),
+        },
+        cancel: { children: <Button variant="outline">Cancel</Button> },
       }}
-      state={true}
       trigger={{
         children: (
           <Button variant="ghost" size="default" className="">
@@ -130,39 +120,51 @@ export const CategoryPageFilter = () => {
         children: (
           <ScrollArea className="flex flex-col items-start p-2 w-full h-full">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 w-full">
+              <div className="flex items-center gap-2">
                 <FilterSlector
                   filter_data={filter_data.governorates}
-                  value={filter_schema.governorates}
+                  value={filter_schema_state.governorates}
                   name="Governorates"
                   setValue={(item: FilterSchema["governorates"]) => {
-                    setFilterSchema({ ...filter_schema, governorates: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      governorates: item,
+                    });
                   }}
                 />
                 <FilterSlector
                   filter_data={filter_data.regions}
-                  value={filter_schema.regions}
+                  value={filter_schema_state.regions}
                   name="Regions"
                   setValue={(item: FilterSchema["regions"]) => {
-                    setFilterSchema({ ...filter_schema, regions: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      regions: item,
+                    });
                   }}
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterSlector
                   filter_data={filter_data.categories}
-                  value={filter_schema.categories}
+                  value={filter_schema_state.categories}
                   name="Categories"
                   setValue={(item: FilterSchema["categories"]) => {
-                    setFilterSchema({ ...filter_schema, categories: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      categories: item,
+                    });
                   }}
                 />
                 <FilterSlector
                   filter_data={filter_data.subcategories}
-                  value={filter_schema.subcategories}
+                  value={filter_schema_state.subcategories}
                   name="Subcategories"
                   setValue={(item: FilterSchema["subcategories"]) => {
-                    setFilterSchema({ ...filter_schema, subcategories: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      subcategories: item,
+                    });
                   }}
                 />
               </div>
@@ -170,57 +172,64 @@ export const CategoryPageFilter = () => {
                 <FilterSlector
                   filter_data={filter_data.brand_countries}
                   name="Third category"
-                  value={filter_schema.brand_countries}
+                  value={filter_schema_state.brand_countries}
                   setValue={(item: FilterSchema["brand_countries"]) => {
-                    setFilterSchema({
-                      ...filter_schema,
+                    setFilterSchema_state({
+                      ...filter_schema_state,
                       brand_countries: item,
                     });
                   }}
                 />
                 <FilterSlector
                   filter_data={filter_data.third_branches}
-                  value={filter_schema.third_branches}
+                  value={filter_schema_state.third_branches}
                   name="Forth Branches"
                   setValue={(item: FilterSchema["third_branches"]) => {
-                    setFilterSchema({ ...filter_schema, third_branches: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      third_branches: item,
+                    });
                   }}
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterSeleector2
-                  value={filter_schema.type}
-                  name="Types"
+                  value={filter_schema_state.type}
                   setValue={(item: string) => {
-                    setFilterSchema({ ...filter_schema, type: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      type: item as any,
+                    });
                   }}
                 />
 
                 <FilterSeleector
-                  value={filter_schema.order}
-                  name="Order"
+                  value={filter_schema_state.order}
                   setValue={(item: string) => {
-                    setFilterSchema({ ...filter_schema, order: item });
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      order: item as any,
+                    });
                   }}
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterInput
                   name="Min Price"
-                  value={filter_schema.min_price}
+                  value={filter_schema_state?.min_price?.toString() || "0"}
                   setValue={(item) => {
-                    setFilterSchema({
-                      ...filter_schema,
+                    setFilterSchema_state({
+                      ...filter_schema_state,
                       min_price: item as any,
                     });
                   }}
                 />
                 <FilterInput
                   name="Max Price"
-                  value={filter_schema.max_price}
+                  value={filter_schema_state?.max_price?.toString() || "0"}
                   setValue={(item) => {
-                    setFilterSchema({
-                      ...filter_schema,
+                    setFilterSchema_state({
+                      ...filter_schema_state,
                       max_price: item as any,
                     });
                   }}
@@ -228,17 +237,18 @@ export const CategoryPageFilter = () => {
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterSwitch
+                  value={filter_schema_state?.negotiate}
                   setValue={(item) => {
-                    setFilterSchema({
-                      ...filter_schema,
-                      negotiate: item as any,
+                    setFilterSchema_state({
+                      ...filter_schema_state,
+                      negotiate: item === true ? 1 : (0 as any),
                     });
                   }}
                 />
                 <Button
                   variant="outline"
                   onClick={() => {
-                    setFilterSchema({
+                    setFilterSchema_state({
                       governorates: null,
                       regions: null,
                       categories: null,
@@ -266,18 +276,18 @@ export const CategoryPageFilter = () => {
 };
 
 export function FilterSeleector({
-  filter_data,
-  name,
+  value,
   setValue,
 }: {
-  filter_data: any;
   value: string | null;
-  name: string;
   setValue: (item: any) => void;
 }) {
   return (
     <div className="w-full">
-      <Select onValueChange={(value) => setValue(value)}>
+      <Select
+        onValueChange={(value) => setValue(value)}
+        defaultValue={value || ""}
+      >
         <Label className="w-full"> Order </Label>
         <SelectTrigger className="w-full">
           <div>
@@ -294,18 +304,15 @@ export function FilterSeleector({
 }
 
 export function FilterSeleector2({
-  filter_data,
-  name,
+  value,
   setValue,
 }: {
-  filter_data: any;
   value: string | null;
-  name: string;
   setValue: (item: any) => void;
 }) {
   return (
     <div className="w-full">
-      <Select onValueChange={(value) => setValue(value)}>
+      <Select onValueChange={(value) => setValue(value)} value={value ?? ""}>
         <Label className="w-full">Type</Label>
         <SelectTrigger className="w-full">
           <div className="flex flex-col space-y-1">
@@ -321,12 +328,22 @@ export function FilterSeleector2({
   );
 }
 
-export function FilterSwitch({ setValue }: { setValue: (item: any) => void }) {
+export function FilterSwitch({
+  setValue,
+  value,
+}: {
+  value: number;
+  setValue: (item: any) => void;
+}) {
   return (
     <div className="flex flex-col gap-2 w-full">
       <Label htmlFor="airplane-mode">Negotiatable</Label>
       <div className="flex items-center space-x-2">
-        <Switch id="airplane-mode" onCheckedChange={setValue} />
+        <Switch
+          id="airplane-mode"
+          onCheckedChange={setValue}
+          checked={value === 1 ? true : false}
+        />
         <Label htmlFor="airplane-mode">Yes</Label>
       </div>
     </div>
@@ -372,7 +389,7 @@ export const FilterSlector = ({
   const { t } = useTranslation();
 
   return (
-    <div className="w-full">
+    <div className=" max-w-[48.5%] w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
           asChild
@@ -392,9 +409,9 @@ export const FilterSlector = ({
                 className: "size-4",
               }}
             >
-              <span className="w-full">
-                {value.id !== 0
-                  ? filter_data.find((framework) => framework.id === value.id)
+              <span className="w-full max-w-[130px] truncate">
+                {value?.id
+                  ? filter_data.find((framework) => framework.id === value?.id)
                       ?.name
                   : `${t("select")} ${name}...`}
               </span>
@@ -453,36 +470,3 @@ export function groupDataByNumbers<T>(
 
   return result;
 }
-
-// Array.from({ length: 5 }).map((_, i) => (
-//               <Accordion
-//                 type="multiple"
-//                 className="w-full"
-//                 defaultValue={["item-1", "item-2", "item-3"]}
-//               >
-//                 <AccordionItem
-//                   value={`item-${i + 1}`}
-//                   className="border-b-2 border-border border-dashed"
-//                 >
-//                   <AccordionTrigger className="hover:no-underline px-2">
-//                     اقسام
-//                   </AccordionTrigger>
-//                   <AccordionContent className="flex flex-wrap gap-2 px-2">
-//                     {categoryData.slice(0, 6).map((item, idx) => (
-//                       <Toggle
-//                         className="border border-border border-solid h-fit px-4 py-2 rounded-lg"
-//                         key={item.id}
-//                       >
-//                         {item.name}
-//                       </Toggle>
-//                     ))}
-//                     <Toggle
-//                       className="border border-red-400 border-dashed h-fit px-4 py-2 rounded-lg bg-red-100/70 text-red-500"
-//                       key={0}
-//                     >
-//                       Show All
-//                     </Toggle>
-//                   </AccordionContent>
-//                 </AccordionItem>
-//               </Accordion>
-//             ))

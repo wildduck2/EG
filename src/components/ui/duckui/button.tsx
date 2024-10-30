@@ -28,6 +28,7 @@ export interface ButtonProps
   command?: CommandType;
   delayDuration?: number;
   loading?: boolean;
+  state?: any;
 }
 
 export interface LabelType

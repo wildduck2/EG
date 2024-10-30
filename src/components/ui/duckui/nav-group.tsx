@@ -1,4 +1,3 @@
-//@ts-nocheck
 "use client";
 import * as React from "react";
 import { cn } from "@/lib/utils";
@@ -115,6 +114,8 @@ const NavGroup = <T extends boolean>({
                 variant,
                 children,
                 icon,
+                route,
+                state,
                 ...props
               } = key;
               return (
@@ -132,8 +133,7 @@ const NavGroup = <T extends boolean>({
                       }
                       isCollapsed={navIsCollabsed ? navIsCollabsed : false}
                       onClick={() => {
-                        console.log(key.route);
-                        navigator({ to: key.route });
+                        navigator({ to: route, state: state });
                       }}
                       className={cn(
                         !navIsCollabsed && "w-full justify-between",

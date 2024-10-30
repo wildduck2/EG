@@ -10,14 +10,14 @@ import {
 } from "../category-search/category-search.types";
 import { toast } from "sonner";
 
-export async function get_gategory_page_ads({}: GetCategoryPageAdsType) {
+export async function get_gategory_page_ads({ id }: GetCategoryPageAdsType) {
   try {
     const { data } = await axios.post<
       Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
     >(
       process.env.BACKEND__BASE_URL + "/client/ads/getAdsByParameters",
       {
-        categoryId: 38,
+        categoryId: id,
         // "subCategoryId": 3,
         // "brandCountryId": 3,
         // "thirdBranchId": 3,

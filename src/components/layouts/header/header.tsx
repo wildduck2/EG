@@ -182,12 +182,14 @@ export const Header = () => {
                 data: [
                   ...categories.splice(0, 6).map((item) => ({
                     title: item.name_en,
-                    route: `/categories/${item.name_en}`,
+                    route: `/categories/${item.id}`,
+                    state: item,
                     children: i18n.language === "en" ? item.name_en : item.name,
                   })),
                   {
                     title: "more",
                     route: `/categories/`,
+                    state: null,
                     children: i18n.language === "en" ? "More" : "المزيد",
                   },
                 ],

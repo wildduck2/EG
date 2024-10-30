@@ -19,6 +19,7 @@ import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as AccountAccountImport } from './routes/account/_account'
 import { Route as CategoriesCategoriesIndexImport } from './routes/categories/_categories.index'
 import { Route as AccountAccountIndexImport } from './routes/account/_account.index'
+import { Route as AuthAuthVerification2Import } from './routes/auth/_auth.verification2'
 import { Route as AuthAuthVerificationConfirmedImport } from './routes/auth/_auth.verification-confirmed'
 import { Route as AuthAuthVerificationImport } from './routes/auth/_auth.verification'
 import { Route as AuthAuthSigninImport } from './routes/auth/_auth.signin'
@@ -112,6 +113,11 @@ const AuthAuthSignupLazyRoute = AuthAuthSignupLazyImport.update({
 } as any).lazy(() =>
   import('./routes/auth/_auth.signup.lazy').then((d) => d.Route),
 )
+
+const AuthAuthVerification2Route = AuthAuthVerification2Import.update({
+  path: '/verification2',
+  getParentRoute: () => AuthAuthRoute,
+} as any)
 
 const AuthAuthVerificationConfirmedRoute =
   AuthAuthVerificationConfirmedImport.update({
@@ -254,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthVerificationConfirmedImport
       parentRoute: typeof AuthAuthImport
     }
+    '/auth/_auth/verification2': {
+      id: '/auth/_auth/verification2'
+      path: '/verification2'
+      fullPath: '/auth/verification2'
+      preLoaderRoute: typeof AuthAuthVerification2Import
+      parentRoute: typeof AuthAuthImport
+    }
     '/auth/_auth/signup': {
       id: '/auth/_auth/signup'
       path: '/signup'
@@ -353,6 +366,7 @@ interface AuthAuthRouteChildren {
   AuthAuthSigninRoute: typeof AuthAuthSigninRoute
   AuthAuthVerificationRoute: typeof AuthAuthVerificationRoute
   AuthAuthVerificationConfirmedRoute: typeof AuthAuthVerificationConfirmedRoute
+  AuthAuthVerification2Route: typeof AuthAuthVerification2Route
   AuthAuthSignupLazyRoute: typeof AuthAuthSignupLazyRoute
 }
 
@@ -362,6 +376,7 @@ const AuthAuthRouteChildren: AuthAuthRouteChildren = {
   AuthAuthSigninRoute: AuthAuthSigninRoute,
   AuthAuthVerificationRoute: AuthAuthVerificationRoute,
   AuthAuthVerificationConfirmedRoute: AuthAuthVerificationConfirmedRoute,
+  AuthAuthVerification2Route: AuthAuthVerification2Route,
   AuthAuthSignupLazyRoute: AuthAuthSignupLazyRoute,
 }
 
@@ -448,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/auth/signin': typeof AuthAuthSigninRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
+  '/auth/verification2': typeof AuthAuthVerification2Route
   '/auth/signup': typeof AuthAuthSignupLazyRoute
   '/categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
   '/account/': typeof AccountAccountIndexRoute
@@ -468,6 +484,7 @@ export interface FileRoutesByTo {
   '/auth/signin': typeof AuthAuthSigninRoute
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
+  '/auth/verification2': typeof AuthAuthVerification2Route
   '/auth/signup': typeof AuthAuthSignupLazyRoute
   '/categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
   '/account/trader/$id': typeof AccountAccountTraderIdRoute
@@ -490,6 +507,7 @@ export interface FileRoutesById {
   '/auth/_auth/signin': typeof AuthAuthSigninRoute
   '/auth/_auth/verification': typeof AuthAuthVerificationRoute
   '/auth/_auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
+  '/auth/_auth/verification2': typeof AuthAuthVerification2Route
   '/auth/_auth/signup': typeof AuthAuthSignupLazyRoute
   '/categories/_categories/$category': typeof CategoriesCategoriesCategoryLazyRoute
   '/account/_account/': typeof AccountAccountIndexRoute
@@ -513,6 +531,7 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/verification'
     | '/auth/verification-confirmed'
+    | '/auth/verification2'
     | '/auth/signup'
     | '/categories/$category'
     | '/account/'
@@ -532,6 +551,7 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/auth/verification'
     | '/auth/verification-confirmed'
+    | '/auth/verification2'
     | '/auth/signup'
     | '/categories/$category'
     | '/account/trader/$id'
@@ -552,6 +572,7 @@ export interface FileRouteTypes {
     | '/auth/_auth/signin'
     | '/auth/_auth/verification'
     | '/auth/_auth/verification-confirmed'
+    | '/auth/_auth/verification2'
     | '/auth/_auth/signup'
     | '/categories/_categories/$category'
     | '/account/_account/'
@@ -628,6 +649,7 @@ export const routeTree = rootRoute
         "/auth/_auth/signin",
         "/auth/_auth/verification",
         "/auth/_auth/verification-confirmed",
+        "/auth/_auth/verification2",
         "/auth/_auth/signup"
       ]
     },
@@ -665,6 +687,10 @@ export const routeTree = rootRoute
     },
     "/auth/_auth/verification-confirmed": {
       "filePath": "auth/_auth.verification-confirmed.tsx",
+      "parent": "/auth/_auth"
+    },
+    "/auth/_auth/verification2": {
+      "filePath": "auth/_auth.verification2.tsx",
       "parent": "/auth/_auth"
     },
     "/auth/_auth/signup": {

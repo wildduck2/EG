@@ -6,21 +6,19 @@ export const CategoryPageWrapperSkeleton = () => {
       <div className="flex flex-col gap-4 w-full">
         {/* Category Title Skeleton */}
         <Skeleton className="h-8 w-1/4" />
-        {
-          // <Separator className="px-2" />
-          //
-          //      {/* Filter and Sort By Skeleton */}
-          //      <div className="flex items-center justify-between">
-          //        {/* Filter Skeleton */}
-          //        <Skeleton className="h-10 w-1/12" />
-          //
-          //        {/* Sort By Skeleton */}
-          //        <div className="flex items-center gap-2">
-          //          <Skeleton className="h-10 w-12" />
-          //          <Skeleton className="h-10 w-[80px]" />
-          //        </div>
-          //      </div>
-        }
+        <Separator className="px-2" />
+
+        {/* Filter and Sort By Skeleton */}
+        <div className="flex items-center justify-between">
+          {/* Filter Skeleton */}
+          <Skeleton className="h-10 w-1/12" />
+
+          {/* Sort By Skeleton */}
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-10 w-12" />
+            <Skeleton className="h-10 w-[80px]" />
+          </div>
+        </div>
 
         <Separator className="px-2" />
 

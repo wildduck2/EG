@@ -1,6 +1,8 @@
 import { ReqResponseType } from "../../home";
 
-export interface GetCategoryPageAdsType {}
+export interface GetCategoryPageAdsType {
+  id: number;
+}
 
 export type GetCategoryPageAds<T> = Awaited<GetCategoryPageAdsRes<T>>;
 
