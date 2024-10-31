@@ -77,7 +77,7 @@ export const ProductPage = () => {
           </Breadcrumb>
         }
 
-        <ProductPageWrapper id={Number(product)} state={state} />
+        <ProductPageWrapper id={Number(product)} state={state as any} />
       </main>
     </>
   );

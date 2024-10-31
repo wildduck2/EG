@@ -70,11 +70,16 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
     return (
       <section className="flex gap-8 items-start my-8 min-h-[63vh]">
         <div className="flex flex-col gap-4 w-full">
-          <h2 className="text-3xl font-semibold capitalize">{id}</h2>
-          <Separator className="px-2" />
+          {id && (
+            <>
+              <h2 className="text-3xl font-semibold capitalize">{id}</h2>
+              <Separator className="px-2" />
+            </>
+          )}
           <div className="flex items-center justify-between">
             <CategoryPageFilter />
           </div>
+
           <Separator className="px-2" />
           <CategoryPageProducts
             data={

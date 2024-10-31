@@ -1,10 +1,6 @@
-//@ts-nocheck
-import { Footer, Header, user } from "@/components/layouts";
-import { getUser } from "@/components/layouts/account/user-profile";
+import { Footer, Header } from "@/components/layouts";
 import { Home } from "@/components/pages";
-import { createFileRoute, redirect, useNavigate } from "@tanstack/react-router";
-import { useAtom } from "jotai";
-import { useEffect } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
   component: () => {

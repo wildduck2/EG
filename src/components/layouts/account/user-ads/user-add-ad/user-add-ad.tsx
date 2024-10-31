@@ -147,6 +147,8 @@ export const UserAddAd = ({
           submit: {
             onClick: handleSubmit((data) => {
               onSubmit?.(attachments, data);
+
+              control._reset();
             }),
             disabled: !formState.isValid || formState.isSubmitting,
             loading: formState.isSubmitting,
@@ -172,7 +174,8 @@ export const UserAddAd = ({
           ),
         }}
         content={{
-          // dir: "rtl",
+          dir: i18n.dir(),
+          side: i18n.dir() === "ltr" ? "right" : "left",
           className:
             "flex flex-col gap-4 sm:max-w-[650px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full  pb-2",
           children: (
@@ -372,7 +375,7 @@ export const UserAddAd = ({
                   <FilterSlector
                     filter_data={filter_data.governorates}
                     value={{ id: +watch("governorate") } as any}
-                    name={t("governorate")}
+                    name={t("governorates")}
                     setValue={(item: FilterSchema["governorates"]) => {
                       setValue("governorate", item?.id.toString() ?? "");
                     }}
@@ -489,7 +492,7 @@ export const UploadAdPictures = ({
   setAttachments,
   errors,
 }: UploadAdInput) => {
-  console.log(attachments, value);
+  const { t } = useTranslation();
 
   return (
     <div className="relative">
@@ -501,7 +504,7 @@ export const UploadAdPictures = ({
               type="button"
               className={cn(
                 "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
-                [...(value ?? [])].length > 0
+                [...(attachments ?? [])].length > 0
                   ? "bottom-[1.5rem] opacity-100 pointer-events-all z-50"
                   : "-bottom-4 opacity-0 pointer-events-none",
               )}
@@ -510,10 +513,10 @@ export const UploadAdPictures = ({
                 className: "!size-[.8rem]",
               }}
               label={{
-                children: [...(value ?? [])].length,
+                children: [...(attachments ?? [])].length,
               }}
             >
-              <span className="text-xs">Attachments</span>
+              <span className="text-xs">{t("attachments")}</span>
             </Button>
           </PopoverTrigger>
           <PopoverContent
@@ -571,7 +574,7 @@ export const UploadAdPictures = ({
           inputError: errors.attachment?.message as string,
         }}
         input_label={{
-          children: "attachment",
+          children: t("attachments"),
           className: "text-sm flex",
         }}
       >
@@ -604,7 +607,7 @@ export const UploadAdPictures = ({
             )}
             icon={{ icon: UploadIcon, className: "h-4 w-4" }}
           >
-            Upload Ad Pictures
+            {t("upload_pictures")}
           </Button>
         </div>
       </FormInput>
@@ -625,6 +628,7 @@ export const GetLocation: React.FC<GetLocationProps> = ({
   value,
   setValue,
 }) => {
+  const { t } = useTranslation();
   const [error, setError] = React.useState<string | null>(null);
 
   const getLocation = () => {
@@ -673,7 +677,7 @@ export const GetLocation: React.FC<GetLocationProps> = ({
           onClick={getLocation}
           className={`w-full max-w-full border-2 ${error ? "border-red-400" : ""}`}
         >
-          Get Location
+          {t("get_location")}
         </Button>
       )}
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}

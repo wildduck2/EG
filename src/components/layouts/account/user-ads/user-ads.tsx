@@ -1,11 +1,12 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { get_user_ads } from "./user-ads.lib";
+import { get_user_ads, paginationType } from "./user-ads.lib";
 import { AdItemCard, ProductType } from "../../home";
 import { UserAdsSkeleton } from "./user-ads.skeleton";
 import { AddAdFormType, UserAddAd } from "./user-add-ad";
 import { user_add_ad } from "./user-add-ad/user-add-ad.lib";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
+import { queryClient } from "@/main";
 
 export const UserAds = () => {
   const { t } = useTranslation();
@@ -43,13 +44,52 @@ export const UserAds = () => {
       <div className="flex items-center justify-between">
         <h2>{t("your_ads")}</h2>
         <UserAddAd
-          onSubmit={(attachments: File[], data: AddAdFormType) => {
-            user_add_ad({
+          onSubmit={async (attachments: File[], data: AddAdFormType) => {
+            const res = await user_add_ad({
               ad_data: {
                 ...data,
                 attachment: attachments,
               },
             });
+            console.log(res);
+
+            if (res?.success) {
+              queryClient.setQueryData<{
+                pages: { ads: ProductType[]; pagination: paginationType }[];
+                pageParams: any[];
+              }>(["user-ads"], (old) => {
+                if (!old) {
+                  // Define a default pagination structure
+                  const defaultPagination: paginationType = {
+                    total: 1,
+                    current_page: 1,
+                    per_page: 10,
+                    last_page: 1,
+                    from: 1,
+                    to: 1,
+                  };
+
+                  return {
+                    pages: [{ ads: [res.data], pagination: defaultPagination }],
+                    pageParams: [],
+                  };
+                }
+
+                return {
+                  ...old,
+                  pages: old.pages.map((page, pageIndex) => {
+                    // Add the new ad to the first page or where appropriate
+                    if (pageIndex === 0) {
+                      return {
+                        ...page,
+                        ads: [res.data, ...page.ads],
+                      };
+                    }
+                    return page;
+                  }),
+                };
+              });
+            }
           }}
         />
       </div>

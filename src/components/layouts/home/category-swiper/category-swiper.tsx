@@ -11,7 +11,7 @@ export const CategorySwiper = () => {
   const route = useNavigate();
 
   // Translate Api
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Query Categories
   const { data, status } = useQuery({
@@ -48,8 +48,9 @@ export const CategorySwiper = () => {
                 <CarouselItem
                   onClick={() => {
                     route({
-                      to: `/categories/$id`,
-                      params: { id: e.name },
+                      to: `/categories/$category`,
+                      params: { category: e.id.toString() },
+                      state: e as any,
                     });
                   }}
                   className="basis-1/3 md:basis-1/5 xl:basis-[14%] transition-all"

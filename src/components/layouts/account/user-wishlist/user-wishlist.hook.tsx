@@ -7,6 +7,8 @@ import { user } from "../../auth";
 import { useAtom } from "jotai";
 import { User } from "../user-profile";
 import { ProductType } from "../../home";
+import { useNavigation } from "react-day-picker";
+import { useNavigate } from "@tanstack/react-router";
 
 export type UseMutateProps = {
   id: number;
@@ -16,10 +18,12 @@ export type UseMutateProps = {
 export type QueryKeyMutateType = {
   wish_list_state: "add" | "remove";
   id: number;
+  route: any;
 };
 
 export const useMutate = ({ id, wish_list_state }: UseMutateProps) => {
-  const mutationFn = () => post_mutate_wishlist({ id, wish_list_state });
+  const route = useNavigate();
+  const mutationFn = () => post_mutate_wishlist({ id, wish_list_state, route });
 
   const startMutation = useMutation({
     mutationFn,

@@ -1,3 +1,26 @@
+@font-face {
+  font-family: "Helvetica";
+  src: url("/public/Helvetica.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/public/Helvetica-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Helvetica";
+  src: url("/public/Helvetica-BoldOblique.ttf") format("truetype");
+  font-weight: bold;
+  font-style: oblique;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap");
+
 @layer base {
   * {
     @apply border-border;
@@ -13,10 +36,6 @@
 
 #root {
   overflow: hidden;
-
-  /* input+div { */
-  /*   left: 1rem; */
-  /* } */
 }
 
 body.rtl {
@@ -24,6 +43,11 @@ body.rtl {
     "rlig" 1,
     "calt" 1;
   direction: rtl;
+  font-family: "Cairo", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  font-variation-settings: "slnt" 0;
 
   input {
     text-align: right;

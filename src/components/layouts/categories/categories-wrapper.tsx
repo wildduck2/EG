@@ -36,8 +36,13 @@ export const CategoriesWrapper = () => {
           <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-[1.5rem] my-4">
             {data?.map((e, i) => (
               <Link
+                key={e.id}
                 className="flex flex-col justify-center items-center w-full rounded-lg gap-2"
-                to={`/categories/${e.name}`}
+                to={`/categories/${e.id}`}
+                params={{
+                  id: e.id.toString(),
+                }}
+                state={e as any}
               >
                 <img
                   src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + e.image}

@@ -26,6 +26,7 @@ import {
 import { get_product_hazards } from "./product-page-info.libs";
 import { useQuery } from "@tanstack/react-query";
 import { useNavigate } from "@tanstack/react-router";
+import { useMutate } from "../../account/user-wishlist/user-wishlist.hook";
 
 export const ProductPreviewInfo = React.forwardRef<
   HTMLDivElement,
@@ -44,24 +45,8 @@ export const ProductPreviewInfo = React.forwardRef<
       {...props}
       ref={ref}
     >
-      <Button
-        variant="secondary"
-        size="sm"
-        className={cn(
-          "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100 absolute top-[1.1rem]",
-          i18n.dir() === "ltr" ? "right-[1.1rem]" : "left-[1.1rem]",
-          // "bg-red-400 hover:bg-red-500/70",
-        )}
-        label={{
-          children: products.addtofav,
-          className:
-            "bg-red-100/70 border-red-200 border hover:bg-red-100/70 [&_span]:text-red-400 [&_span]:mt-[-.4rem]",
-          showLabel: true,
-          side: "bottom",
-        }}
-      >
-        <Heart className={cn("size-4", "text-red-400 fill-red-400")} />
-      </Button>
+      <AddWishlistButton wishlist={data.wishlist} id={data.id} />
+
       <h3 className="text-3xl font-semibold">{data.name}</h3>
       <h2 className="text-2xl font-semibold">{data.price}</h2>
       <div className="flex items-center gap-4">
@@ -256,4 +241,51 @@ export const SafetyAccordion = () => {
       </Accordion>
     );
   }
+};
+
+export type AddWishlistButtonType = {
+  id: number;
+  wishlist: boolean;
+};
+
+export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
+  const [wishlistState, setWishlistState] = React.useState<boolean>(wishlist);
+  const { startMutation } = useMutate({
+    id,
+    wish_list_state: wishlistState ? "add" : "remove",
+  });
+
+  const { t, i18n } = useTranslation();
+
+  return (
+    <Button
+      variant="secondary"
+      size="sm"
+      className={cn(
+        "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100 absolute top-5",
+        wishlistState && "bg-red-400 hover:bg-red-500/70",
+        i18n.dir() === "ltr" ? "right-[1.1rem]" : "left-[1.1rem]",
+      )}
+      label={{
+        children: t("favorite"),
+        className:
+          "bg-red-100/70 border-red-200 border hover:bg-red-100/70 [&_span]:text-red-400 [&_span]:mt-[-.4rem]",
+        showLabel: true,
+        side: "bottom",
+      }}
+      onClick={() => {
+        setWishlistState(!wishlistState);
+        startMutation.mutate();
+      }}
+    >
+      <Heart
+        className={cn(
+          "size-4",
+          !wishlistState
+            ? "text-red-400 fill-red-400"
+            : "text-white fill-white",
+        )}
+      />
+    </Button>
+  );
 };

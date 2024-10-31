@@ -1,18 +1,18 @@
 export enum ConfirmPasswordRules {
-  Match = "Passwords do not match",
+  Match = "confirm_password_rules_match",
 }
 
 export enum UserNameRules {
-  MinLength = "Must be at least 3 characters long",
-  MaxLength = "Must be at most 254 characters long",
+  MinLength = "user_name_rules_min_length",
+  MaxLength = "user_name_rules_max_length",
 }
 
 export enum CompanyNameRules {
-  MinLength = "Must be at least 3 characters long",
-  MaxLength = "Must be at most 254 characters long",
+  MinLength = "company_name_rules_min_length",
+  MaxLength = "company_name_rules_max_length",
 }
 
 export enum EmailRules {
-  ValidEmail = "Must be a valid email address",
-  MaxLength = "Must be at most 254 characters long",
+  ValidEmail = "email_rules_valid_email",
+  MaxLength = "email_rules_max_length",
 }

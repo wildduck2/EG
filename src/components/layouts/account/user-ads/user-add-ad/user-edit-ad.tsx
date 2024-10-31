@@ -109,8 +109,6 @@ export const UserEditdAd = ({
       mode: "all",
     });
 
-  console.log(defaultValues);
-
   const [filter_data] = useAtom(filterData);
 
   const [attachments, setAttachments] = React.useState<File[]>(
@@ -145,8 +143,9 @@ export const UserEditdAd = ({
           },
           submit: {
             onClick: handleSubmit((data) => {
-              console.log(data);
               onSubmit?.(attachments, data);
+
+              control._reset();
             }),
             disabled: !formState.isValid || formState.isSubmitting,
             loading: formState.isSubmitting,
@@ -489,8 +488,6 @@ const UploadAdPictures = ({
   setAttachments,
   errors,
 }: UploadAdInput) => {
-  console.log(attachments, value);
-
   return (
     <div className="relative">
       <div className={cn("absolute bottom-6 w-full")}>
@@ -502,7 +499,7 @@ const UploadAdPictures = ({
                 type="button"
                 className={cn(
                   "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
-                  [...(value ?? [])].length > 0
+                  [...(attachments ?? [])].length > 0
                     ? "bottom-[1.5rem] opacity-100 pointer-events-all z-50"
                     : "-bottom-4 opacity-0 pointer-events-none",
                 )}
@@ -511,7 +508,7 @@ const UploadAdPictures = ({
                   className: "!size-[.8rem]",
                 }}
                 label={{
-                  children: [...(value ?? [])].length,
+                  children: [...(attachments ?? [])].length,
                 }}
               >
                 <span className="text-xs">Attachments</span>
@@ -540,10 +537,6 @@ const UploadAdPictures = ({
                                 attachments?.filter(
                                   (item) => item !== attachment,
                                 ),
-                              );
-                              setValue(
-                                "attachment",
-                                value?.filter((item) => item !== attachment),
                               );
                             }}
                           />
@@ -596,7 +589,9 @@ const UploadAdPictures = ({
               if (e.target.files && e.target.files[0].size > 5 * 1024 * 1024) {
                 return toast.error("File size should be less than 5MB");
               }
-              setAttachments(e.target.files ? Array.from(e.target.files) : []);
+              setAttachments((old) =>
+                e.target.files ? [...old!, ...e.target.files] : old,
+              );
               setValue("attachment", e.target.files);
             }}
           />

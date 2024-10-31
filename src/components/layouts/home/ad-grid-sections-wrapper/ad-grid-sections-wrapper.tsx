@@ -5,6 +5,7 @@ import { AdGridSection, AdGridSectionSkeleton } from "../ad-grid-section";
 import { Banner } from "../banner";
 import { useQuery } from "@tanstack/react-query";
 import { get_ads_section } from "./ad-grid-sections-wrapper.lib";
+import React from "react";
 export const AdGridSectionsWrapper = () => {
   const { t } = useTranslation();
 
@@ -34,7 +35,7 @@ export const AdGridSectionsWrapper = () => {
     return (
       <>
         {data.map((item, idx) => (
-          <>
+          <React.Fragment key={idx}>
             <Banner>
               <img
                 src={banner2}
@@ -43,7 +44,7 @@ export const AdGridSectionsWrapper = () => {
               />
             </Banner>
             <AdGridSection {...item} key={idx} buttonContent={t("viewMore")} />
-          </>
+          </React.Fragment>
         ))}
       </>
     );

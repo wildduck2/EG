@@ -5,7 +5,7 @@ export const CategoryPageProducts = ({ data }: { data: ProductType[] }) => {
     <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
       {data?.map((item, idx) => (
         <div className="" key={idx}>
-          <AdItemCard {...item} />
+          <AdItemCard {...(item as any)} />
         </div>
       ))}
     </div>

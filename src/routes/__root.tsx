@@ -15,6 +15,16 @@ export const Route = createRootRoute({
   component: () => {
     const { i18n } = useTranslation();
 
+    const lang = localStorage.getItem("i18nextLng");
+    React.useEffect(() => {
+      i18n.changeLanguage(lang.split("-")[0] ?? "en");
+      if (lang === "ar") {
+        document.body.classList.add("rtl");
+      } else {
+        document.body.classList.remove("rtl");
+      }
+    }, []);
+
     return (
       <React.Fragment>
         <ScrollRestoration />

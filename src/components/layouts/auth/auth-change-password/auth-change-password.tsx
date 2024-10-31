@@ -16,7 +16,7 @@ const changePasswordShema = z
   })
   .refine((data) => data.password === data.password_confirmation, {
     path: ["password_confirmation"],
-    message: "Passwords must match",
+    message: "passwords_must_match",
   });
 
 export type ChangePasswordFormType = z.infer<typeof changePasswordShema>;

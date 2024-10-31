@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 export const Categories = () => {
   const { category } = useParams({ strict: false });
   const { state }: { state: CategoryItemType } = useLocation();
+  console.log(state);
   const { t, i18n } = useTranslation();
 
   return (
@@ -44,7 +45,10 @@ export const Categories = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <CategoryPageWrapper id={category ?? ""} />
+      <CategoryPageWrapper
+        name={i18n.dir() === "rtl" ? state.name : state.name_en}
+        id={category ?? state.id.toString()}
+      />
     </main>
   );
 };

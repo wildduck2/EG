@@ -32,10 +32,15 @@ export async function get_user_wishlist(user: User | null) {
 export async function post_mutate_wishlist({
   id,
   wish_list_state,
+  route,
 }: QueryKeyMutateType) {
   const user: User | null = JSON.parse(
     localStorage.getItem("user-info") as string,
   );
+  if (!user) {
+    route({ to: "/auth/signin" });
+    return toast.error("Please login first");
+  }
 
   try {
     if (wish_list_state === "add") {

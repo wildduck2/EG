@@ -18,7 +18,7 @@ export const ProductPageWrapper = ({ id, state }: ProductPageWrapperProps) => {
     return <ProductPageWrapperSkeleton />;
   }
 
-  if (status === "success" && data) {
+  if (status === "success" && data?.id) {
     return (
       <div className="flex flex-col items-center gap-4 w-full my-8">
         <div className="flex gap-8 justify-between w-full trigger">

@@ -36,6 +36,7 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
               params: {
                 id: category_id.toString(),
               },
+              state: { name: category_name, name_en: category_name_en } as any,
             });
           }}
         >
@@ -44,7 +45,7 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
       </CardPreviewHeader>
       <CardPreviewContent>
         {ads.map((item, index) => {
-          return <AdItemCard {...item} key={index} />;
+          return <AdItemCard {...(item as any)} key={index} />;
         })}
       </CardPreviewContent>
     </CardPreview>

@@ -65,7 +65,7 @@ export const filter = atom<FilterSchema>({
 });
 
 export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const products = t("products");
 
   const [filter_data] = useAtom(filterData);
@@ -81,8 +81,8 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
       state={true}
       drawerData={products.length > 0}
       header={{
-        head: "Filter",
-        description: "Filter your search results",
+        head: t("filter"),
+        description: t("filter_your_search_results"),
       }}
       footer={{
         className:
@@ -99,11 +99,11 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 cb?.();
               }}
             >
-              Submit
+              {t("submit")}
             </Button>
           ),
         },
-        cancel: { children: <Button variant="outline">Cancel</Button> },
+        cancel: { children: <Button variant="outline">{t("cancel")}</Button> },
       }}
       trigger={{
         children: (
@@ -114,7 +114,9 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
         ),
       }}
       content={{
-        // dir: "rtl",
+        dir: i18n.dir(),
+        side: i18n.dir() === "rtl" ? "left" : "right",
+
         className:
           "flex flex-col gap-4 sm:max-w-[450px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full",
         children: (
@@ -124,7 +126,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 <FilterSlector
                   filter_data={filter_data.governorates}
                   value={filter_schema_state.governorates}
-                  name="Governorates"
+                  name={t("governates")}
                   setValue={(item: FilterSchema["governorates"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -135,7 +137,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 <FilterSlector
                   filter_data={filter_data.regions}
                   value={filter_schema_state.regions}
-                  name="Regions"
+                  name={t("regions")}
                   setValue={(item: FilterSchema["regions"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -148,7 +150,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 <FilterSlector
                   filter_data={filter_data.categories}
                   value={filter_schema_state.categories}
-                  name="Categories"
+                  name={t("categories")}
                   setValue={(item: FilterSchema["categories"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -159,7 +161,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 <FilterSlector
                   filter_data={filter_data.subcategories}
                   value={filter_schema_state.subcategories}
-                  name="Subcategories"
+                  name={t("subcategories")}
                   setValue={(item: FilterSchema["subcategories"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -171,7 +173,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
               <div className="flex items-center gap-2 w-full">
                 <FilterSlector
                   filter_data={filter_data.brand_countries}
-                  name="Third category"
+                  name={t("brand_countries")}
                   value={filter_schema_state.brand_countries}
                   setValue={(item: FilterSchema["brand_countries"]) => {
                     setFilterSchema_state({
@@ -183,7 +185,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 <FilterSlector
                   filter_data={filter_data.third_branches}
                   value={filter_schema_state.third_branches}
-                  name="Forth Branches"
+                  name={t("third_branches")}
                   setValue={(item: FilterSchema["third_branches"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -193,16 +195,17 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                 />
               </div>
               <div className="flex items-center gap-2 w-full">
-                <FilterSeleector2
-                  value={filter_schema_state.type}
-                  setValue={(item: string) => {
-                    setFilterSchema_state({
-                      ...filter_schema_state,
-                      type: item as any,
-                    });
-                  }}
-                />
-
+                {
+                  // <FilterSeleector2
+                  //   value={filter_schema_state.type}
+                  //   setValue={(item: string) => {
+                  //     setFilterSchema_state({
+                  //       ...filter_schema_state,
+                  //       type: item as any,
+                  //     });
+                  //   }}
+                  // />
+                }
                 <FilterSeleector
                   value={filter_schema_state.order}
                   setValue={(item: string) => {
@@ -215,7 +218,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterInput
-                  name="Min Price"
+                  name={t("min_price")}
                   value={filter_schema_state?.min_price?.toString() || "0"}
                   setValue={(item) => {
                     setFilterSchema_state({
@@ -225,7 +228,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   }}
                 />
                 <FilterInput
-                  name="Max Price"
+                  name={t("max_price")}
                   value={filter_schema_state?.max_price?.toString() || "0"}
                   setValue={(item) => {
                     setFilterSchema_state({
@@ -237,7 +240,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
               </div>
               <div className="flex items-center gap-2 w-full">
                 <FilterSwitch
-                  value={filter_schema_state?.negotiate}
+                  value={filter_schema_state?.negotiate as any}
                   setValue={(item) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -264,7 +267,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   }}
                   className="w-full"
                 >
-                  Clear
+                  {t("clear")}
                 </Button>
               </div>
             </div>
@@ -282,21 +285,22 @@ export function FilterSeleector({
   value: string | null;
   setValue: (item: any) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="w-full">
       <Select
         onValueChange={(value) => setValue(value)}
         defaultValue={value || ""}
       >
-        <Label className="w-full"> Order </Label>
+        <Label className="w-full">{t("order")} </Label>
         <SelectTrigger className="w-full">
           <div>
-            <SelectValue placeholder="Order..." />
+            <SelectValue placeholder={`${t("order")}`} />
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="asc">Ascending</SelectItem>
-          <SelectItem value="desc">Descending</SelectItem>
+          <SelectItem value="asc">{t("asc")}</SelectItem>
+          <SelectItem value="desc">{t("desc")}</SelectItem>
         </SelectContent>
       </Select>
     </div>
@@ -310,18 +314,20 @@ export function FilterSeleector2({
   value: string | null;
   setValue: (item: any) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <div className="w-full">
       <Select onValueChange={(value) => setValue(value)} value={value ?? ""}>
-        <Label className="w-full">Type</Label>
+        <Label className="w-full">{t("type")}</Label>
         <SelectTrigger className="w-full">
           <div className="flex flex-col space-y-1">
-            <SelectValue placeholder="Type..." />
+            <SelectValue placeholder={t("type") + "..."} />
           </div>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="used">Used</SelectItem>
-          <SelectItem value="new">New</SelectItem>
+          <SelectItem value="used">{t("used")}</SelectItem>
+          <SelectItem value="new">{t("new")}</SelectItem>
         </SelectContent>
       </Select>
     </div>
@@ -335,16 +341,17 @@ export function FilterSwitch({
   value: number;
   setValue: (item: any) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col gap-2 w-full">
-      <Label htmlFor="airplane-mode">Negotiatable</Label>
+      <Label htmlFor="airplane-mode">{t("negotiable")}</Label>
       <div className="flex items-center space-x-2">
         <Switch
           id="airplane-mode"
           onCheckedChange={setValue}
           checked={value === 1 ? true : false}
         />
-        <Label htmlFor="airplane-mode">Yes</Label>
+        <Label htmlFor="airplane-mode">{t("yes")}</Label>
       </div>
     </div>
   );
@@ -410,9 +417,10 @@ export const FilterSlector = ({
               }}
             >
               <span className="w-full max-w-[130px] truncate">
-                {value?.id
-                  ? filter_data.find((framework) => framework.id === value?.id)
-                      ?.name
+                {(value as any)?.id
+                  ? filter_data.find(
+                      (framework) => framework.id === (value as any)?.id,
+                    )?.name
                   : `${t("select")} ${name}...`}
               </span>
             </Button>
@@ -420,12 +428,12 @@ export const FilterSlector = ({
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0  overflow-y-scroll">
           <Command>
-            <CommandInput placeholder={`Search ${name}...`} />
+            <CommandInput placeholder={`${t("select")} ${name}...`} />
             <CommandList>
               <CommandEmpty>No Governates found.</CommandEmpty>
               <CommandGroup className="">
                 <ScrollArea className=" overflo-scroll h-[200px]">
-                  {filter_data.map((framework) => (
+                  {filter_data.map((framework: any) => (
                     <CommandItem
                       key={framework.id}
                       value={framework.id.toString()}
@@ -437,7 +445,7 @@ export const FilterSlector = ({
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value?.id === framework.id
+                          (value as any)?.id === framework.id
                             ? "opacity-100"
                             : "opacity-0",
                         )}

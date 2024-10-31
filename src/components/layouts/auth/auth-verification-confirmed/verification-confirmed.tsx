@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui";
 import { verification_icons } from "../auth-verification";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 export const AuthVerificationConfirmed = () => {
+  const { t } = useTranslation();
   const route = useNavigate();
 
   return (
@@ -11,7 +13,7 @@ export const AuthVerificationConfirmed = () => {
         <div className="flex flex-col gap-2 items-center space-y-4">
           <verification_icons.email_done className="w-[340px] h-fit" />
           <div className="otpverification__header__description">
-            Your account has been confirmed successfully.
+            {t("your_account_has_been_confirmed_successfully")}.
           </div>
         </div>
 

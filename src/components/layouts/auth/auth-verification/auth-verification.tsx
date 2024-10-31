@@ -11,6 +11,7 @@ import React from "react";
 import { onSubmitVerification } from "./auth-verification.lib";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 export const AuthVerification = ({
   verify_register,
@@ -35,18 +36,17 @@ export const AuthVerification = ({
     setLoading(false);
   }
 
+  const { t } = useTranslation();
   return (
     <div className="h-screen w-full md:p-12 flex relative">
       <div className="flex flex-col items-center gap-3 justify-center mx-auto border h-fit place-self-center px-32 py-12 rounded-lg">
         <div className="flex flex-col gap-2 items-center">
           <verification_icons.email className="w-[340px] h-fit" />
-          <div className="otpverification__header__title">Check your email</div>
+          <div className="otpverification__header__title">
+            {t("check_your_email")}
+          </div>
           <div className="otpverification__header__description">
-            Enter The 6-digit code sent to{" "}
-            {
-              //user?.email
-            }
-            to continue.
+            {t("enter_the_6_digit_code_sent_to_to_continue")} .
           </div>
         </div>
 
@@ -136,7 +136,7 @@ export const AuthVerification = ({
             disabled={!(otp.length === 6) || error || loading}
             loading={loading}
           >
-            Verify your email
+            {t("verify_your_email")}
           </Button>
         </form>
       </div>

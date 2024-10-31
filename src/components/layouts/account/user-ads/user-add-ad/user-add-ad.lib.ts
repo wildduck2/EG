@@ -82,16 +82,53 @@ export async function user_edit_ad({
   id: string;
 }) {
   const user: User = JSON.parse(localStorage.getItem("user-info") || "{}");
-  console.log(ad_data, "add_data");
+  console.log(ad_data, "ad_data");
+
   try {
     const formData = new FormData();
 
-    // Append files
-    ad_data.attachment.forEach((file: File, index: number) => {
-      formData.append(`images[${index}]`, file); // server expects 'images' as the field name
-    });
+    // Handle each attachment (URL or File)
+    await Promise.all(
+      ad_data.attachment.map(async (attachment: any, index: number) => {
+        // If `attachment` is a URL string
+        if (typeof attachment === "string") {
+          try {
+            const response = await fetch(
+              `https://development.goods.eg/uploads${attachment}`,
+            );
+            if (!response.ok) {
+              console.error(
+                `Failed to fetch image at ${attachment}: ${response.statusText}`,
+              );
+              throw new Error(`Failed to fetch image at ${attachment}`);
+            }
+            const blob = await response.blob();
+            const file = new File([blob], `image${index}.jpg`, {
+              type: blob.type,
+            });
+            formData.append(`images[${index}]`, file);
+          } catch (error) {
+            console.error(
+              `Error fetching image ${index} at ${attachment}`,
+              error,
+            );
+            throw error;
+          }
+        }
+        // If `attachment` is already a File object
+        else if (attachment instanceof File) {
+          formData.append(`images[${index}]`, attachment);
+        } else {
+          console.error(
+            `Unsupported attachment type at index ${index}`,
+            attachment,
+          );
+          return null;
+        }
+      }),
+    );
 
-    // Append other form data with appropriate types
+    // Append other form data
     formData.append("name", ad_data.name);
     formData.append("description", ad_data.description);
     formData.append("price", String(ad_data.price));
@@ -108,20 +145,23 @@ export async function user_edit_ad({
     formData.append("notes", ad_data.note);
     formData.append("phone_number", user.phone_number);
 
+    // Send the data using axios
     const { data } = await axios.post(
       `${process.env.BACKEND__BASE_URL}/client/ads/${id}`,
       formData,
       {
         withCredentials: true,
-        headers: {
-          // Let axios set the Content-Type to multipart/form-data
-        },
       },
     );
-    toast.success("Ad created successfully");
 
-    return data;
+    if (data.success) {
+      toast.success("Ad created successfully");
+      return data;
+    }
+
+    return null;
   } catch (error) {
+    console.error("Failed to create ad", error);
     toast.error("Failed to create ad");
     return null;
   }

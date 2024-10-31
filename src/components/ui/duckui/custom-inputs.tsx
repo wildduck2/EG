@@ -1,14 +1,10 @@
 import React from "react";
 import { Input } from "./input";
-import { Circle, CircleAlert } from "lucide-react";
+import { Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import {
-  FieldError,
-  MultipleFieldErrors,
-  UseFormRegisterReturn,
-} from "react-hook-form";
-import { Badge } from "./badge";
+import { MultipleFieldErrors, UseFormRegisterReturn } from "react-hook-form";
 import { Label } from ".";
+import { useTranslation } from "react-i18next";
 
 interface FormInputProps extends React.HTMLProps<HTMLInputElement> {
   register?: UseFormRegisterReturn;
@@ -23,7 +19,10 @@ interface FormInputProps extends React.HTMLProps<HTMLInputElement> {
 }
 
 export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
-  ({ register, error, input, input_label, children, className, ...props }) => {
+  (
+    { register, error, input, input_label, children, className, ...props },
+    ref,
+  ) => {
     const { states, errors, inputError, type = "raw" } = error ?? {};
     const { className: inputClassName, ...inputProps } = input ?? {};
     const {
@@ -31,9 +30,10 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
       children: labelChildren,
       ...labelProps
     } = input_label ?? {};
+    const { t } = useTranslation();
 
     return (
-      <div className={cn("relative", className)} {...props}>
+      <div className={cn("relative", className)} {...props} ref={ref}>
         <div className="relative">
           <Label
             className={cn(
@@ -59,21 +59,23 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
                 {...register}
               />
             )}
-            {inputError && (
-              <Badge
-                variant="ghost"
-                size="icon"
-                label={{
-                  children: inputError,
-                  className:
-                    "border-red-400 bg-red-100 w-full ring-red-400 text-red-400",
-                  showLabel: true,
-                }}
-                className="absolute right-3 top-1/2 -translate-y-1/2 "
-              >
-                <CircleAlert className="text-red-600 size-4" />
-              </Badge>
-            )}
+            {
+              // inputError && (
+              //                             <Badge
+              //                                 variant="ghost"
+              //                                 size="icon"
+              //                                 label={{
+              //                                     children: inputError,
+              //                                     className:
+              //                                         "border-red-400 bg-red-100 w-full ring-red-400 text-red-400",
+              //                                     showLabel: true,
+              //                                 }}
+              //                                 className="absolute right-3 top-1/2 -translate-y-1/2 "
+              //                             >
+              //                                 <CircleAlert className="text-red-600 size-4" />
+              //                             </Badge>
+              //                         )
+            }
           </div>
         </div>
 
@@ -84,7 +86,7 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
               inputError ? "h-5 opacity-100 mb-1" : "h-0 opacity-0 mb-0 py-0",
             )}
           >
-            {inputError}
+            {t(inputError ?? "")}
           </p>
         )}
 
@@ -109,7 +111,7 @@ export const FormInput = React.forwardRef<HTMLDivElement, FormInputProps>(
                         : "fill-green-400 stroke-green-400",
                     )}
                   />
-                  <span className="text-sm">{rule}</span>
+                  <span className="text-sm">{t(rule)}</span>
                 </li>
               ))}
             </ul>

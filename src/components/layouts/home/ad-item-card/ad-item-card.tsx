@@ -144,14 +144,33 @@ export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
                 sheet_title: t("edit_ad_title"),
                 sheet_desc: t("edit_ad_desc"),
               }}
-              onSubmit={(attachments: File[], data: AddAdFormType) => {
-                user_edit_ad({
+              onSubmit={async (attachments: File[], data: AddAdFormType) => {
+                const res = await user_edit_ad({
                   ad_data: {
                     ...data,
                     attachment: attachments,
                   },
                   id: id.toString(),
                 });
+
+                if (res?.success) {
+                  queryClient.setQueryData<{
+                    pages: { ads: ProductType[]; pagination: paginationType }[];
+                    pageParams: any[];
+                  }>(["user-ads"], (old) => {
+                    if (!old) return { pages: [], pageParams: [] };
+
+                    return {
+                      ...old,
+                      pages: old.pages.map((page) => ({
+                        ...page,
+                        ads: page.ads.map((ad) =>
+                          ad.id === id ? { ...ad, ...res.data } : ad,
+                        ),
+                      })),
+                    };
+                  });
+                }
               }}
             />
           )}
