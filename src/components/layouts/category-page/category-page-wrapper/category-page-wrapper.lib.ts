@@ -13,36 +13,54 @@ export async function get_gategory_page_ads({
   filter_schema,
 }: GetCategoryPageAdsType & { page?: number; filter_schema?: FilterSchema }) {
   try {
-    const { data } = await axios.post<
+    const { data } = await axios.get<
       Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
-    >(
-      `${process.env.BACKEND__BASE_URL}/client/ads/getAdsByParameters`,
-      {
-        categoryId: id,
-        subCategoryId: filter_schema?.subcategories?.id,
-        brandCountryId: filter_schema?.brand_countries?.id,
-        thirdBranchId: filter_schema?.third_branches?.id,
-        gov_id: filter_schema?.governorates?.id,
-        region_id: filter_schema?.regions?.id,
-        min_price: filter_schema?.min_price,
-        max_price: filter_schema?.max_price,
-        negotiable:
-          (filter_schema?.negotiate as unknown as number) === 1 ? 1 : 0,
-        page,
+    >(`${process.env.BACKEND__BASE_URL}/client/subcategories/${id}`, {
+      headers: {
+        withCredentials: true,
+        "Content-Type": "application/json",
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
+    });
 
     if (!data.success) {
       toast.error("Failed to get category ad");
       return null;
     }
 
-    return data;
+    if (data.data.length === 0) {
+      const { data } = await axios.post<
+        Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
+      >(
+        `${process.env.BACKEND__BASE_URL}/client/ads/getAdsByParameters`,
+        {
+          categoryId: id,
+          subCategoryId: filter_schema?.subcategories?.id,
+          brandCountryId: filter_schema?.brand_countries?.id,
+          thirdBranchId: filter_schema?.third_branches?.id,
+          gov_id: filter_schema?.governorates?.id,
+          region_id: filter_schema?.regions?.id,
+          min_price: filter_schema?.min_price,
+          max_price: filter_schema?.max_price,
+          negotiable:
+            (filter_schema?.negotiate as unknown as number) === 1 ? 1 : 0,
+          page,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+
+      if (!data.success) {
+        toast.error("Failed to get category ad");
+        return null;
+      }
+
+      return { ...data, type: "product" };
+    }
+
+    return { ...data, type: "category" };
   } catch (error) {
     toast.error("Failed to get category ad");
     return null;

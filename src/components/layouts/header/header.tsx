@@ -165,7 +165,10 @@ export const Header = () => {
                 <Button
                   title={t("sale")}
                   className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px]"
-                  onClick={() => navigate({ to: "/sale" })}
+                  onClick={() => {
+                    navigate({ to: "/account" });
+                    localStorage.setItem("tab", "my ads");
+                  }}
                 />
               </div>
             </nav>

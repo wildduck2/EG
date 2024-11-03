@@ -10,7 +10,7 @@ import {
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-export const Categories = () => {
+export const CategoryPageB1 = () => {
   const { category } = useParams({ strict: false });
   const { state }: { state: CategoryItemType } = useLocation();
   console.log(state);

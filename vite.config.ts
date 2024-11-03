@@ -1,4 +1,3 @@
-// import react from '@vitejs/plugin-react-swc'
 import path from "path";
 import { defineConfig, loadEnv } from "vite";
 import viteReact from "@vitejs/plugin-react";
@@ -6,6 +5,7 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
+
   return {
     define: {
       "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
@@ -15,9 +15,8 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       TanStackRouterVite({
-        // experimental: {
-        //   enableCodeSplitting: true,
-        // },
+        // Enable experimental code-splitting in TanStack Router, if supported
+        autoCodeSplitting: true,
       }),
       viteReact(),
     ],
@@ -25,6 +24,19 @@ export default defineConfig(({ mode }) => {
       alias: {
         "@": path.resolve(__dirname, "./src"),
       },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          // Separate large dependencies like React and TanStack Router
+          manualChunks: {
+            react: ["react", "react-dom"],
+            tanstack: ["@tanstack/react-router", "@tanstack/react-query"],
+            // Include other common libraries as needed
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1000, // Suppress warnings if necessary
     },
   };
 });

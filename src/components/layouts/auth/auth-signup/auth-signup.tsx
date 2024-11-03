@@ -185,7 +185,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "email",
-                placeholder: "duckui@duck.com",
+                placeholder: "example@example.com",
                 type: "email",
                 autoCapitalize: "none",
                 autoCorrect: "off",
