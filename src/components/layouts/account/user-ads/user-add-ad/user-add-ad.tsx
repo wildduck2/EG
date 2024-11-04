@@ -147,13 +147,19 @@ export const UserAddAd = ({
           submit: {
             onClick: handleSubmit((data) => {
               onSubmit?.(attachments, data);
-
+              setAttachments([]);
               control._reset();
             }),
             disabled: !formState.isValid || formState.isSubmitting,
             loading: formState.isSubmitting,
             children: (
-              <Button variant="default" type="submit">
+              <Button
+                variant="default"
+                type="submit"
+                // onClick={() => {
+                //   control._reset();
+                // }}
+              >
                 {t("submit")}
               </Button>
             ),
@@ -592,7 +598,7 @@ export const UploadAdPictures = ({
               if (e.target.files && e.target.files[0].size > 5 * 1024 * 1024) {
                 return toast.error("File size should be less than 5MB");
               }
-              setAttachments(e.target.files ? Array.from(e.target.files) : []);
+              setAttachments((old) => [...old, ...Array.from(e.target.files)]);
               setValue("attachment", e.target.files);
             }}
           />

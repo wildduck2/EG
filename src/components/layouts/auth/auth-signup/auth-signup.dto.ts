@@ -25,7 +25,7 @@ const middleSchema = z.object({
   phone: phoneSchema,
   password: passwordSchema,
   password_confirmation: z.string(),
-  email: emailSchema.optional().nullable(),
+  email: z.string().default(""),
   username: usernameSchema,
   agreed: z.boolean().optional().default(false),
 });

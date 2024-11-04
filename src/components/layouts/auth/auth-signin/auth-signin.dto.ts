@@ -5,9 +5,8 @@ import { User } from "../../home/ad-item-card";
 
 export const phoneSchema = z
   .string()
-  .min(10, PhoneInputError.TooShort)
-  .max(15, PhoneInputError.TooLong)
-  .regex(/^\+?\d+$/, PhoneInputError.InvalidCharacters);
+  .min(11, PhoneInputError.TooShort)
+  .max(11, PhoneInputError.TooLong);
 
 export const passwordSchema = z
   .string()

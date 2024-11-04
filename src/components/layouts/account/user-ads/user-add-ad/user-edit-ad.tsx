@@ -533,7 +533,7 @@ const UploadAdPictures = ({
                           <CommentClose
                             className="absolute top-1/2 -translate-y-1/2 right-2"
                             onClick={() => {
-                              setAttachments(
+                              setAttachments((attachments) =>
                                 attachments?.filter(
                                   (item) => item !== attachment,
                                 ),

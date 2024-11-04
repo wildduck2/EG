@@ -19,15 +19,12 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
   // First Form
   const { register, formState, watch, handleSubmit } =
     useForm<UserInfoFormSchemaType>({
-      resolver: zodResolver(userInfoFormSchema),
       defaultValues: {
         username: data.name,
         companyname: data.name_company,
         phone: data.phone_number,
         email: data.email,
       },
-      shouldUseNativeValidation: false,
-      criteriaMode: "all",
       mode: "onChange",
     });
 
@@ -40,12 +37,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
         <FormInput
           name="username"
           register={register("username")}
-          error={{
-            states: formState.errors.username?.types,
-            errors: userNameErrorsArray,
-            inputError: formState.errors.username?.message,
-            type: "slide",
-          }}
           input={{
             id: "username",
             placeholder: account.username,
@@ -59,12 +50,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
         <FormInput
           name="companyname"
           register={register("companyname")}
-          error={{
-            states: formState.errors.companyname?.types,
-            errors: companyNameErrorsArray,
-            inputError: formState.errors.companyname?.message,
-            type: "slide",
-          }}
           input={{
             id: "companyname",
             placeholder: account.company,
@@ -79,12 +64,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
         <FormInput
           name="email"
           register={register("email")}
-          error={{
-            states: formState.errors.email?.types,
-            errors: emailErrorsArray,
-            inputError: formState.errors.email?.message,
-            type: "slide",
-          }}
           input={{
             id: "email",
             placeholder: "duckui@duck.com",
@@ -97,12 +76,6 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
         <FormInput
           name="phone"
           register={register("phone")}
-          error={{
-            states: formState.errors.phone?.types,
-            errors: phoneErrorsArray,
-            inputError: formState.errors.phone?.message,
-            type: "slide",
-          }}
           input={{
             id: "phone",
             placeholder: "01 xxx-xxx-xxxx",
@@ -117,7 +90,7 @@ export const UserInfoForm: React.FC<UserInfoFormProps> = ({ data }) => {
       <Button
         type="submit"
         className="w-1/2"
-        disabled={!formState.isValid || !formState.isDirty}
+        disabled={!formState.isDirty}
         loading={formState.isSubmitting}
       >
         {account.save}

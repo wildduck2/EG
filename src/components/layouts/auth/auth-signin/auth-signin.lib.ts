@@ -20,7 +20,7 @@ export const onSubmitSignin = async (
     const { data: res_data } = await axios.post<SigninReqType>(
       process.env.BACKEND__BASE_URL + "/user/login",
       {
-        phone_number: data.phone,
+        phone_number: "+2" + data.phone,
         password: data.password,
       },
       {

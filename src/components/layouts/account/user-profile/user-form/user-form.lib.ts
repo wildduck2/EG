@@ -14,7 +14,7 @@ export async function getUser() {
       process.env.BACKEND__BASE_URL +
         "/user/user-data" +
         "?phone_number=" +
-        user.phone_number,
+        `+201285971022`,
       {
         withCredentials: true,
         headers: {

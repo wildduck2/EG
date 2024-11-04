@@ -142,7 +142,7 @@ export const Header = () => {
                   </Button>
                 )}
                 <Button
-                  title={t("languages")}
+                  title={i18n.language === "en" ? "عربي" : "English"}
                   variant={"outline"}
                   className="w-full md:w-[100px]"
                   onClick={() => {
@@ -188,21 +188,39 @@ export const Header = () => {
               navigationKeys={{
                 data:
                   categories.length > 0
-                    ? [
-                        ...categories.splice(0, 6).map((item) => ({
-                          title: item.name_en,
-                          route: `/categories/${item.id}`,
-                          state: item,
-                          children:
-                            i18n.language === "en" ? item.name_en : item.name,
-                        })),
-                        {
-                          title: "more",
-                          route: `/categories/`,
-                          state: null,
-                          children: i18n.language === "en" ? "More" : "المزيد",
-                        },
-                      ]
+                    ? i18n.language === "en"
+                      ? [
+                          ...categories.splice(0, 6).map((item) => ({
+                            title: item.name_en,
+                            route: `/categories/${item.id}`,
+                            state: { ...item, branch: 1 },
+                            children:
+                              i18n.language === "en" ? item.name_en : item.name,
+                          })),
+                          {
+                            title: "more",
+                            route: `/categories/`,
+                            state: { branch: 0 },
+                            children:
+                              i18n.language === "en" ? "More" : "المزيد",
+                          },
+                        ]
+                      : [
+                          {
+                            title: "more",
+                            route: `/categories/`,
+                            state: { branch: 0 },
+                            children:
+                              i18n.language === "en" ? "More" : "المزيد",
+                          },
+                          ...categories.splice(0, 6).map((item) => ({
+                            title: item.name_en,
+                            route: `/categories/${item.id}`,
+                            state: { ...item, branch: 1 },
+                            children:
+                              i18n.language === "en" ? item.name_en : item.name,
+                          })),
+                        ]
                     : [],
               }}
             />

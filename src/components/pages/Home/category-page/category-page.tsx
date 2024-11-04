@@ -13,9 +13,8 @@ import { useTranslation } from "react-i18next";
 export const Categories = () => {
   const { category } = useParams({ strict: false });
   const { state }: { state: CategoryItemType } = useLocation();
-  console.log(state);
   const { t, i18n } = useTranslation();
-
+  console.log(state);
   return (
     <main className="flex flex-col py-8 container min-h-screen lg:mt-[17rem]">
       <Breadcrumb className="mx-auto">
@@ -42,6 +41,7 @@ export const Categories = () => {
 
       <CategoryPageWrapper
         name={i18n.dir() === "rtl" ? state.name : state.name_en}
+        branch={state.branch}
         id={category ?? state.id.toString()}
       />
     </main>

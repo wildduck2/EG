@@ -15,13 +15,15 @@ import { Link } from "@tanstack/react-router";
 export const CategoryPageWrapper = ({
   id,
   name,
+  branch,
 }: {
   id: string;
+  branch: number;
   name: string;
 }) => {
   const { t } = useTranslation();
   const [filter_schema] = useAtom(filter);
-
+  console.log(branch);
   const {
     data,
     status,
@@ -32,7 +34,12 @@ export const CategoryPageWrapper = ({
   } = useInfiniteQuery({
     queryKey: ["categories", id, filter_schema],
     queryFn: ({ pageParam = 1 }) =>
-      get_gategory_page_ads({ id: +id, page: pageParam, filter_schema }),
+      get_gategory_page_ads({
+        id: +id,
+        page: pageParam,
+        filter_schema,
+        branch,
+      }),
     getNextPageParam: (lastPage) => {
       const currentPage = lastPage?.pagination?.current_page ?? 1;
       const lastPageNum = lastPage?.pagination?.last_page ?? 1;
@@ -70,10 +77,6 @@ export const CategoryPageWrapper = ({
         <div className="flex flex-col gap-4 w-full">
           <h2 className="text-3xl font-semibold capitalize">{name}</h2>
           <Separator className="px-2" />
-          <div className="flex items-center justify-between">
-            <CategoryPageFilter />
-          </div>
-          <Separator className="px-2" />
         </div>
         <h2 className="text-sm mx-auto">There's no data related to {name}</h2>
       </section>
@@ -104,7 +107,10 @@ export const CategoryPageWrapper = ({
                   params={{
                     id: e.id.toString(),
                   }}
-                  state={e as any}
+                  state={{ ...e, branch: branch + 1 } as any}
+                  onClick={() => {
+                    localStorage.setItem("branch", (branch + 1).toString());
+                  }}
                 >
                   <img
                     src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + e.image}

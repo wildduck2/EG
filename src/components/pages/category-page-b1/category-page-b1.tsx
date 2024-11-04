@@ -9,6 +9,7 @@ import {
 } from "@/components/ui";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
+import { CategoryB1PageWrapper } from "./category-page-b1.l";
 
 export const CategoryPageB1 = () => {
   const { category } = useParams({ strict: false });
@@ -40,7 +41,7 @@ export const CategoryPageB1 = () => {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <CategoryPageWrapper
+      <CategoryB1PageWrapper
         name={i18n.dir() === "rtl" ? state.name : state.name_en}
         id={category ?? state.id.toString()}
       />

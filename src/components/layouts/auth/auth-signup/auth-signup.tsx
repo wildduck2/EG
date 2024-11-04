@@ -43,12 +43,12 @@ export const AuthSignup = () => {
   const traderMethods = useForm<TraderValues>({
     resolver: zodResolver(traderFormSchemaa),
     defaultValues: {
-      phone: "1234567891232",
-      password: "123456",
-      password_confirmation: "123456",
-      email: "duck30@duck.com",
-      username: "duck-ui-[1]",
-      companyname: "duck-ui",
+      phone: "",
+      password: "",
+      password_confirmation: "",
+      email: "",
+      username: "",
+      companyname: "",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
@@ -189,7 +189,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
                 type: "email",
                 autoCapitalize: "none",
                 autoCorrect: "off",
-                required: true,
+                required: false,
               }}
             />
 

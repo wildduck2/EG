@@ -42,7 +42,7 @@ export const CategoriesWrapper = () => {
                 params={{
                   id: e.id.toString(),
                 }}
-                state={e as any}
+                state={{ ...(e as any), branch: 1 } as any}
               >
                 <img
                   src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + e.image}

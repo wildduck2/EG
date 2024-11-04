@@ -6,21 +6,19 @@ import {
 import { toast } from "sonner";
 import { GetCategoryPageAdsType } from "./category-page-wrapper.types";
 import { FilterSchema } from "../category-page-filter";
-import { phone_number } from "@/context";
 
 export async function get_gategory_page_ads({
   id,
   page = 1,
   filter_schema,
-  branch,
+  type,
 }: GetCategoryPageAdsType & {
   page?: number;
   filter_schema?: FilterSchema;
-  branch: number;
+  type: "category";
 }) {
   try {
-    if (branch === 1) {
-      console.log(branch);
+    if (type === "category") {
       const { data } = await axios.get<
         Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
       >(`${process.env.BACKEND__BASE_URL}/client/subcategories/${id}`, {
@@ -30,54 +28,14 @@ export async function get_gategory_page_ads({
         },
       });
 
-      // if (!data.success) {
-      //   console.log(data);
-      //   toast.error("Failed to get category ad ...");
-      //   return null;
-      // }
+      if (!data.success) {
+        toast.error("Failed to get category ad");
+        return null;
+      }
 
       return { ...data, type: "category" };
     }
-
-    if (branch > 1) {
-      console.log(branch);
-      const { data } = await axios.post<
-        Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
-      >(
-        `${process.env.BACKEND__BASE_URL}/client/get-data-by-type`,
-        {
-          type: JSON.parse(localStorage.getItem("branch") as string),
-          value: id,
-          page: page,
-          phone_number: JSON.parse(localStorage.getItem("phone") as string),
-        },
-        {
-          headers: {
-            withCredentials: true,
-            "Content-Type": "application/json",
-          },
-        },
-      );
-
-      // if (!data.success) {
-      //   toast.error("Failed to get category ad");
-      //   return null;
-      // }
-
-      // console.log(JSON.stringify(data.data[0] as any).includes("wishlist"));
-
-      return {
-        ...data,
-        type:
-          data.data.length === 0
-            ? "category"
-            : JSON.stringify(data.data[0] as any)?.includes("wishlist")
-              ? "product"
-              : "category",
-      };
-    }
   } catch (error) {
-    console.log(error);
     toast.error("Failed to get category ad");
     return null;
   }

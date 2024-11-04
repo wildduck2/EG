@@ -134,6 +134,7 @@ const NavGroup = <T extends boolean>({
                       isCollapsed={navIsCollabsed ? navIsCollabsed : false}
                       onClick={() => {
                         navigator({ to: route, state: state });
+                        localStorage.setItem("branch", "1");
                       }}
                       className={cn(
                         !navIsCollabsed && "w-full justify-between",
