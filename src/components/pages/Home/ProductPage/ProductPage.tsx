@@ -19,29 +19,12 @@ export const ProductPage = () => {
   const { product, category } = useParams({ strict: false });
   const { state }: { state: { name: string; category: string } } =
     useLocation();
-  console.log(state);
 
-  useGSAP(() => {
-    const mm = gsap.matchMedia();
-    mm.add("(min-width: 1300px)", () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ".trigger",
-          start: `0% 35%`,
-          end: `80% 55%`,
-          pin: ".pinn",
-          scrub: 0.1,
-          pinSpacing: false,
-          // markers: true,
-        },
-        clearProps: true,
-      });
-    });
-  });
+  console.log(state);
 
   return (
     <>
-      <main className="container flex flex-col pm-4 lg:pt-[17rem]">
+      <main className="container flex flex-col pm-4 lg:pt-[14rem]">
         {
           <Breadcrumb className="mx-auto">
             <BreadcrumbList>

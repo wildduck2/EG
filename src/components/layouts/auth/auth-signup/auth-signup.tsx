@@ -185,7 +185,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "email",
-                placeholder: "example@example.com",
+                placeholder: `${t("email")} (${t("optional")})`,
                 type: "email",
                 autoCapitalize: "none",
                 autoCorrect: "off",
@@ -204,7 +204,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "phone",
-                placeholder: "01 xxx-xxx-xxxx",
+                placeholder: `${t("phone")}`,
                 type: "tel",
                 autoCapitalize: "none",
                 autoComplete: "tel",
@@ -224,7 +224,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "password",
-                placeholder: "••••••••••••",
+                placeholder: `${t("password")}`,
                 type: "password",
                 autoCapitalize: "none",
                 autoCorrect: "off",
@@ -242,7 +242,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "confirm_password",
-                placeholder: "••••••••••••",
+                placeholder: `${t("passwordConfirm")}`,
                 type: "password",
                 autoCapitalize: "none",
                 autoCorrect: "off",

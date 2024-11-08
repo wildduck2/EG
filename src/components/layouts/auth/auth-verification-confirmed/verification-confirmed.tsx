@@ -23,7 +23,7 @@ export const AuthVerificationConfirmed = () => {
           onClick={() => route({ to: "/auth/signin" })}
           className="w-full bg-red-600 hover:bg-red-700 mb-2"
         >
-          Continue
+          {t("continue")}
         </Button>
       </div>
     </div>

@@ -4,7 +4,9 @@ import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 import {
   BadgeCheck,
+  Check,
   Clock10,
+  Copy,
   Heart,
   LucideIcon,
   MapPin,
@@ -21,12 +23,18 @@ import {
   AccordionTrigger,
   AvatarCustom,
   Button,
+  buttonVariants,
+  Input,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
   Skeleton,
 } from "@/components/ui";
 import { get_product_hazards } from "./product-page-info.libs";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useMutate } from "../../account/user-wishlist/user-wishlist.hook";
+import { Facebook, LinkedIn, mes, teletgram, Whatsapp, wts, x } from "@/assets";
 
 export const ProductPreviewInfo = React.forwardRef<
   HTMLDivElement,
@@ -34,6 +42,7 @@ export const ProductPreviewInfo = React.forwardRef<
 >(({ className, data, children, ...props }, ref) => {
   const { t, i18n } = useTranslation();
   const route = useNavigate();
+  const [copied, setCopied] = React.useState(false);
 
   const products = t("product");
   return (
@@ -49,34 +58,6 @@ export const ProductPreviewInfo = React.forwardRef<
 
       <h3 className="text-3xl font-semibold">{data.name}</h3>
       <h2 className="text-2xl font-semibold">{data.price}</h2>
-      <div className="flex items-center gap-4">
-        <div className="flex gap-2">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="h-fit py-1 rounded-full bg-blue-100/70 border-blue-200 border hover:bg-blue-100/70 cursor-default"
-            label={{
-              className: "text-xs",
-              children: products.check,
-              side: "top",
-            }}
-          >
-            <BadgeCheck className={cn("size-5", "text-white fill-blue-400")} />
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            label={{
-              children: products.special,
-              className: "text-xs",
-              side: "top",
-            }}
-            className="h-fit py-1 rounded-full bg-yellow-100/70 border-yellow-200 border cursor-default hover:bg-yellow-100/70"
-          >
-            <Star className={cn("size-5", "text-yellow-400 fill-yellow-400")} />
-          </Button>
-        </div>
-      </div>
 
       <div className="flex items-center gap-12 py-1">
         {data.address && (
@@ -91,7 +72,7 @@ export const ProductPreviewInfo = React.forwardRef<
           <span className="text-sm">{data.age}</span>
         </div>
       </div>
-      <div className="md:flex items-center gap-4 w-full my-2 grid grid-cols-2">
+      <div className="md:flex items-center gap-4 w-full my-2 flex lg:grid lg:grid-cols-2">
         <a href={`tel:${data.user.phone_number}`} target="_blank">
           <Button
             variant={"default"}
@@ -121,15 +102,92 @@ export const ProductPreviewInfo = React.forwardRef<
             }}
           ></Button>
         </a>
-        <Button
-          variant={"ghost"}
-          className="w-full max-w-[300px] h-[50px] grid-4"
-          icon={{
-            icon: Share,
-          }}
-        >
-          {products.share}
-        </Button>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"ghost"}
+              className="w-full max-w-[300px] h-[50px] grid-4"
+              icon={{
+                icon: Share,
+              }}
+            >
+              {products.share}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80">
+            <div className="flex items-center gap-2 mb-2">
+              <a
+                href={`https://www.facebook.com/sharer/sharer.php?u=${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "default" }), "p-0")}
+              >
+                <img src={Facebook} alt="facebook" className="size-10" />
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "ghost" }), "p-0")}
+              >
+                <img src={LinkedIn} alt="facebook" className="size-10" />
+              </a>
+
+              <a
+                href={`https://twitter.com/intent/tweet?url=${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "default" }), "p-0")}
+              >
+                <img src={x} alt="facebook" className="size-10" />
+              </a>
+
+              <a
+                href={`https://t.me/share/url?url=${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "default" }), "p-0")}
+              >
+                <img src={teletgram} alt="facebook" className="size-10" />
+              </a>
+
+              <a
+                href={`https://wa.me/?text=Check%20this%20out:%20${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "default" }), "p-0")}
+              >
+                <img src={wts} alt="facebook" className="size-10" />
+              </a>
+
+              <a
+                href={`https://m.me/?link=${location.href}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={cn(buttonVariants({ variant: "default" }), "p-0")}
+              >
+                <img src={mes} alt="facebook" className="size-10" />
+              </a>
+            </div>
+            <div className="flex gap-2">
+              <Input value={location.href} />
+              <Button
+                className="0"
+                onClick={() => {
+                  setCopied(true);
+
+                  navigator.clipboard.writeText(location.href);
+                  setTimeout(() => {
+                    setCopied(false);
+                  }, 1000);
+                }}
+              >
+                {copied ? <Check size={16} /> : <Copy size={16} />}
+              </Button>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
       <div className="flex flex-col items-start w-full">
         <div className="flex flex-col w-full">
@@ -138,6 +196,11 @@ export const ProductPreviewInfo = React.forwardRef<
             variant={"ghost"}
             size={"lg"}
             onClick={() => {
+              if (data.user.is_trader !== 0) {
+                return route({
+                  to: `/account`,
+                });
+              }
               route({
                 to: `/account/trader/$id`,
                 params: { id: data.user.id.toString() },

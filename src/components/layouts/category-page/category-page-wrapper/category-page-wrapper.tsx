@@ -10,7 +10,9 @@ import { Button, Separator } from "@/components/ui";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
 import { useAtom } from "jotai";
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { queryClient } from "@/main";
 
 export const CategoryPageWrapper = ({
   id,
@@ -21,9 +23,9 @@ export const CategoryPageWrapper = ({
   branch: number;
   name: string;
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [filter_schema] = useAtom(filter);
-  console.log(branch);
+  const hi = JSON.parse(localStorage.getItem("history") as string);
   const {
     data,
     status,
@@ -38,7 +40,7 @@ export const CategoryPageWrapper = ({
         id: +id,
         page: pageParam,
         filter_schema,
-        branch,
+        branch: hi ?? branch,
       }),
     getNextPageParam: (lastPage) => {
       const currentPage = lastPage?.pagination?.current_page ?? 1;
@@ -48,6 +50,22 @@ export const CategoryPageWrapper = ({
     refetchOnWindowFocus: false,
     initialPageParam: 1,
   });
+
+  const location = useLocation();
+  const [history, setHistory] = useState([]);
+
+  useEffect(() => {
+    if (history.includes(location.pathname)) {
+      console.log("Visited an old page:", location.pathname);
+    }
+
+    setHistory((prevHistory) => {
+      localStorage.setItem("branch", JSON.stringify(branch));
+      queryClient.invalidateQueries(["categories", id, filter_schema]);
+      const updatedHistory = [...prevHistory, location.pathname];
+      return updatedHistory;
+    });
+  }, [location.pathname]);
 
   if (status === "pending" || isRefetching) {
     return <CategoryPageWrapperSkeleton />;
@@ -109,6 +127,7 @@ export const CategoryPageWrapper = ({
                   }}
                   state={{ ...e, branch: branch + 1 } as any}
                   onClick={() => {
+                    localStorage.setItem("category_data", JSON.stringify(e.id));
                     localStorage.setItem("branch", (branch + 1).toString());
                   }}
                 >
@@ -118,7 +137,7 @@ export const CategoryPageWrapper = ({
                     className="rounded full size-[250px]"
                   />
                   <h4 className="text-center mt-0 font-semibold text-md transition-colors duration-300 ease-in-out group-hover:text-[#ffc223]">
-                    {e.name}
+                    {i18n.language === "en" ? e.name_en : e.name}
                   </h4>
                 </Link>
               ))}

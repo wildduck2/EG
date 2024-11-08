@@ -19,7 +19,11 @@ import {
   SelectValue,
   Switch,
 } from "@/components/ui";
-import { AlertDialogCustom } from "@/components/ui/duckui";
+import {
+  AlertDialogCustom,
+  CommandDialog,
+  SelectGroup,
+} from "@/components/ui/duckui";
 import { atom, useAtom } from "jotai";
 import { ArrowDown01, Check, ChevronsUpDown } from "lucide-react";
 import React from "react";
@@ -138,6 +142,8 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   filter_data={filter_data.regions}
                   value={filter_schema_state.regions}
                   name={t("regions")}
+                  id={"governorate_id"}
+                  selected={filter_schema_state?.governorates?.id}
                   setValue={(item: FilterSchema["regions"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -162,6 +168,8 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   filter_data={filter_data.subcategories}
                   value={filter_schema_state.subcategories}
                   name={t("subcategories")}
+                  id={"category_id"}
+                  selected={filter_schema_state?.categories?.id}
                   setValue={(item: FilterSchema["subcategories"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -175,6 +183,8 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   filter_data={filter_data.brand_countries}
                   name={t("brand_countries")}
                   value={filter_schema_state.brand_countries}
+                  id={"subcategory_id"}
+                  selected={filter_schema_state?.subcategories?.id}
                   setValue={(item: FilterSchema["brand_countries"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -186,6 +196,8 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
                   filter_data={filter_data.third_branches}
                   value={filter_schema_state.third_branches}
                   name={t("third_branches")}
+                  id={"category_id"}
+                  selected={filter_schema_state?.brand_countries?.id}
                   setValue={(item: FilterSchema["third_branches"]) => {
                     setFilterSchema_state({
                       ...filter_schema_state,
@@ -385,7 +397,11 @@ export const FilterSlector = ({
   disabled,
   filter_data,
   name,
+  selected,
+  id,
 }: {
+  id: string;
+  selected: number;
   value: FilterSchema[keyof FilterSchema];
   disabled?: boolean;
   setValue: (item: FilterSchema[keyof FilterSchema]) => void;
@@ -393,14 +409,14 @@ export const FilterSlector = ({
   name: string;
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <div className=" max-w-[48.5%] w-full">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
           asChild
-          className={cn("w-full", disabled && "pointer-events-none opecity-50")}
+          className={disabled ? "pointer-events-none" : ""}
         >
           <div className="w-full">
             <Label className="w-full">{name}</Label>
@@ -427,36 +443,37 @@ export const FilterSlector = ({
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-[200px] p-0  overflow-y-scroll">
-          <Command>
+          <CommandDialog open={open} onOpenChange={setOpen}>
             <CommandInput placeholder={`${t("select")} ${name}...`} />
             <CommandList>
-              <CommandEmpty>No Governates found.</CommandEmpty>
               <CommandGroup className="">
-                <ScrollArea className=" overflo-scroll h-[200px]">
-                  {filter_data.map((framework: any) => (
-                    <CommandItem
-                      key={framework.id}
-                      value={framework.id.toString()}
-                      onSelect={() => {
-                        setValue(framework);
-                        setOpen(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          (value as any)?.id === framework.id
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
-                      {framework.name}
-                    </CommandItem>
-                  ))}
+                <ScrollArea className=" overflow-y-scroll h-[200px]">
+                  {filter_data
+                    .filter((item) => item?.[id] === selected)
+                    .map((framework: any) => (
+                      <CommandItem
+                        key={framework.id}
+                        // value={framework.id.toString()}
+                        onSelect={() => {
+                          setValue(framework);
+                          setOpen(false);
+                        }}
+                      >
+                        <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            (value as any)?.id === framework.id
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                        {framework.name}
+                      </CommandItem>
+                    ))}
                 </ScrollArea>
               </CommandGroup>
             </CommandList>
-          </Command>
+          </CommandDialog>
         </PopoverContent>
       </Popover>
     </div>

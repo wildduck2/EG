@@ -8,4 +8,5 @@ export type GetProductItemReq<T> = Promise<ReqResponseType<T>>;
 export type ProductPageWrapperProps = {
   id?: number;
   state?: ProductType;
+  category: string;
 };

@@ -20,7 +20,6 @@ export async function get_gategory_page_ads({
 }) {
   try {
     if (branch === 1) {
-      console.log(branch);
       const { data } = await axios.get<
         Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
       >(`${process.env.BACKEND__BASE_URL}/client/subcategories/${id}`, {
@@ -40,16 +39,15 @@ export async function get_gategory_page_ads({
     }
 
     if (branch > 1) {
-      console.log(branch);
       const { data } = await axios.post<
         Awaited<Promise<ReqResponseWithPageType<GetCatgegorySearchResponse[]>>>
       >(
         `${process.env.BACKEND__BASE_URL}/client/get-data-by-type`,
         {
-          type: JSON.parse(localStorage.getItem("branch") as string),
+          type: JSON.parse(localStorage.getItem("branch") as string) ?? branch,
           value: id,
           page: page,
-          phone_number: JSON.parse(localStorage.getItem("phone") as string),
+          phone_number: "+201285971022", // JSON.parse(localStorage.getItem("phone") as string),
         },
         {
           headers: {
@@ -59,10 +57,10 @@ export async function get_gategory_page_ads({
         },
       );
 
-      // if (!data.success) {
-      //   toast.error("Failed to get category ad");
-      //   return null;
-      // }
+      if (!data.success) {
+        toast.error("Failed to get category ad");
+        return null;
+      }
 
       // console.log(JSON.stringify(data.data[0] as any).includes("wishlist"));
 

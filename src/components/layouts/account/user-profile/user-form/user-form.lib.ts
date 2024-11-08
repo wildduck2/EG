@@ -12,9 +12,7 @@ export async function getUser() {
 
     const { data: res_data } = await axios.get(
       process.env.BACKEND__BASE_URL +
-        "/user/user-data" +
-        "?phone_number=" +
-        `+201285971022`,
+        `/user/user-data?phone_number=${user.phone_number}`,
       {
         withCredentials: true,
         headers: {
@@ -33,29 +31,45 @@ export async function getUser() {
     return null;
   }
 }
-
-export const update_user_data = async ({ data }: UpdateUserFormData) => {
+export const update_user_data = async ({
+  data,
+  attachments,
+}: UpdateUserFormData) => {
   const user: User = JSON.parse(localStorage.getItem("user-info") as string);
   if (!user) {
     toast.error("Your data has not been saved");
     return null;
   }
 
+  const formData = new FormData();
+
+  // Convert Base64 to Blob if attachments are provided
+  if (attachments) {
+    const contentType = "image/jpeg"; // Adjust the content type as needed
+    const blob = base64ToBlob(attachments, contentType);
+    formData.append("image", blob, "profile-picture.jpg"); // Adjust file name as needed
+    // } else {
+    //   toast.error("No attachment provided");
+    //   return null;
+  }
+
+  // Add other fields to the FormData
+  formData.append("name", data.username);
+  formData.append("email", data.email);
+  formData.append("phone_number", data.phone);
+  if (user.is_trader === 1) {
+    formData.append("company_name", data.companyname);
+  }
+  formData.append("user_type", user.is_trader === 1 ? "trader" : "client");
+
   try {
     const { data: res_data } = await axios.post(
-      process.env.BACKEND__BASE_URL + "/user/update-profile",
-      {
-        name: data.username,
-        email: data.email,
-        phone_number: data.phone,
-        name_company: data.companyname,
-        user_type: user.is_trader === 1 ? "trader" : "client",
-      },
+      `${process.env.BACKEND__BASE_URL}/user/update-profile`,
+      formData,
       {
         withCredentials: true,
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // 'Content-Type': 'multipart/form-data', // Axios will set this automatically
         },
       },
     );
@@ -68,8 +82,25 @@ export const update_user_data = async ({ data }: UpdateUserFormData) => {
     toast.error("Your data has not been saved");
     return null;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     toast.error("Your data has not been saved");
     return null;
   }
 };
+// Function to convert Base64 string to Blob
+function base64ToBlob(base64: string, contentType = "", sliceSize = 512): Blob {
+  const byteCharacters = atob(base64.split(",")[1]);
+  const byteArrays = [];
+
+  for (let offset = 0; offset < byteCharacters.length; offset += sliceSize) {
+    const slice = byteCharacters.slice(offset, offset + sliceSize);
+    const byteNumbers = new Array(slice.length);
+    for (let i = 0; i < slice.length; i++) {
+      byteNumbers[i] = slice.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    byteArrays.push(byteArray);
+  }
+
+  return new Blob(byteArrays, { type: contentType });
+}

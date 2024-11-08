@@ -24,7 +24,17 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
     >
       {items
         .filter((item) => {
-          if (item.title !== "verify your account") {
+          if (
+            item.title !== "Bundles" &&
+            item.title !== "my ads" &&
+            item.title !== "verify your account"
+          ) {
+            return item;
+          }
+          if (
+            userData?.is_trader === 1 &&
+            (item.title === "Bundles" || item.title === "my ads")
+          ) {
             return item;
           }
 

@@ -12,7 +12,7 @@ export const onSubmitResetPassword = async (
     const { data: res_data } = await axios.post(
       process.env.BACKEND__BASE_URL + "/user/password/reset",
       {
-        phone_number: phone,
+        phone_number: "+2" + phone,
         password: data.password,
         password_confirmation: data.password_confirmation,
       },

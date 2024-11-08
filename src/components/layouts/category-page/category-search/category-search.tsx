@@ -17,6 +17,7 @@ import { CategoryItemType } from "../../home";
 export const CategorySearch = ({ id }: { id: string | undefined }) => {
   const { t } = useTranslation();
   const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
+  console.log(filter_schema);
 
   // Query Categories
   const { data, status, fetchNextPage, isFetchingNextPage, isRefetching } =

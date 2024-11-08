@@ -12,7 +12,7 @@ export const onSubmitForgetPassword = async (
     const { data: res_data } = await axios.post<ForgetPasswordResType>(
       process.env.BACKEND__BASE_URL + "/user/password-send-otp",
       {
-        phone_number: data.phone,
+        phone_number: "+2" + data.phone,
       },
       {
         headers: {

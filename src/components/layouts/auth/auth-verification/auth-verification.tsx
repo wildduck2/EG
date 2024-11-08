@@ -39,7 +39,7 @@ export const AuthVerification = ({
   const { t } = useTranslation();
   return (
     <div className="h-screen w-full md:p-12 flex relative">
-      <div className="flex flex-col items-center gap-3 justify-center mx-auto border h-fit place-self-center px-32 py-12 rounded-lg">
+      <div className="flex flex-col items-center gap-3 justify-center mx-auto border h-fit place-self-center px-4 lg:px-32 py-12 rounded-lg">
         <div className="flex flex-col gap-2 items-center">
           <verification_icons.email className="w-[340px] h-fit" />
           <div className="otpverification__header__title">
@@ -63,7 +63,7 @@ export const AuthVerification = ({
             onSubmit(otp);
           }}
         >
-          <div className="otpverification__content">
+          <div className="otpverification__content" dir="ltr">
             <InputOTP
               maxLength={6}
               required

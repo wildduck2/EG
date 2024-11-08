@@ -8,7 +8,7 @@ export async function get_banner_swiper(): Promise<
   try {
     const { data: res_data } = await axios.get<
       Awaited<GetBannerSwiperReq<CategoryItemType>>
-    >(process.env.BACKEND__BASE_URL + "/client/banners", {
+    >(process.env.BACKEND__BASE_URL + "/client/webfirstbanners", {
       headers: {
         "Content-Type": "application/json",
       },

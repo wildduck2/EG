@@ -12,6 +12,9 @@ export const CustomerServiceForm = () => {
           icon={{
             icon: Phone,
           }}
+          onClick={() => {
+            window.open(`tel:${"+966500000000"}`, "_blank");
+          }}
         >
           اتصل بنا
         </Button>
@@ -21,6 +24,9 @@ export const CustomerServiceForm = () => {
           icon={{
             icon: FaWhatsapp as LucideIcon,
           }}
+          onClick={() => {
+            window.open(`https://wa.me/${"+966500000000"}`, "_blank");
+          }}
         >
           تواصل عبر الواتساب
         </Button>
@@ -29,6 +35,9 @@ export const CustomerServiceForm = () => {
           className=" h-[50px] [&_svg]:w-5 [&_svg]:h-5"
           icon={{
             icon: MessageSquare,
+          }}
+          onClick={() => {
+            window.open(`https://wa.me/${"+966500000000"}`, "_blank");
           }}
         >
           ارسال رسالة

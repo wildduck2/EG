@@ -1,8 +1,4 @@
 # TODOs for 03th Nov 2024
 
-- [*] set the Sele button to get me to the my account page (my-ads) section
-- [*] make the branch routing
-  - [*] branch one.
-  - [*] branch two.
-  - [*] branch three.
-  - [*] branch four.
+- [ ] swiper make in between 20.
+- [ ] make the bannerrs to be a link forward to another place with the href.

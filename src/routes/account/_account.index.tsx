@@ -6,7 +6,6 @@ export const Route = createFileRoute("/account/_account/")({
   component: () => {
     return (
       <div>
-        <Header />
         <SettingsLayout></SettingsLayout>
       </div>
     );

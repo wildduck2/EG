@@ -1,7 +1,7 @@
-import { redirect, UseNavigateResult } from "@tanstack/react-router";
+import { UseNavigateResult } from "@tanstack/react-router";
 import axios from "axios";
 import { toast } from "sonner";
-import { ReqResponseType, User } from "../../home";
+import { User } from "../../home";
 import { VerificationResType } from "./auth-verification.types";
 
 export const onSubmitVerification = async (
@@ -19,7 +19,11 @@ export const onSubmitVerification = async (
     const { data: res_data } = await axios.post<VerificationResType>(
       process.env.BACKEND__BASE_URL! + path,
       {
-        phone_number: user ? user.phone_number : phone,
+        phone_number: phone
+          ? phone.toString().startsWith("+")
+            ? phone
+            : `+2${phone}`
+          : user.phone_number,
         otp: data.otp,
         code: data.otp,
       },

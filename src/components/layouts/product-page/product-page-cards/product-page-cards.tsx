@@ -16,8 +16,10 @@ import { map } from "@/assets";
 import { data as Data } from "@/constants";
 import { ProductPageCardsProps } from "./product-page-cards.types";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
-export const ProductPageCards = ({ data }: ProductPageCardsProps) => {
+export const ProductPageCards = ({ data, category }: ProductPageCardsProps) => {
   const { t } = useTranslation();
 
   const products = t("product");
@@ -71,32 +73,58 @@ export const ProductPageCards = ({ data }: ProductPageCardsProps) => {
           ></iframe>
         </CardContent>
       </Card>
-      <ProductPageCardSwiper />
+      <ProductPageCardSwiper category={category} />
     </div>
   );
 };
 
-export const ProductPageCardSwiper = () => {
+export const ProductPageCardSwiper = ({ category }: { category: string }) => {
+  console.log(category);
   // Query Special Offers
   const { data, status } = useQuery({
     queryKey: ["specialOffers"],
-    queryFn: get_special_offers,
+    queryFn: async () => {
+      const { data } = await axios.post(
+        process.env.BACKEND__BASE_URL + "/client/ads/getAdsByParameters",
+        {
+          categoryId: category,
+          page: 1,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            getContentType: "application/json",
+          },
+        },
+      );
+
+      if (!data.success) {
+        toast.error("failed to get related ads");
+        return null;
+      }
+
+      return data.data;
+    },
   });
+  const { t } = useTranslation();
 
   if (status === "pending") {
     return <SpecialOffersSkeleton />;
   }
 
   return (
-    <CustomCarousel showIndicators={false}>
-      {data?.map((item, idx) => (
-        <CarouselItem
-          className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3"
-          key={idx}
-        >
-          <AdItemCard {...item} />
-        </CarouselItem>
-      ))}
-    </CustomCarousel>
+    <div className="flex flex-col mt-4">
+      <h2 className="text-2xl font-semibold">{t("related_ads")}</h2>
+      <CustomCarousel showIndicators={false}>
+        {data?.map((item, idx) => (
+          <CarouselItem
+            className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3"
+            key={idx}
+          >
+            <AdItemCard {...item} />
+          </CarouselItem>
+        ))}
+      </CustomCarousel>
+    </div>
   );
 };

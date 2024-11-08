@@ -7,6 +7,7 @@ import { user_add_ad } from "./user-add-ad/user-add-ad.lib";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui";
 import { queryClient } from "@/main";
+import { toast } from "sonner";
 
 export const UserAds = () => {
   const { t } = useTranslation();
@@ -51,9 +52,9 @@ export const UserAds = () => {
                 attachment: attachments,
               },
             });
-            console.log(res);
 
             if (res?.success) {
+              toast.success("الاعلان تحت المراجعه");
               queryClient.setQueryData<{
                 pages: { ads: ProductType[]; pagination: paginationType }[];
                 pageParams: any[];

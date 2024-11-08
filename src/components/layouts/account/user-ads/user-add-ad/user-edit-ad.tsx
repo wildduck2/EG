@@ -84,7 +84,7 @@ const default_values: AddAdFormType = {
   category: "",
   subcategory: "",
   brand_country: "",
-  third_branch: "",
+  third_branch: -1,
   region: "",
   governorate: "",
 };
@@ -151,7 +151,7 @@ export const UserEditdAd = ({
             loading: formState.isSubmitting,
             children: (
               <Button variant="default" type="submit">
-                {t("submit")}
+                {default_input?.title || t("add_ad")}
               </Button>
             ),
           },
@@ -171,13 +171,15 @@ export const UserEditdAd = ({
           ),
         }}
         content={{
-          // dir: "rtl",
+          dir: i18n.dir(),
+          side: i18n.dir() === "ltr" ? "right" : "left",
+
           className:
             "flex flex-col gap-4 sm:max-w-[650px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full  pb-2",
           children: (
             <ScrollArea className="flex flex-col items-start w-full h-full space-y-4">
               <form className="w-full flex flex-col space-y-2 p-2 mt-4 pr-4">
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <div className="flex flex-col w-full">
                     <UploadAdPictures
                       attachments={attachments}
@@ -203,7 +205,29 @@ export const UserEditdAd = ({
                     }}
                   />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
+                  <FormInput
+                    className="w-full"
+                    error={{
+                      inputError: formState.errors.description?.message,
+                    }}
+                    input_label={{
+                      children: t("description"),
+                      className: "text-sm flex",
+                    }}
+                  >
+                    <Textarea
+                      className={cn(
+                        formState.errors.description?.types &&
+                          "border-red-400 bg-red-100 ring-red-400",
+                      )}
+                      placeholder={t("add_description")}
+                      rows={3}
+                      {...register("description")}
+                    />
+                  </FormInput>
+                </div>
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <FormInput
                     className="w-full"
                     register={register("price")}
@@ -219,24 +243,26 @@ export const UserEditdAd = ({
                       className: "text-sm flex",
                     }}
                   />
-                  <FormInput
-                    className="w-full"
-                    register={register("address")}
-                    error={{
-                      inputError: formState.errors.address?.message,
-                    }}
-                    input={{
-                      placeholder: t("add_address"),
-                      type: "text",
-                    }}
-                    input_label={{
-                      children: t("address"),
-                      className: "text-sm flex",
-                    }}
-                  />
+                  {
+                    // <FormInput
+                    //   className="w-full"
+                    //   register={register("address")}
+                    //   error={{
+                    //     inputError: formState.errors.address?.message,
+                    //   }}
+                    //   input={{
+                    //     placeholder: t("add_address"),
+                    //     type: "text",
+                    //   }}
+                    //   input_label={{
+                    //     children: t("address"),
+                    //     className: "text-sm flex",
+                    //   }}
+                    // />
+                  }
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <FormInput
                     className="w-full"
                     register={register("status")}
@@ -278,96 +304,37 @@ export const UserEditdAd = ({
                       </div>
                     </RadioGroup>
                   </FormInput>
-
-                  <FormInput
-                    className="w-full"
-                    register={register("status")}
-                    error={{
-                      inputError: formState.errors.status?.message,
-                    }}
-                    input_label={{
-                      children: t("status"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <RadioGroup
-                      defaultValue="used"
-                      {...register("status")}
-                      onValueChange={(value) => {
-                        setValue("status", value as "new" | "used");
-                      }}
-                      className="flex gap-8 h-[40px]"
-                    >
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.status?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="new" id="r1" />
-                        <Label htmlFor="r1">{t("new")}</Label>
-                      </div>
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.status?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="used" id="r2" />
-                        <Label htmlFor="r2">{t("used")}</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormInput>
-                </div>
-                <div className="flex gap-4">
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError: formState.errors.description?.message,
-                    }}
-                    input_label={{
-                      children: t("description"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Textarea
-                      className={cn(
-                        formState.errors.description?.types &&
-                          "border-red-400 bg-red-100 ring-red-400",
-                      )}
-                      placeholder={t("add_description")}
-                      rows={3}
-                      {...register("description")}
-                    />
-                  </FormInput>
                 </div>
 
-                <div className="flex gap-4">
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError: formState.errors.note?.message,
-                    }}
-                    input_label={{
-                      children: t("note"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Textarea
-                      className={cn(
-                        formState.errors.note?.types &&
-                          "border-red-400 bg-red-100 ring-red-400",
-                      )}
-                      placeholder={t("add_note")}
-                      rows={3}
-                      {...register("note")}
-                    />
-                  </FormInput>
-                </div>
+                {
+                  //             <div className="flex gap-4" dir={i18n.dir()}>
+                  //   <FormInput
+                  //     className="w-full"
+                  //     error={{
+                  //       inputError: formState.errors.note?.message,
+                  //     }}
+                  //     input_label={{
+                  //       children: t("note"),
+                  //       className: "text-sm flex",
+                  //     }}
+                  //   >
+                  //     <Textarea
+                  //       className={cn(
+                  //         formState.errors.note?.types &&
+                  //           "border-red-400 bg-red-100 ring-red-400",
+                  //       )}
+                  //       placeholder={t("add_note")}
+                  //       rows={3}
+                  //       {...register("note")}
+                  //     />
+                  //   </FormInput>
+                  // </div>
+                }
 
-                <div className="flex items-center gap-2 w-full">
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
                   <FilterSlector
                     filter_data={filter_data.governorates}
                     value={{ id: +watch("governorate") } as any}
@@ -380,12 +347,17 @@ export const UserEditdAd = ({
                     filter_data={filter_data.regions}
                     value={{ id: +watch("region") } as any}
                     name={t("regions")}
+                    id={"governorate_id"}
+                    selected={+watch("governorate")}
                     setValue={(item: FilterSchema["regions"]) => {
                       setValue("region", item?.id.toString() ?? "");
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-2 w-full">
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
                   <FilterSlector
                     filter_data={filter_data.categories}
                     value={
@@ -406,39 +378,52 @@ export const UserEditdAd = ({
                       } as any
                     }
                     name={t("subcategories")}
+                    id={"category_id"}
+                    selected={+watch("category")}
                     disabled={!watch("category") ? true : false}
                     setValue={(item: FilterSchema["subcategories"]) => {
                       setValue("subcategory", item?.id.toString() ?? "");
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-2 w-full">
-                  <FilterSlector
-                    filter_data={filter_data.brand_countries}
-                    name={t("brand_countries")}
-                    disabled={!watch("subcategory") ? true : false}
-                    value={
-                      {
-                        id: +watch("brand_country"),
-                      } as any
-                    }
-                    setValue={(item: FilterSchema["brand_countries"]) => {
-                      setValue("brand_country", item?.id.toString() ?? "");
-                    }}
-                  />
-                  <FilterSlector
-                    disabled={!watch("brand_country") ? true : false}
-                    filter_data={filter_data.third_branches}
-                    value={
-                      {
-                        id: +watch("third_branch"),
-                      } as any
-                    }
-                    name={t("third_branches")}
-                    setValue={(item: FilterSchema["third_branches"]) => {
-                      setValue("third_branch", item?.id.toString() ?? "");
-                    }}
-                  />
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
+                  {+watch("subcategory") ? (
+                    <FilterSlector
+                      filter_data={filter_data.brand_countries}
+                      name={t("brand_countries")}
+                      disabled={!watch("subcategory") ? true : false}
+                      value={
+                        {
+                          id: +watch("brand_country"),
+                        } as any
+                      }
+                      id={"subcategory_id"}
+                      selected={+watch("subcategory")}
+                      setValue={(item: FilterSchema["brand_countries"]) => {
+                        setValue("brand_country", item?.id.toString() ?? "");
+                      }}
+                    />
+                  ) : null}
+                  {+watch("third_branch") ? (
+                    <FilterSlector
+                      disabled={!watch("brand_country") ? true : false}
+                      filter_data={filter_data.third_branches}
+                      value={
+                        {
+                          id: +watch("third_branch"),
+                        } as any
+                      }
+                      id={"brandcountry_id"}
+                      selected={+watch("third_branch")}
+                      name={t("third_branches")}
+                      setValue={(item: FilterSchema["third_branches"]) => {
+                        setValue("third_branch", item?.id.toString() ?? "");
+                      }}
+                    />
+                  ) : null}
                 </div>
                 <div className="flex items-center gap-2 w-full">
                   <FormInput
@@ -488,6 +473,7 @@ const UploadAdPictures = ({
   setAttachments,
   errors,
 }: UploadAdInput) => {
+  const { t, i18n } = useTranslation();
   return (
     <div className="relative">
       <div className={cn("absolute bottom-6 w-full")}>
@@ -498,9 +484,9 @@ const UploadAdPictures = ({
                 size={"sm"}
                 type="button"
                 className={cn(
-                  "absolute right-0 gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
+                  "absolute gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
                   [...(attachments ?? [])].length > 0
-                    ? "bottom-[1.5rem] opacity-100 pointer-events-all z-50"
+                    ? `bottom-[1.5rem] opacity-100 pointer-events-all z-50 ${i18n.dir() === "rtl" ? " left-0" : "-right-0"}`
                     : "-bottom-4 opacity-0 pointer-events-none",
                 )}
                 icon={{
@@ -571,7 +557,7 @@ const UploadAdPictures = ({
           inputError: errors.attachment?.message as string,
         }}
         input_label={{
-          children: "attachment",
+          children: t("attachments"),
           className: "text-sm flex",
         }}
       >
@@ -606,7 +592,7 @@ const UploadAdPictures = ({
             )}
             icon={{ icon: UploadIcon, className: "h-4 w-4" }}
           >
-            Upload Ad Pictures
+            {t("upload_pictures")}
           </Button>
         </div>
       </FormInput>

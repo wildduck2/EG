@@ -8,7 +8,7 @@ export const CategoriesWrapper = () => {
   const route = useNavigate();
 
   // Translate Api
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   // Query Categories
   const { data, status } = useQuery({
@@ -50,7 +50,7 @@ export const CategoriesWrapper = () => {
                   className="rounded full size-[250px]"
                 />
                 <h4 className="text-center mt-0 font-semibold text-md transition-colors duration-300 ease-in-out group-hover:text-[#ffc223]">
-                  {e.name}
+                  {i18n.language === "en" ? e.name_en : e.name}
                 </h4>
               </Link>
             ))}

@@ -25,7 +25,7 @@ export const CategorySwiper = () => {
 
   if (status === "success" && data) {
     return (
-      <div className="py-4 lg:py-12">
+      <div className="py-4 lg:py-4">
         <div>
           <div className="flex justify-start items-center mb-7">
             <div className="relative z-[2]">
@@ -38,7 +38,7 @@ export const CategorySwiper = () => {
           </div>
           <Carousel
             opts={{
-              direction: "ltr",
+              direction: i18n.language === "en" ? "ltr" : "rtl",
               align: "start",
             }}
             plugins={[Autoplay({ delay: 2000 })]}
@@ -50,7 +50,7 @@ export const CategorySwiper = () => {
                     route({
                       to: `/categories/$category`,
                       params: { category: e.id.toString() },
-                      state: e as any,
+                      state: { ...e, branch: 1 } as any,
                     });
                   }}
                   className="basis-1/3 md:basis-1/5 xl:basis-[14%] transition-all"

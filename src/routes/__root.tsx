@@ -10,9 +10,9 @@ import { useTranslation } from "react-i18next";
 import { getUser } from "@/components/layouts/account/user-profile";
 
 export const Route = createRootRoute({
-  // beforeLoad: async () => {
-  //   await getUser();
-  // },
+  beforeLoad: async () => {
+    await getUser();
+  },
   component: () => {
     const { i18n } = useTranslation();
 

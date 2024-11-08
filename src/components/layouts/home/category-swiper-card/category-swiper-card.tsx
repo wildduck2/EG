@@ -2,6 +2,7 @@ import { Bg } from "@/assets";
 import React from "react";
 import { CategoryItemType } from "./category-swiper-card.types";
 import { Link } from "@tanstack/react-router";
+import { useTranslation } from "react-i18next";
 
 export const CategorySwiperItem: React.FC<CategoryItemType> = ({
   id,
@@ -15,6 +16,7 @@ export const CategorySwiperItem: React.FC<CategoryItemType> = ({
   title_price,
   multi_feature_hd_id,
 }) => {
+  const { t, i18n } = useTranslation();
   return (
     <Link className="flex flex-col justify-center items-center h-40 w-full rounded-lg">
       <div className="relative rounded-full w-[120px] h-[100px] flex justify-center items-center group">
@@ -30,7 +32,7 @@ export const CategorySwiperItem: React.FC<CategoryItemType> = ({
         />
       </div>
       <h4 className="text-center mt-0 font-semibold text-sm transition-colors duration-300 ease-in-out group-hover:text-[#ffc223]">
-        {name}
+        {i18n.language === "en" ? name_en : name}
       </h4>
     </Link>
   );

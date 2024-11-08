@@ -5,6 +5,8 @@ import {
   CardPreviewHeader,
   CardPreviewTitle,
   Button,
+  CustomCarousel,
+  CarouselItem,
 } from "@/components/ui";
 import { AdGridSectionProps } from "./ad-grid-section.types";
 import { AdItemCard } from "../ad-item-card";
@@ -22,8 +24,8 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
   const { t, i18n } = useTranslation();
   const route = useNavigate();
   return (
-    <CardPreview>
-      <CardPreviewHeader>
+    <>
+      <CardPreviewHeader className="!pb-0">
         <CardPreviewTitle>
           {i18n.language === "en" ? category_name_en : category_name}
         </CardPreviewTitle>
@@ -36,19 +38,27 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
               params: {
                 id: category_id.toString(),
               },
-              state: { name: category_name, name_en: category_name_en } as any,
+              state: {
+                name: category_name,
+                name_en: category_name_en,
+                branch: 1,
+              } as any,
             });
           }}
         >
           {buttonContent}
         </Button>
       </CardPreviewHeader>
-      <CardPreviewContent>
-        {ads.map((item, index) => {
-          return <AdItemCard {...(item as any)} key={index} />;
+      <CustomCarousel className="min-h-[447px] w-full">
+        {ads.slice(0, 20).map((item, index) => {
+          return (
+            <CarouselItem className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+              <AdItemCard {...(item as any)} key={index} />
+            </CarouselItem>
+          );
         })}
-      </CardPreviewContent>
-    </CardPreview>
+      </CustomCarousel>
+    </>
   );
 };
 

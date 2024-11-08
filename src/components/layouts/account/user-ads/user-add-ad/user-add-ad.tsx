@@ -59,8 +59,8 @@ export const addAdSchema = z.object({
   subcategory: z.string().nonempty("Subcategory is required"),
   brand_country: z.string().nonempty("Brand country is required"),
   third_branch: z.string().nonempty("Third branch is required"),
-  region: z.string().nonempty("Region is required"),
-  governorate: z.string().nonempty("Governorate is required"),
+  region: z.string().optional().nullish(),
+  governorate: z.string().optional().nullish(),
 });
 
 // Define the TypeScript type based on the schema
@@ -103,9 +103,7 @@ export const UserAddAd = ({
 }) => {
   const { register, watch, formState, handleSubmit, setValue, control } =
     useForm<AddAdFormType>({
-      resolver: zodResolver(addAdSchema),
       defaultValues: defaultValues,
-      criteriaMode: "all",
       mode: "all",
     });
 
@@ -135,6 +133,8 @@ export const UserAddAd = ({
           },
         }}
         header={{
+          className: "place-content-end justify-end [&_*]:text-start",
+          dir: i18n.dir(),
           head: default_input?.sheet_title || t("add_ad_title"),
           description: default_input?.sheet_desc || t("add_ad_desc"),
         }}
@@ -160,7 +160,7 @@ export const UserAddAd = ({
                 //   control._reset();
                 // }}
               >
-                {t("submit")}
+                {default_input?.title || t("add_ad")}
               </Button>
             ),
           },
@@ -187,7 +187,7 @@ export const UserAddAd = ({
           children: (
             <ScrollArea className="flex flex-col items-start w-full h-full space-y-4">
               <form className="w-full flex flex-col space-y-2 p-2 mt-4 pr-4">
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <div className="flex flex-col w-full">
                     <UploadAdPictures
                       attachments={attachments}
@@ -213,7 +213,29 @@ export const UserAddAd = ({
                     }}
                   />
                 </div>
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
+                  <FormInput
+                    className="w-full"
+                    error={{
+                      inputError: formState.errors.description?.message,
+                    }}
+                    input_label={{
+                      children: t("description"),
+                      className: "text-sm flex",
+                    }}
+                  >
+                    <Textarea
+                      className={cn(
+                        formState.errors.description?.types &&
+                          "border-red-400 bg-red-100 ring-red-400",
+                      )}
+                      placeholder={t("add_description")}
+                      rows={3}
+                      {...register("description")}
+                    />
+                  </FormInput>
+                </div>
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <FormInput
                     className="w-full"
                     register={register("price")}
@@ -229,24 +251,26 @@ export const UserAddAd = ({
                       className: "text-sm flex",
                     }}
                   />
-                  <FormInput
-                    className="w-full"
-                    register={register("address")}
-                    error={{
-                      inputError: formState.errors.address?.message,
-                    }}
-                    input={{
-                      placeholder: t("add_address"),
-                      type: "text",
-                    }}
-                    input_label={{
-                      children: t("address"),
-                      className: "text-sm flex",
-                    }}
-                  />
+                  {
+                    // <FormInput
+                    //   className="w-full"
+                    //   register={register("address")}
+                    //   error={{
+                    //     inputError: formState.errors.address?.message,
+                    //   }}
+                    //   input={{
+                    //     placeholder: t("add_address"),
+                    //     type: "text",
+                    //   }}
+                    //   input_label={{
+                    //     children: t("address"),
+                    //     className: "text-sm flex",
+                    //   }}
+                    // />
+                  }
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4" dir={i18n.dir()}>
                   <FormInput
                     className="w-full"
                     register={register("status")}
@@ -288,96 +312,12 @@ export const UserAddAd = ({
                       </div>
                     </RadioGroup>
                   </FormInput>
-
-                  <FormInput
-                    className="w-full"
-                    register={register("status")}
-                    error={{
-                      inputError: formState.errors.status?.message,
-                    }}
-                    input_label={{
-                      children: t("status"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <RadioGroup
-                      defaultValue="used"
-                      {...register("status")}
-                      onValueChange={(value) => {
-                        setValue("status", value as "new" | "used");
-                      }}
-                      className="flex gap-8 h-[40px]"
-                    >
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.status?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="new" id="r1" />
-                        <Label htmlFor="r1">{t("new")}</Label>
-                      </div>
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.status?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="used" id="r2" />
-                        <Label htmlFor="r2">{t("used")}</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormInput>
-                </div>
-                <div className="flex gap-4">
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError: formState.errors.description?.message,
-                    }}
-                    input_label={{
-                      children: t("description"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Textarea
-                      className={cn(
-                        formState.errors.description?.types &&
-                          "border-red-400 bg-red-100 ring-red-400",
-                      )}
-                      placeholder={t("add_description")}
-                      rows={3}
-                      {...register("description")}
-                    />
-                  </FormInput>
                 </div>
 
-                <div className="flex gap-4">
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError: formState.errors.note?.message,
-                    }}
-                    input_label={{
-                      children: t("note"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Textarea
-                      className={cn(
-                        formState.errors.note?.types &&
-                          "border-red-400 bg-red-100 ring-red-400",
-                      )}
-                      placeholder={t("add_note")}
-                      rows={3}
-                      {...register("note")}
-                    />
-                  </FormInput>
-                </div>
-
-                <div className="flex items-center gap-2 w-full">
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
                   <FilterSlector
                     filter_data={filter_data.governorates}
                     value={{ id: +watch("governorate") } as any}
@@ -389,13 +329,18 @@ export const UserAddAd = ({
                   <FilterSlector
                     filter_data={filter_data.regions}
                     value={{ id: +watch("region") } as any}
+                    id={"governorate_id"}
+                    selected={+watch("governorate")}
                     name={t("regions")}
                     setValue={(item: FilterSchema["regions"]) => {
                       setValue("region", item?.id.toString() ?? "");
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-2 w-full">
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
                   <FilterSlector
                     filter_data={filter_data.categories}
                     value={
@@ -408,6 +353,7 @@ export const UserAddAd = ({
                       setValue("category", item?.id.toString() ?? "");
                     }}
                   />
+
                   <FilterSlector
                     filter_data={filter_data.subcategories}
                     value={
@@ -415,6 +361,8 @@ export const UserAddAd = ({
                         id: +watch("subcategory"),
                       } as any
                     }
+                    id={"category_id"}
+                    selected={+watch("category")}
                     name={t("subcategories")}
                     disabled={!watch("category") ? true : false}
                     setValue={(item: FilterSchema["subcategories"]) => {
@@ -422,35 +370,49 @@ export const UserAddAd = ({
                     }}
                   />
                 </div>
-                <div className="flex items-center gap-2 w-full">
-                  <FilterSlector
-                    filter_data={filter_data.brand_countries}
-                    name={t("brand_countries")}
-                    disabled={!watch("subcategory") ? true : false}
-                    value={
-                      {
-                        id: +watch("brand_country"),
-                      } as any
-                    }
-                    setValue={(item: FilterSchema["brand_countries"]) => {
-                      setValue("brand_country", item?.id.toString() ?? "");
-                    }}
-                  />
-                  <FilterSlector
-                    disabled={!watch("brand_country") ? true : false}
-                    filter_data={filter_data.third_branches}
-                    value={
-                      {
-                        id: +watch("third_branch"),
-                      } as any
-                    }
-                    name={t("third_branches")}
-                    setValue={(item: FilterSchema["third_branches"]) => {
-                      setValue("third_branch", item?.id.toString() ?? "");
-                    }}
-                  />
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
+                  {+watch("subcategory") ? (
+                    <FilterSlector
+                      filter_data={filter_data.brand_countries}
+                      name={t("brand_countries")}
+                      disabled={!watch("subcategory") ? true : false}
+                      value={
+                        {
+                          id: +watch("brand_country"),
+                        } as any
+                      }
+                      id={"subcategory_id"}
+                      selected={+watch("subcategory")}
+                      setValue={(item: FilterSchema["brand_countries"]) => {
+                        setValue("brand_country", item?.id.toString() ?? "");
+                      }}
+                    />
+                  ) : null}
+                  {+watch("brand_country") ? (
+                    <FilterSlector
+                      disabled={!watch("brand_country") ? true : false}
+                      filter_data={filter_data.third_branches}
+                      value={
+                        {
+                          id: +watch("third_branch"),
+                        } as any
+                      }
+                      id={"brandcountry_id"}
+                      selected={+watch("brand_country")}
+                      name={t("third_branches")}
+                      setValue={(item: FilterSchema["third_branches"]) => {
+                        setValue("third_branch", item?.id.toString() ?? "");
+                      }}
+                    />
+                  ) : null}
                 </div>
-                <div className="flex items-center gap-2 w-full">
+                <div
+                  className="flex items-center gap-2 w-full"
+                  dir={i18n.dir()}
+                >
                   <FormInput
                     className="w-full"
                     error={{
@@ -469,6 +431,28 @@ export const UserAddAd = ({
                       errors={formState.errors}
                       value={watch("location")}
                       setValue={setValue}
+                    />
+                  </FormInput>
+                </div>
+                <div className="flex gap-4" dir={i18n.dir()}>
+                  <FormInput
+                    className="w-full"
+                    error={{
+                      inputError: formState.errors.note?.message,
+                    }}
+                    input_label={{
+                      children: t("note"),
+                      className: "text-sm flex",
+                    }}
+                  >
+                    <Textarea
+                      className={cn(
+                        formState.errors.note?.types &&
+                          "border-red-400 bg-red-100 ring-red-400",
+                      )}
+                      placeholder={t("add_note")}
+                      rows={3}
+                      {...register("note")}
                     />
                   </FormInput>
                 </div>
@@ -595,11 +579,19 @@ export const UploadAdPictures = ({
             )}
             {...register("attachment")}
             onChange={(e) => {
-              if (e.target.files && e.target.files[0].size > 5 * 1024 * 1024) {
-                return toast.error("File size should be less than 5MB");
+              if (e.target.files) {
+                const files = Array.from(e.target.files);
+                const exceededFiles = files.filter(
+                  (file) => file.size > 5 * 1024 * 1024,
+                );
+
+                if (exceededFiles.length > 0) {
+                  return toast.error("حجم الملف يجب أن يكون أقل من 5MB"); // Arabic message
+                }
+
+                setAttachments((old) => [...old, ...files]);
+                setValue("attachment", e.target.files);
               }
-              setAttachments((old) => [...old, ...Array.from(e.target.files)]);
-              setValue("attachment", e.target.files);
             }}
           />
 

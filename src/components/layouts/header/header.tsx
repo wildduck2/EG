@@ -16,11 +16,14 @@ import {
   AvatarImage,
   DropdownMenu,
   DropdownMenuTrigger,
-  DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuItem,
   Input,
+  Popover,
+  DropdownMenuContent,
+  PopoverTrigger,
+  PopoverContent,
 } from "@/components/ui";
 import { Link, useLocation, useNavigate } from "@tanstack/react-router";
 import { Logo } from "@/assets";
@@ -31,6 +34,9 @@ import { useAtom } from "jotai";
 import { signoutAsync, user } from "../auth";
 import { MapPin, Search } from "lucide-react";
 import { Category } from "../home";
+import { filter, FilterSchema, FilterSlector } from "../category-page";
+import { filterData } from "@/context";
+import { queryClient } from "@/main";
 
 export const Header = () => {
   const location = useLocation();
@@ -87,37 +93,84 @@ export const Header = () => {
               )}
             >
               <div className="flex item-center gap-4 w-full">
-                <Button
-                  variant={"outline"}
-                  className="w-[90px] rounded-lg"
-                  icon={{ icon: MapPin }}
-                  onClick={() => route({ to: "/categories/search" })}
-                >
-                  {t("egypt")}
-                </Button>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className="w-[90px] rounded-lg font-bold"
+                      icon={{ icon: MapPin }}
+                    >
+                      {t("egypt")}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-96 p-4">
+                    <SGHeader />
+                  </PopoverContent>
+                </Popover>
                 <SearchInput
                   //@ts-ignore
                   variant="default"
                   size="default"
-                  className="lg:max-w-[700px] md:w-full !w-full relative"
+                  className="!max-w-full md:w-full !w-full relative"
                   searchPlaceholder={t("search")}
                   searchIcon={true}
                   dir={i18n.dir()}
                 />
               </div>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
+              <div className="flex  sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
+                <Button
+                  title={i18n.language === "en" ? "عربي" : "English"}
+                  variant={"outline"}
+                  className="w-full md:w-[100px] font-bold"
+                  onClick={() => {
+                    document.body.classList.toggle("rtl");
+                    localStorage.setItem(
+                      "i18nextLng",
+                      i18n.language === "en" ? "ar" : "en",
+                    );
+                    i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+                  }}
+                />
+                {!userData && (
+                  <Button
+                    title={t("login")}
+                    variant={"outline"}
+                    className="w-full md:w-[130px] font-bold"
+                    onClick={() => navigate({ to: "/auth/signin" })}
+                  />
+                )}
+                <Button
+                  title={t("sale")}
+                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px] font-bold"
+                  onClick={() => {
+                    navigate({ to: "/account" });
+                    localStorage.setItem("tab", "my ads");
+                  }}
+                />
+                <Button
+                  title={t("searchfortrader")}
+                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px] font-bold"
+                  onClick={() => {
+                    navigate({ to: "/account/trader-profiles" });
+                  }}
+                />
                 {userData && (
-                  <Button className="w-fit p-0 rounded-full" variant={"ghost"}>
+                  <Button
+                    className="size-[60px] p-0 rounded-full overflow-hidden"
+                    variant={"outline"}
+                  >
                     <DropdownMenu>
                       <DropdownMenuTrigger>
-                        <Avatar>
-                          <AvatarImage
-                            className="object-cover"
-                            src="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/duckui%20(1).png"
-                            alt="@duckui"
-                          />
-                          <AvatarFallback>{userData.name}</AvatarFallback>
-                        </Avatar>
+                        <img
+                          className="object-cover w-16 h-12 rounded-full"
+                          src={
+                            process.env.BACKEND__BASE_UPLOAD_URL +
+                              "/" +
+                              userData?.image ||
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLMI5YxZE03Vnj-s-sth2_JxlPd30Zy7yEGg&s"
+                          }
+                          alt={userData?.name}
+                        />
                       </DropdownMenuTrigger>
                       <DropdownMenuContent>
                         <DropdownMenuLabel>{t("my_account")}</DropdownMenuLabel>
@@ -141,45 +194,15 @@ export const Header = () => {
                     </DropdownMenu>
                   </Button>
                 )}
-                <Button
-                  title={i18n.language === "en" ? "عربي" : "English"}
-                  variant={"outline"}
-                  className="w-full md:w-[100px]"
-                  onClick={() => {
-                    document.body.classList.toggle("rtl");
-                    localStorage.setItem(
-                      "i18nextLng",
-                      i18n.language === "en" ? "ar" : "en",
-                    );
-                    i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
-                  }}
-                />
-                {!userData && (
-                  <Button
-                    title={t("login")}
-                    variant={"outline"}
-                    className="w-full md:w-[130px]"
-                    onClick={() => navigate({ to: "/auth/signin" })}
-                  />
-                )}
-                <Button
-                  title={t("sale")}
-                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px]"
-                  onClick={() => {
-                    navigate({ to: "/account" });
-                    localStorage.setItem("tab", "my ads");
-                  }}
-                />
               </div>
             </nav>
-            <Separator />
           </div>
           <div className="flex items-center justify-center place-self-center w-full">
             <NavGroup<true>
               position="top"
               nav={{
                 className:
-                  "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit [&_button]:justify-center [&_ul]:flex-wrap w-full",
+                  "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit [&_button]:justify-center [&_ul]:flex-wrap w-full [&_button]:font-bold",
                 group: [10],
                 router: {},
                 pathname: location.pathname,
@@ -190,7 +213,7 @@ export const Header = () => {
                   categories.length > 0
                     ? i18n.language === "en"
                       ? [
-                          ...categories.splice(0, 6).map((item) => ({
+                          ...categories.splice(0, 9).map((item) => ({
                             title: item.name_en,
                             route: `/categories/${item.id}`,
                             state: { ...item, branch: 1 },
@@ -213,13 +236,18 @@ export const Header = () => {
                             children:
                               i18n.language === "en" ? "More" : "المزيد",
                           },
-                          ...categories.splice(0, 6).map((item) => ({
-                            title: item.name_en,
-                            route: `/categories/${item.id}`,
-                            state: { ...item, branch: 1 },
-                            children:
-                              i18n.language === "en" ? item.name_en : item.name,
-                          })),
+                          ...categories
+                            .splice(0, 9)
+                            .reverse()
+                            .map((item) => ({
+                              title: item.name_en,
+                              route: `/categories/${item.id}`,
+                              state: { ...item, branch: 1 },
+                              children:
+                                i18n.language === "en"
+                                  ? item.name_en
+                                  : item.name,
+                            })),
                         ]
                     : [],
               }}
@@ -228,6 +256,65 @@ export const Header = () => {
         </div>
       </header>
     </>
+  );
+};
+
+export const SGHeader = () => {
+  const { t, i18n } = useTranslation();
+  const route = useNavigate();
+
+  const [filter_data] = useAtom(filterData);
+
+  const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
+  const [filter_data1, setFilterData] = React.useState<{
+    governates: number | null;
+    region: number | null;
+  }>({
+    region: null,
+    governates: null,
+  });
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        setFilterSchema((old) => ({ ...old, ...filter_data1 }));
+        route({
+          to: "/categories/search",
+        });
+      }}
+    >
+      <div className="flex items-center gap-2 w-full" dir={i18n.dir()}>
+        <FilterSlector
+          filter_data={filter_data.governorates}
+          value={{ id: filter_data1.governates } as any}
+          name={t("governorates")}
+          setValue={(item: FilterSchema["governorates"]) => {
+            setFilterData((old) => ({
+              ...old,
+              governates: item?.id as number,
+            }));
+          }}
+        />
+        <FilterSlector
+          filter_data={filter_data.regions}
+          value={{ id: filter_data1.region } as any}
+          name={t("regions")}
+          // id={"governorate_id"}
+          // selected={{ governorate_id: filter_data.governates }}
+          setValue={(item: FilterSchema["regions"]) => {
+            setFilterData((old) => ({
+              ...old,
+              region: item?.id as number,
+            }));
+          }}
+        />
+      </div>
+
+      <Button type="submit" className="w-full mt-4">
+        {t("search")}
+      </Button>
+    </form>
   );
 };
 
@@ -256,10 +343,7 @@ const SearchInput = () => {
       }
       <Input
         placeholder={i18n.dir() === "rtl" ? "ابحث" : "Search..."}
-        className={cn(
-          "w-full max-w-[700px]",
-          i18n.dir() === "rtl" ? "pr-8" : " pl-8",
-        )}
+        className={cn("w-full", i18n.dir() === "rtl" ? "pr-8" : " pl-8")}
       />
     </form>
   );

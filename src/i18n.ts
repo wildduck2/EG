@@ -11,6 +11,23 @@ i18n
     resources: {
       en: {
         translation: {
+          searchfortrader: "traders",
+          region: "Region",
+          joined: "Joined",
+          governorate: "Governorate",
+          subcategory: "Subcategory",
+          category: "Category",
+          searchyy: "Search for the traders or companies",
+          notrades: "There's no data related to traders.",
+          searchy: "Search",
+          tradersprofile: "Traders Profile",
+          card: "Card",
+          wallet: "Wallet",
+          pickpaymentmenthod: "Pick payment method",
+          duration: "Duration",
+          days: "Days",
+          egp: "EGP",
+          subscribe: "Subscribe",
           your_account_has_been_confirmed_successfully:
             "Your account has been confirmed successfully",
           favorite: "Favorite",
@@ -45,7 +62,7 @@ i18n
           // password_rules_special_character: "Must contain a special character (e.g. !@#$%)",
 
           get_location: "Get Location",
-          attachments: "Attachments",
+          attachments: "ad pictures",
           upload_pictures: "Upload Pictures",
 
           filter_your_search_results: "Filter Your Search Results",
@@ -75,7 +92,7 @@ i18n
           cancel: "Cancel",
           continue: "Continue",
           submit: "Submit",
-          name: "Name",
+          name: "ad Name",
           add_name: "Enter Name",
           price: "Price",
           add_price: "Enter Price",
@@ -199,6 +216,10 @@ i18n
                 children: "my ads",
               },
               {
+                title: "Bundles",
+                children: "Bundles",
+              },
+              {
                 title: "verify your account",
                 children: "verify your account",
               },
@@ -258,8 +279,15 @@ i18n
             numberstitle: "Contact us",
             followustitle: "Follow us:",
 
-            copyright: "© 2022. All rights reserved.",
+            copyright: "All rights reserved.",
           },
+          optional: "Optional",
+          email: "Your Email",
+          phone: "Your Phone number",
+          password: "Your Password",
+          passwordConfirm: "Confirm Password",
+
+          related_ads: "Related Ads",
         },
       },
       ar: {
@@ -279,8 +307,8 @@ i18n
           cancel: "إلغاء",
           continue: "متابعة",
           submit: "بحث",
-          name: "الاسم",
-          add_name: "أدخل الاسم",
+          name: "اسم الاعلان",
+          add_name: "أدخل اسم الإعلان",
           price: "السعر",
           add_price: "أدخل السعر",
           address: "العنوان",
@@ -301,10 +329,10 @@ i18n
 
           governates: "المحافظات",
           regions: "المناطق",
-          cattegories: "التصنيفات",
-          subcategories: "الفئات الفرعية",
-          brand_countries: "دول العلامة التجارية",
-          third_branches: "الفروع الثانوية",
+          cattegories: "قسم رئيسي",
+          subcategories: "القسم الفرعي",
+          brand_countries: "اقسم ذات صله",
+          third_branches: "فروع اخري",
           location: "الموقع",
           select: "اختر",
 
@@ -404,6 +432,10 @@ i18n
                 children: "إعلاناتي",
               },
               {
+                title: "Bundles",
+                children: "ميز اعلانك",
+              },
+              {
                 title: "verify your account",
                 children: "تحقق من حسابك",
               },
@@ -462,11 +494,11 @@ i18n
             subtitle: "تواصل معنا عبر",
             numberstitle: "تواصل معنا",
             followustitle: "تابعنا :",
-            copyright: "جميع الحقوق محفوظه لدي البضاعه @ 2024",
+            copyright: "جميع الحقوق محفوظه لدي تطبيق البضاعة",
           },
 
           home: "الرئيسية",
-          categories: "التصنيفات",
+          categories: "اقسام رئيسيه",
           viewMore: "اظهار المزيد",
 
           filter_your_search_results: "تصفية نتائج البحث",
@@ -480,7 +512,7 @@ i18n
           desc: "تنازلي",
 
           get_location: "احصل على موقعك",
-          attachments: "المرفقات",
+          attachments: "صور الاعلان",
           upload_pictures: "تحميل الصور",
 
           phone_input_error_too_short:
@@ -514,6 +546,29 @@ i18n
           verify_your_email: "تحقق من بريدك",
           favorite: "المفضلة",
           your_account_has_been_confirmed_successfully: "تم تأكيد حسابك بنجاح",
+          optional: "اختياري",
+          email: "البريد الالكتروني",
+          phone: "الهاتف المحمول",
+
+          password: "كلمة المرور",
+          passwordConfirm: "تأكيد كلمة المرور",
+          egp: "ج.م",
+          duration: "المدة",
+          days: "الأيام",
+          subscribe: "اشترك",
+          card: "بطاقة",
+          wallet: "محفظة",
+          pickpaymentmenthod: "اختر طريقة الدفع",
+          tradersprofile: "بحث التجار",
+          searchy: "ابحث",
+          notrades: "لا يوجد تجار",
+          searchyy: "ابحث عن تاجر او شركه",
+          region: "منطقة",
+          governorate: "محافظة",
+          subcategory: "التصنيف الفرعي",
+          category: "التصنيف الرئيسي",
+          joined: "انضم",
+          searchfortrader: "التجار",
         },
       },
     },

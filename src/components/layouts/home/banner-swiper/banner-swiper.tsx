@@ -21,13 +21,17 @@ export const HomeBannerSwiper = () => {
       <CustomCarousel showIndicators={false}>
         {data.map((item, idx) => (
           <CarouselItem key={idx}>
-            <div className="relative rounded-2xl">
+            <a
+              className="relative rounded-2xl"
+              href={item?.link}
+              target="_blank"
+            >
               <img
                 src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + item.image}
                 alt="slide1"
-                className="object-cover rounded-2xl w-full h-[400px]"
+                className="object-cover rounded-2xl w-full h-[300px]"
               />
-            </div>
+            </a>
           </CarouselItem>
         ))}
       </CustomCarousel>

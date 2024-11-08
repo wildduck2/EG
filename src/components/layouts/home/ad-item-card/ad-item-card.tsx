@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "@tanstack/react-router";
 import { AddItemCardProps, ProductType } from "./ad-item-card.types";
 import {
+  Badge,
   Button,
   Card,
   CardContent,
@@ -23,10 +24,13 @@ import {
 import { queryClient } from "@/main";
 import { paginationType } from "../../account/user-ads/user-ads.lib";
 
-export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
+export const AdItemCard: React.FC<
+  AddItemCardProps & { edit: boolean; select: boolean }
+> = ({
   edit = false,
   name,
   price,
+  select = false,
   id,
   image,
   age,
@@ -58,20 +62,35 @@ export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
   const route = useNavigate();
 
   return (
-    <Card className="hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer">
+    <Card
+      className={cn(
+        "hover:border-white border-0 transition shadow-none hover:shadow-[0px_0px_12px_2px_rgba(17,12,35,0.05)] rounded-2xl p-3 mb-4 cursor-pointer relative",
+        status === "تحت المراجعه" && "opacity-90",
+      )}
+    >
+      <Badge
+        className={cn(
+          "absolute top-8 left-8",
+          status === "تحت المراجعه" && "opacity-90",
+        )}
+      >
+        {status}
+      </Badge>
       <CardHeader
         className="p-0 relative h-[250px] overflow-hidden"
         onClick={() => {
-          route({
-            to: "/categories/$category/product/$product",
-            params: { category: `${category}`, product: `${id}` },
-            state: {
-              name: i18n.dir() == "rtl" ? name : name,
-              category:
-                i18n.dir() === "rtl" ? _category.name : _category.name_en,
-            } as any,
-          });
-          window.scrollTo(0, 0);
+          !select &&
+            route({
+              to: "/categories/product/$product",
+              params: { product: `${id}` },
+              state: {
+                category_id: _category.id,
+                name: i18n.dir() == "rtl" ? name : name,
+                category:
+                  i18n.dir() === "rtl" ? _category.name : _category.name_en,
+              } as any,
+            });
+          !select && window.scrollTo(0, 0);
         }}
       >
         <img
@@ -88,12 +107,13 @@ export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
         <div
           className="flex justify-between items-start mb-2 flex-col"
           onClick={() => {
-            route({
-              to: "/categories/$category/product/$product",
-              params: { category: `${category}`, product: `${id}` },
-              state: { name: name, category: _category.name } as any,
-            });
-            window.scrollTo(0, 0);
+            !select &&
+              route({
+                to: "/categories/product/$product",
+                params: { category: `${category}`, product: `${id}` },
+                state: { name: name, category: _category.name } as any,
+              });
+            !select && window.scrollTo(0, 0);
           }}
         >
           <h4 className="text-[14px] font-medium m-0 truncate">{name}</h4>
@@ -117,7 +137,7 @@ export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
         </div>
 
         <div className="flex gap-2">
-          {edit && (
+          {edit && !select && (
             <UserEditdAd
               defaultValues={{
                 name,
@@ -175,7 +195,7 @@ export const AdItemCard: React.FC<AddItemCardProps & { edit: boolean }> = ({
             />
           )}
 
-          {edit && <DeleteButton id={id} />}
+          {edit && !select && <DeleteButton id={id} />}
 
           {is_featured === 1 ? (
             <Button

@@ -40,11 +40,11 @@ export async function user_add_ad({ ad_data }: { ad_data: AddAdFormType }) {
         },
       },
     );
-    toast.success("Ad created successfully");
+    toast.success("الاعلان تم انشاء بنجاح");
 
     return data;
   } catch (error) {
-    toast.error("Failed to create ad");
+    toast.error("فشل انشاء الاعلان");
     return null;
   }
 }
@@ -63,13 +63,13 @@ export async function delete_ad(id: string) {
     );
 
     if (!data.success) {
-      toast.error("Failed to delete ad");
+      toast.error("فشل حذف الاعلان");
     }
 
-    toast.success("Ad deleted successfully");
+    toast.success("تم حذف الاعلان بنجاح");
     return data;
   } catch (error) {
-    toast.error("Failed to delete ad");
+    toast.error("فشل حذف الاعلان");
     return null;
   }
 }
@@ -155,7 +155,7 @@ export async function user_edit_ad({
     );
 
     if (data.success) {
-      toast.success("Ad created successfully");
+      toast.success("تم تعديل الاعلان بنجاح");
       return data;
     }
 
