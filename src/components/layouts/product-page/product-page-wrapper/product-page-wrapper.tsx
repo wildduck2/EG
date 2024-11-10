@@ -26,7 +26,7 @@ export const ProductPageWrapper = ({ id, state }: ProductPageWrapperProps) => {
         scrollTrigger: {
           trigger: ref.current,
           start: `0% 25%`,
-          end: `85% 55%`,
+          end: `70% 55%`,
           pin: ".pinn",
           scrub: 0.1,
           pinSpacing: false,

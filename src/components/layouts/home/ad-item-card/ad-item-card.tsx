@@ -68,14 +68,21 @@ export const AdItemCard: React.FC<
         status === "تحت المراجعه" && "opacity-90",
       )}
     >
-      <Badge
-        className={cn(
-          "absolute top-8 left-8",
-          status === "تحت المراجعه" && "opacity-90",
-        )}
-      >
-        {status}
-      </Badge>
+      <div className="absolute top-8 left-8 z-10 flex items-center gap-2">
+        <Badge className={cn("", status === "تحت المراجعه" && "opacity-90")}>
+          {status}
+        </Badge>
+        {is_featured === 1 ? (
+          <Button
+            variant="secondary"
+            size="sm"
+            className="h-7 rounded-full bg-yellow-200/70 border-yellow-200 border cursor-default hover:bg-yellow-100/70"
+          >
+            {t("special")}
+          </Button>
+        ) : null}
+      </div>
+
       <CardHeader
         className="p-0 relative h-[250px] overflow-hidden"
         onClick={() => {
@@ -196,25 +203,6 @@ export const AdItemCard: React.FC<
           )}
 
           {edit && !select && <DeleteButton id={id} />}
-
-          {is_featured === 1 ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              label={{
-                children: "مميز",
-                showLabel: true,
-                className:
-                  "bg-yellow-100/70 border-yellow-200 border hover:bg-yellow-100/70 [&_span]:text-yellow-400 [&_span]:mt-[-.4rem]",
-                side: "top",
-              }}
-              className="size-7 rounded-full bg-yellow-100/70 border-yellow-200 border cursor-default hover:bg-yellow-100/70"
-            >
-              <Star
-                className={cn("size-4", "text-yellow-400 fill-yellow-400")}
-              />
-            </Button>
-          ) : null}
         </div>
       </CardFooter>
     </Card>
@@ -275,10 +263,7 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
     <Button
       variant="secondary"
       size="sm"
-      className={cn(
-        "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100",
-        wishlistState && "bg-red-400 hover:bg-red-500/70",
-      )}
+      className={cn("size-8 rounded-full border")}
       label={{
         children: "مفضلة",
         className:
@@ -295,8 +280,8 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
         className={cn(
           "size-4",
           !wishlistState
-            ? "text-red-400 fill-red-400"
-            : "text-white fill-white",
+            ? "text-primary fill-primary"
+            : "text-red-400 fill-red-400",
         )}
       />
     </Button>

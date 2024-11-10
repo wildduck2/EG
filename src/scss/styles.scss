@@ -5,3 +5,12 @@
 @forward "pages";
 /* @forward "themes"; */
 @forward "utils";
+
+body.rtl {
+  div[role="dialog"] {
+    &>button {
+      right: auto;
+      left: 1rem !important;
+    }
+  }
+}

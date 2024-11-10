@@ -2,8 +2,10 @@ import { CategoryPageProducts } from "@/components/layouts";
 import { useQuery } from "@tanstack/react-query";
 import { TraderProfileAdsSkeleton } from "./trader-profile-ads.skeleton";
 import { get_trader_ads } from "./trader-profile-ads.lib";
+import { useTranslation } from "react-i18next";
 
 export const TraderProfileAds = ({ id }: { id: string }) => {
+  const { t } = useTranslation();
   const { data, status } = useQuery({
     queryKey: ["trader_ads", id],
     queryFn: () => get_trader_ads({ id }),
@@ -19,9 +21,7 @@ export const TraderProfileAds = ({ id }: { id: string }) => {
   }
 
   if (status === "success" && !data) {
-    return (
-      <h2 className="text-center text-sm">There's not ads for this trader</h2>
-    );
+    return <h2 className="text-center text-sm">{t("notrades")}</h2>;
   }
 
   if (status === "success" && data) {

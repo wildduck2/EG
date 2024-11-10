@@ -5,6 +5,7 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
+  Separator,
 } from "@/components/ui";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,13 +15,14 @@ gsap.registerPlugin(ScrollTrigger);
 import { useGSAP } from "@gsap/react";
 import { Link, useLocation, useParams } from "@tanstack/react-router";
 import { ProductType } from "@/components/layouts";
+import { useTranslation } from "react-i18next";
 
 export const ProductPage = () => {
   const { product, category } = useParams({ strict: false });
   const { state }: { state: { name: string; category: string } } =
     useLocation();
 
-  console.log(state);
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -30,13 +32,13 @@ export const ProductPage = () => {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink>
-                  <Link to="/">Home</Link>
+                  <Link to="/">{t("home")}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink>
-                  <Link to="/categories">Categories</Link>
+                  <Link to="/categories">{t("categories")}</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
@@ -46,19 +48,21 @@ export const ProductPage = () => {
                     to="/categories/$category"
                     params={{ category: category ?? "" }}
                   >
-                    {state.category}
+                    {i18n.dir() === "ltr" ? state.category_en : state.category}
                   </Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbPage className="text-red-400 font-bold">
-                  {state.name}
+                  {i18n.dir() === "ltr" ? state.name_en : state.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         }
+
+        <Separator className="my-2" />
 
         <ProductPageWrapper id={Number(product)} state={state as any} />
       </main>

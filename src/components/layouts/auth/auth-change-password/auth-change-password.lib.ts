@@ -24,16 +24,16 @@ export const onSubmitResetPassword = async (
     );
 
     if (!res_data.success) {
-      toast.error("Failed to reset password");
+      toast.error("فشل في تغيير كلمة المرور");
       return null;
     }
 
     route({ to: "/auth/signin" });
-    toast.success("Account password reset successfully");
+    toast.success("تم تغيير كلمة المرور بنجاح");
     return res_data;
   } catch (error) {
     console.log(error);
-    toast.error("Failed to reset password");
+    toast.error("فشل في تغيير كلمة المرور");
     return null;
   }
 };

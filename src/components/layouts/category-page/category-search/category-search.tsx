@@ -17,7 +17,6 @@ import { CategoryItemType } from "../../home";
 export const CategorySearch = ({ id }: { id: string | undefined }) => {
   const { t } = useTranslation();
   const [filter_schema, setFilterSchema] = useAtom<FilterSchema>(filter);
-  console.log(filter_schema);
 
   // Query Categories
   const { data, status, fetchNextPage, isFetchingNextPage, isRefetching } =
@@ -40,29 +39,27 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
       <section className="flex gap-8 items-start my-8 min-h-[63vh] flex-col">
         <div className="flex flex-col gap-4 w-full">
           <h2 className="text-3xl font-semibold capitalize">{id}</h2>
-          <Separator className="px-2" />
-        </div>
-        <Separator className="px-2" />
-        <div className="flex items-center justify-between">
           <CategoryPageFilter />
+          <Separator className="px-2" />
         </div>
         <Separator className="px-2" />
       </section>
     );
   }
 
-  if (data.pages.map((item) => item?.data).length === 0) {
+  if (data.pages.map((item) => item?.data).length === 0 || !data.pages.length) {
     return (
       <section className="flex gap-8 items-start my-8 min-h-[63vh] flex-col">
         <div className="flex flex-col gap-4 w-full">
-          <h2 className="text-3xl font-semibold capitalize">{id}</h2>
-          <Separator className="px-2" />
           <div className="flex items-center justify-between">
+            <h2 className="text-3xl font-semibold capitalize">{id}</h2>
             <CategoryPageFilter />
           </div>
           <Separator className="px-2" />
         </div>
-        <h2 className="text-sm mx-auto">There's no data related to {id}</h2>
+        <h2 className="text-sm mx-auto">
+          {t("there_no_data_related_to")} {id}
+        </h2>
       </section>
     );
   }
@@ -71,24 +68,28 @@ export const CategorySearch = ({ id }: { id: string | undefined }) => {
     return (
       <section className="flex gap-8 items-start my-8 min-h-[63vh]">
         <div className="flex flex-col gap-4 w-full">
-          {id && (
-            <>
-              <h2 className="text-3xl font-semibold capitalize">{id}</h2>
-              <Separator className="px-2" />
-            </>
-          )}
           <div className="flex items-center justify-between">
-            <CategoryPageFilter />
+            {id && (
+              <>
+                <h2 className="text-3xl font-semibold capitalize">{id}</h2>
+                <CategoryPageFilter />
+              </>
+            )}
           </div>
-
           <Separator className="px-2" />
-          <CategoryPageProducts
-            data={
-              data.pages.flatMap(
-                (item) => item?.data,
-              ) as unknown as ProductType[]
-            }
-          />
+          {data.pages.flatMap((item) => item?.data).length ? (
+            <CategoryPageProducts
+              data={
+                data.pages.flatMap(
+                  (item) => item?.data,
+                ) as unknown as ProductType[]
+              }
+            />
+          ) : (
+            <h2 className="text-sm mx-auto">
+              {t("there_no_data_related_to")} {id}
+            </h2>
+          )}
           {data.pages.slice(-1)[0]?.data.length > 0 && (
             <Button
               variant="default"

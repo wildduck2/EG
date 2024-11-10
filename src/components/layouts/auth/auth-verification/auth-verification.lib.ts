@@ -36,22 +36,22 @@ export const onSubmitVerification = async (
     );
 
     if (!res_data.success) {
-      toast.error("Something went wrong");
+      toast.error("فشل التحقق");
       return null;
     }
 
     if (verify_register) {
       route({ to: "/auth/change-password" });
-      toast.success("Account verified successfully");
+      toast.success("تم التحقق بنجاح");
       return res_data;
     }
 
     route({ to: "/auth/verification-confirmed" });
-    toast.success("Account verified successfully");
+    toast.success("تم التحقق بنجاح");
     return res_data;
   } catch (error) {
     console.log(error);
-    toast.error("Something went wrong");
+    toast.error("فشل التحقق");
     return null;
   }
 };

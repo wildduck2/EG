@@ -19,12 +19,12 @@ export async function get_user_ads(page: number) {
     );
 
     if (!data.success) {
-      toast.error("Failed to get user ads");
+      toast.error("فشل الحصول على الاعلانات");
     }
 
     return data.data;
   } catch (error) {
-    toast.error("Failed to get user ads");
+    toast.error("فشل الحصول على الاعلانات");
     return null;
   }
 }

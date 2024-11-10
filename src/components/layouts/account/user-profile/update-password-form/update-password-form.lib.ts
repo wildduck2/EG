@@ -7,7 +7,7 @@ import { User } from "@/components/layouts/home/ad-item-card";
 export const update_password = async ({ data }: UpdatePasswordFormProps) => {
   const user: User = JSON.parse(localStorage.getItem("user-info") as string);
   if (!user) {
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تسجيل الدخول");
     return null;
   }
 
@@ -30,15 +30,15 @@ export const update_password = async ({ data }: UpdatePasswordFormProps) => {
     );
 
     if (res_data.success) {
-      toast.success("Your data has been saved");
+      toast.success("تم تعديل كلمة المرور بنجاح");
       return res_data.data;
     }
 
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تسجيل الدخول");
     return null;
   } catch (error) {
     console.log(error);
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تسجيل الدخول");
     return null;
   }
 };

@@ -44,8 +44,10 @@ export const Header = () => {
   const { t, i18n } = useTranslation();
 
   const route = useNavigate();
-  const [userData] = useAtom(user);
+  const userData = JSON.parse(localStorage.getItem("user-info") as string);
   const [isSticky, setIsSticky] = React.useState(false);
+
+  console.log();
 
   React.useEffect(() => {
     window.onscroll = () => {
@@ -66,7 +68,9 @@ export const Header = () => {
       <header
         className={cn(
           "lg:fixed top-0 xl:left-1/2 xl:-translate-x-1/2 w-full z-50 mx-auto place-self-center",
-          isSticky ? "border-border border-solid border-b" : "",
+          location.pathname !== "/account/trader-profiles" ||
+            (location.pathname.toString().includes("/account/trader2") &&
+              "border-border border-solid border-b"),
         )}
       >
         <div className="flex flex-col items-cetner gap-2 container  bg-background ">
@@ -74,6 +78,63 @@ export const Header = () => {
             <Link to="/" className="logo mt-2">
               <img src={Logo} className="w-[9rem] h-auto" alt="Logo" />
             </Link>
+            <div className="flex lg:hidden items-center gap-4">
+              <Button
+                title={i18n.language === "en" ? "عربي" : "English"}
+                variant={"outline"}
+                className="w-full md:w-[100px] font-bold lg:hidden flex"
+                onClick={() => {
+                  document.body.classList.toggle("rtl");
+                  localStorage.setItem(
+                    "i18nextLng",
+                    i18n.language === "en" ? "ar" : "en",
+                  );
+                  i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+                }}
+              />
+              {userData && (
+                <div className="w-full">
+                  <Button
+                    className="size-[47px] p-0 rounded-full overflow-hidden lg:hidden flex"
+                    variant={"outline"}
+                  >
+                    <DropdownMenu>
+                      <DropdownMenuTrigger>
+                        <img
+                          className="object-cover w-12 h-12 rounded-full"
+                          src={
+                            userData?.image
+                              ? process.env.BACKEND__BASE_UPLOAD_URL +
+                                "/" +
+                                userData?.image
+                              : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLMI5YxZE03Vnj-s-sth2_JxlPd30Zy7yEGg&s"
+                          }
+                          alt={userData?.name}
+                        />
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent dir={i18n.dir()}>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            localStorage.setItem("tab", "account");
+                            navigate({ to: "/account" });
+                          }}
+                        >
+                          {t("my_account")}
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          className="hover:bg-destructive hover:text-accent"
+                          onClick={async () => {
+                            signoutAsync({ route });
+                          }}
+                        >
+                          {t("logout")}
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </Button>
+                </div>
+              )}
+            </div>
             <img
               src={shape}
               className={cn(
@@ -92,6 +153,47 @@ export const Header = () => {
                 "grid md:flex items-center md:justify-center lg:justify-between place-self-center pt-2 pb-4 gap-2 w-full",
               )}
             >
+              {userData && (
+                <Button
+                  className="size-[47px] w-[57px] p-0 rounded-full overflow-hidden hidden lg:flex"
+                  variant={"outline"}
+                >
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <img
+                        className="object-cover w-12 h-12 rounded-full"
+                        src={
+                          // userData?.image
+                          process.env.BACKEND__BASE_UPLOAD_URL +
+                          "/" +
+                          userData?.image
+                          // : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLMI5YxZE03Vnj-s-sth2_JxlPd30Zy7yEGg&s"
+                        }
+                        alt={userData?.name}
+                      />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent dir={i18n.dir()}>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          localStorage.setItem("tab", "account");
+                          navigate({ to: "/account" });
+                        }}
+                      >
+                        {t("my_account")}
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        className="hover:bg-destructive hover:text-accent"
+                        onClick={async () => {
+                          signoutAsync({ route });
+                        }}
+                      >
+                        {t("logout")}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </Button>
+              )}
+
               <div className="flex item-center gap-4 w-full">
                 <Popover>
                   <PopoverTrigger asChild>
@@ -108,20 +210,26 @@ export const Header = () => {
                   </PopoverContent>
                 </Popover>
                 <SearchInput
-                  //@ts-ignore
-                  variant="default"
-                  size="default"
-                  className="!max-w-full md:w-full !w-full relative"
-                  searchPlaceholder={t("search")}
-                  searchIcon={true}
-                  dir={i18n.dir()}
+                  placeHolder={
+                    i18n.dir() === "rtl"
+                      ? "ابحث عن البضاعه التي تريدها..."
+                      : "search for products..."
+                  }
+                />
+
+                <Button
+                  title={t("search2")}
+                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px] font-bold !max-w-[300px] md:w-full !w-full relative [&_svg]:stroke-white [&_input]:placeholder:text-white [&_input]:bg-[#ee1d24]"
+                  onClick={() => {
+                    navigate({ to: "/account/trader-profiles" });
+                  }}
                 />
               </div>
               <div className="flex  sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
                 <Button
                   title={i18n.language === "en" ? "عربي" : "English"}
                   variant={"outline"}
-                  className="w-full md:w-[100px] font-bold"
+                  className="w-full md:w-[100px] font-bold hidden lg:flex"
                   onClick={() => {
                     document.body.classList.toggle("rtl");
                     localStorage.setItem(
@@ -147,53 +255,6 @@ export const Header = () => {
                     localStorage.setItem("tab", "my ads");
                   }}
                 />
-                <Button
-                  title={t("searchfortrader")}
-                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px] font-bold"
-                  onClick={() => {
-                    navigate({ to: "/account/trader-profiles" });
-                  }}
-                />
-                {userData && (
-                  <Button
-                    className="size-[60px] p-0 rounded-full overflow-hidden"
-                    variant={"outline"}
-                  >
-                    <DropdownMenu>
-                      <DropdownMenuTrigger>
-                        <img
-                          className="object-cover w-16 h-12 rounded-full"
-                          src={
-                            process.env.BACKEND__BASE_UPLOAD_URL +
-                              "/" +
-                              userData?.image ||
-                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLMI5YxZE03Vnj-s-sth2_JxlPd30Zy7yEGg&s"
-                          }
-                          alt={userData?.name}
-                        />
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuLabel>{t("my_account")}</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem
-                          onClick={() => {
-                            localStorage.setItem("tab", "account");
-                            navigate({ to: "/account" });
-                          }}
-                        >
-                          {t("accounty")}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={async () => {
-                            signoutAsync({ route });
-                          }}
-                        >
-                          {t("logout")}
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </Button>
-                )}
               </div>
             </nav>
           </div>
@@ -202,13 +263,16 @@ export const Header = () => {
               position="top"
               nav={{
                 className:
-                  "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit [&_button]:justify-center [&_ul]:flex-wrap w-full [&_button]:font-bold",
+                  "[&_ul]:flex [&_ul]:gap-4 [&_li]:w-fit hover:[&_button]:bg-[#ee1d24] hover:[&_button]:text-accent [&_button]:justify-center [&_ul]:flex-wrap w-full [&_button]:font-bold",
                 group: [10],
                 router: {},
                 pathname: location.pathname,
                 isCollabsed: false,
               }}
               navigationKeys={{
+                activeKey: {
+                  className: "bg-[#ee1d24] text-accent",
+                },
                 data:
                   categories.length > 0
                     ? i18n.language === "en"
@@ -318,13 +382,19 @@ export const SGHeader = () => {
   );
 };
 
-const SearchInput = () => {
+const SearchInput = ({
+  className,
+  placeHolder,
+}: {
+  className?: string;
+  placeHolder?: string;
+}) => {
   const { i18n } = useTranslation();
   const route = useNavigate();
 
   return (
     <form
-      className="relative flex w-full"
+      className={cn("relative flex w-full", className)}
       onSubmit={(e) => {
         e.preventDefault();
         route({
@@ -342,8 +412,8 @@ const SearchInput = () => {
         />
       }
       <Input
-        placeholder={i18n.dir() === "rtl" ? "ابحث" : "Search..."}
-        className={cn("w-full", i18n.dir() === "rtl" ? "pr-8" : " pl-8")}
+        placeholder={placeHolder}
+        className={cn("w-full", i18n.dir() === "rtl" ? "pr-8" : " pl-8", "")}
       />
     </form>
   );

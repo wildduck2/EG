@@ -90,7 +90,7 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
       }}
       footer={{
         className:
-          "flex w-full place-content-end justify-end items-end gap-2 [&__button]:w-32",
+          "!flex w-full flex-row place-content-end justify-end items-end gap-2 [&__button]:w-32",
         submit: {
           children: (
             <Button
@@ -111,7 +111,11 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
       }}
       trigger={{
         children: (
-          <Button variant="ghost" size="default" className="">
+          <Button
+            variant="outline"
+            size="default"
+            className="hover:bg-[#ee1d24] hover:text-white"
+          >
             <ArrowDown01 className="size-5 rotate-180" />
             {t("filter")}
           </Button>
@@ -119,7 +123,6 @@ export const CategoryPageFilter = ({ cb }: { cb?: () => void }) => {
       }}
       content={{
         dir: i18n.dir(),
-        side: i18n.dir() === "rtl" ? "left" : "right",
 
         className:
           "flex flex-col gap-4 sm:max-w-[450px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full",

@@ -11,8 +11,10 @@ import Screws from "./screws.png";
 import Tools from "./tools-free-image-png.png";
 import img1 from "./1.png";
 import img2 from "./2.png";
+import side from "./side.png";
 
 export {
+  side,
   img1,
   img2,
   map,

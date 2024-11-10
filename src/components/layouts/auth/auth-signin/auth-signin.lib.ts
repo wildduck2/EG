@@ -32,17 +32,17 @@ export const onSubmitSignin = async (
     );
 
     if (!res_data.data) {
-      toast.error("Sign in failed");
+      toast.error("فشل تسجيل الدخول");
       return null;
     }
 
     route({ to: "/" });
-    toast.success("Sign in successfully");
+    toast.success("تم تسجيل الدخول بنجاح");
 
     localStorage.setItem("user-info", JSON.stringify(res_data.data.user));
     return res_data;
   } catch (error) {
-    toast.error("Sign in failed");
+    toast.error("فشل تسجيل الدخول");
     return null;
   }
 };

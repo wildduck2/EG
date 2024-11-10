@@ -44,7 +44,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         })
         .map((item) => (
           <TabsTrigger
-            className="w-full text-start justify-start data-[state=active]:bg-primary data-[state=active]:text-primary-foreground capitalize"
+            className="w-full text-start justify-start data-[state=active]:bg-[#ee1d24] data-[state=active]:text-primary-foreground capitalize hover:bg-[#ee1d24] hover:text-primary-foreground"
             value={item.title}
             onClick={() => {
               localStorage.setItem("tab", item.title);

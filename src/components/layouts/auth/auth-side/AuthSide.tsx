@@ -1,14 +1,14 @@
-import { Logo, LogoWhite } from "@/assets";
+import { Logo, LogoWhite, side } from "@/assets";
 import { Link } from "@tanstack/react-router";
 
 export const AuthSide = () => {
   // <div className="layout" />
   return (
-    <aside className="hidden lg:grid h-screen bg-red-700 w-1/2 p-12 pr-[8rem] relative palace-self-center">
+    <aside className="hidden lg:grid h-screen bg-red-700 w-[110%] p-12 pr-[8rem] relative palace-self-center">
       <div className="absolute inset-0 h-screen -z-1">
         <img
           className="h-full object-cover w-full object-center"
-          src="https://images.pexels.com/photos/19332284/pexels-photo-19332284/free-photo-of-elegant-man-in-a-suit-posing-in-studio-on-red-background.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+          src={side}
           alt=""
         />
       </div>

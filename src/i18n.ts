@@ -6,11 +6,19 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    // lng: "en",
+    lng: "ar",
     returnObjects: true,
     resources: {
       en: {
         translation: {
+          contact: "phone numbers",
+          sorty: "category",
+          preface: "Preface",
+          search2: "Search for the trader, companies and factories...",
+          details: "Details",
+          bundles: "Bundles",
+          there_no_data_related_to: "There's no data related to",
+          special: "special ad",
           searchfortrader: "traders",
           region: "Region",
           joined: "Joined",
@@ -569,6 +577,15 @@ i18n
           category: "التصنيف الرئيسي",
           joined: "انضم",
           searchfortrader: "التجار",
+          special: "اعلان مميز",
+          related_ads: "الاعلانات المرتبطة",
+          there_no_data_related_to: "لا يوجد بيانات مرتبطة بـ",
+          bundles: "الباقات",
+          details: "تفاصيل",
+          search2: "الدليل المصري لمصانع والشركات والتجار ...",
+          preface: "نبذة عن الشركة",
+          sorty: "التصنيف",
+          contact: "ارقام التلفونات",
         },
       },
     },

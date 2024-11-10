@@ -22,16 +22,16 @@ export const onSubmitForgetPassword = async (
     );
 
     if (!res_data.success) {
-      toast.error("Failed to send OTP");
+      toast.error("فشل إرسال رمز التحقق");
       return null;
     }
 
     route({ to: "/auth/verification2" });
     localStorage.setItem("phone", JSON.stringify(data.phone));
-    toast.success("OTP sent successfully");
+    toast.success("تم أرسال رمز التحقق بنجاح");
     return res_data;
   } catch (error) {
-    toast.error("Failed to send OTP");
+    toast.error("فشل إرسال رمز التحقق");
     return null;
   }
 };

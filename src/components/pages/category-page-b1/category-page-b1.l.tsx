@@ -57,7 +57,10 @@ export const CategoryB1PageWrapper = ({
           </div>
           <Separator className="px-2" />
         </div>
-        <h2 className="text-sm mx-auto">There's no data related to {name}</h2>
+        <h2 className="text-sm mx-auto">
+          {t("there_no_data_related_to")}
+          {name}
+        </h2>
       </section>
     );
   }

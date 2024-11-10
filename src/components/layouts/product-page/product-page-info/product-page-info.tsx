@@ -48,7 +48,7 @@ export const ProductPreviewInfo = React.forwardRef<
   return (
     <div
       className={cn(
-        "flex flex-col items-start gap-2 p-4 relative pin",
+        "flex flex-col items-start gap-2 md:p-4 relative pin",
         className,
       )}
       {...props}
@@ -72,41 +72,42 @@ export const ProductPreviewInfo = React.forwardRef<
           <span className="text-sm">{data.age}</span>
         </div>
       </div>
-      <div className="md:flex items-center gap-4 w-full my-2 flex lg:grid lg:grid-cols-2">
-        <a href={`tel:${data.user.phone_number}`} target="_blank">
-          <Button
-            variant={"default"}
-            className="w-full lg:max-w-[300px] h-[50px] grid-2"
-            icon={{
-              icon: Phone,
-            }}
-          >
-            {products.calltrader}
-          </Button>
-        </a>
-        <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
-          <Button
-            variant={"default"}
-            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6 bg-green-400 hover:bg-green-500"
-            icon={{
-              icon: FaWhatsapp as LucideIcon,
-            }}
-          />
-        </a>
-        <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
-          <Button
-            variant={"default"}
-            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-            icon={{
-              icon: MessageSquare,
-            }}
-          ></Button>
-        </a>
-
+      <div className="items-center gap-4 w-full my-2 sm:flex grid">
+        <div className="flex items-start w-full gap-2">
+          <a href={`tel:${data.user.phone_number}`} target="_blank">
+            <Button
+              variant={"default"}
+              className="w-full lg:max-w-[300px] h-[50px] grid-2"
+              icon={{
+                icon: Phone,
+              }}
+            >
+              {products.calltrader}
+            </Button>
+          </a>
+          <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
+            <Button
+              variant={"default"}
+              className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6 bg-green-400 hover:bg-green-500"
+              icon={{
+                icon: FaWhatsapp as LucideIcon,
+              }}
+            />
+          </a>
+          <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
+            <Button
+              variant={"default"}
+              className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+              icon={{
+                icon: MessageSquare,
+              }}
+            ></Button>
+          </a>
+        </div>
         <Popover>
           <PopoverTrigger asChild>
             <Button
-              variant={"ghost"}
+              variant={"default"}
               className="w-full max-w-[300px] h-[50px] grid-4"
               icon={{
                 icon: Share,
@@ -325,8 +326,7 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
       variant="secondary"
       size="sm"
       className={cn(
-        "size-8 rounded-full bg-red-100/70 border-red-200 border hover:bg-red-100 absolute top-5",
-        wishlistState && "bg-red-400 hover:bg-red-500/70",
+        "size-8 rounded-full absolute top-5",
         i18n.dir() === "ltr" ? "right-[1.1rem]" : "left-[1.1rem]",
       )}
       label={{
@@ -345,8 +345,8 @@ export const AddWishlistButton = ({ id, wishlist }: AddWishlistButtonType) => {
         className={cn(
           "size-4",
           !wishlistState
-            ? "text-red-400 fill-red-400"
-            : "text-white fill-white",
+            ? "text-primary fill-primary"
+            : "text-red-400 fill-red-400",
         )}
       />
     </Button>

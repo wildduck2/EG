@@ -44,13 +44,13 @@ export async function get_category_search(
     );
 
     if (!data.success) {
-      toast.error("Failed to get category search");
+      toast.error("فشل البحث");
       return null;
     }
 
     return data;
   } catch (error) {
-    toast.error("Failed to get category search");
+    toast.error("فشل البحث");
     return null;
   }
 }

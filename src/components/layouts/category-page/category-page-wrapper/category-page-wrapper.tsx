@@ -74,15 +74,15 @@ export const CategoryPageWrapper = ({
   if (status === "error") {
     return (
       <section className="flex gap-8 items-start my-8 min-h-[63vh] flex-col">
-        <div className="flex flex-col gap-4 w-full">
+        <div className="flex items-center justify-between">
           <h2 className="text-3xl font-semibold capitalize">{id}</h2>
           <Separator className="px-2" />
-        </div>
-        <Separator className="px-2" />
-        <div className="flex items-center justify-between">
           <CategoryPageFilter />
         </div>
         <Separator className="px-2" />
+        <h2 className="text-sm mx-auto">
+          {t("there_no_data_related_to")} {name}
+        </h2>
       </section>
     );
   }
@@ -95,8 +95,12 @@ export const CategoryPageWrapper = ({
         <div className="flex flex-col gap-4 w-full">
           <h2 className="text-3xl font-semibold capitalize">{name}</h2>
           <Separator className="px-2" />
+          asdfasdf
         </div>
-        <h2 className="text-sm mx-auto">There's no data related to {name}</h2>
+        <h2 className="text-sm mx-auto">
+          asdf{t("there_no_data_related_to")} {name}
+        </h2>
+        asdf
       </section>
     );
   }

@@ -460,7 +460,7 @@ export const handleAttachment = ({
 }: HandleAttachmentProps) => {
   const files = e.currentTarget.files;
 
-  if (!files) return toast.error("Please select a file");
+  if (!files) return toast.error("شفله ای انتخاب نشد");
 
   const newAttachments: AttachmentType[] = [];
 
@@ -469,7 +469,7 @@ export const handleAttachment = ({
 
     if (file.size > 10 * 1024 * 1024) {
       toast.error(
-        `File has exceeded the max size: ${file.name.slice(0, 15)}...`,
+        `حجم فایل بیش از ${filesize(10 * 1024 * 1024, { round: 0 })} است..`,
       );
       continue; // Skip this file and continue with the next
     }

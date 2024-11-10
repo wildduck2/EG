@@ -137,7 +137,7 @@ export const UserEditdAd = ({
         }}
         footer={{
           className:
-            "flex w-full place-content-start justify-end items-start gap-2 [&__button]:w-32 pr-4 pt-4",
+            "flex w-full place-content-start flex-row justify-end items-start gap-2 [&__button]:w-32 pr-4 pt-4",
           cancel: {
             children: <Button variant="outline">{t("cancel")}</Button>,
           },
@@ -172,283 +172,271 @@ export const UserEditdAd = ({
         }}
         content={{
           dir: i18n.dir(),
-          side: i18n.dir() === "ltr" ? "right" : "left",
 
           className:
             "flex flex-col gap-4 sm:max-w-[650px] [&>div]:flex [&>div]:flex-col [&>div]:justify-between [&>div]:h-full  pb-2",
           children: (
-            <ScrollArea className="flex flex-col items-start w-full h-full space-y-4">
-              <form className="w-full flex flex-col space-y-2 p-2 mt-4 pr-4">
-                <div className="flex gap-4" dir={i18n.dir()}>
-                  <div className="flex flex-col w-full">
-                    <UploadAdPictures
-                      attachments={attachments}
-                      setAttachments={setAttachments}
-                      value={watch("attachment")}
-                      setValue={setValue}
-                      register={register}
-                      errors={formState.errors}
-                    />
-                  </div>
-                  <FormInput
-                    className="w-full"
-                    register={register("name")}
-                    error={{
-                      inputError: formState.errors.name?.message,
-                    }}
-                    input={{
-                      placeholder: t("add_name"),
-                    }}
-                    input_label={{
-                      children: t("name"),
-                      className: "text-sm flex",
-                    }}
+            <form className="w-full flex flex-col space-y-2 p-2 mt-4 pr-4">
+              <div className="flex gap-4" dir={i18n.dir()}>
+                <div className="flex flex-col w-full">
+                  <UploadAdPictures
+                    attachments={attachments}
+                    setAttachments={setAttachments}
+                    value={watch("attachment")}
+                    setValue={setValue}
+                    register={register}
+                    errors={formState.errors}
                   />
                 </div>
-                <div className="flex gap-4" dir={i18n.dir()}>
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError: formState.errors.description?.message,
-                    }}
-                    input_label={{
-                      children: t("description"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <Textarea
-                      className={cn(
-                        formState.errors.description?.types &&
-                          "border-red-400 bg-red-100 ring-red-400",
-                      )}
-                      placeholder={t("add_description")}
-                      rows={3}
-                      {...register("description")}
-                    />
-                  </FormInput>
-                </div>
-                <div className="flex gap-4" dir={i18n.dir()}>
-                  <FormInput
-                    className="w-full"
-                    register={register("price")}
-                    error={{
-                      inputError: formState.errors.price?.message,
-                    }}
-                    input={{
-                      placeholder: t("add_price"),
-                      type: "number",
-                    }}
-                    input_label={{
-                      children: t("price"),
-                      className: "text-sm flex",
-                    }}
+                <FormInput
+                  className="w-full"
+                  register={register("name")}
+                  error={{
+                    inputError: formState.errors.name?.message,
+                  }}
+                  input={{
+                    placeholder: t("add_name"),
+                  }}
+                  input_label={{
+                    children: t("name"),
+                    className: "text-sm flex",
+                  }}
+                />
+              </div>
+              <div className="flex gap-4" dir={i18n.dir()}>
+                <FormInput
+                  className="w-full"
+                  error={{
+                    inputError: formState.errors.description?.message,
+                  }}
+                  input_label={{
+                    children: t("description"),
+                    className: "text-sm flex",
+                  }}
+                >
+                  <Textarea
+                    className={cn(
+                      formState.errors.description?.types &&
+                        "border-red-400 bg-red-100 ring-red-400",
+                    )}
+                    placeholder={t("add_description")}
+                    rows={3}
+                    {...register("description")}
                   />
-                  {
-                    // <FormInput
-                    //   className="w-full"
-                    //   register={register("address")}
-                    //   error={{
-                    //     inputError: formState.errors.address?.message,
-                    //   }}
-                    //   input={{
-                    //     placeholder: t("add_address"),
-                    //     type: "text",
-                    //   }}
-                    //   input_label={{
-                    //     children: t("address"),
-                    //     className: "text-sm flex",
-                    //   }}
-                    // />
-                  }
-                </div>
-
-                <div className="flex gap-4" dir={i18n.dir()}>
-                  <FormInput
-                    className="w-full"
-                    register={register("status")}
-                    error={{
-                      inputError: formState.errors.negotiate?.message,
-                    }}
-                    input_label={{
-                      children: t("negotiable"),
-                      className: "text-sm flex",
-                    }}
-                  >
-                    <RadioGroup
-                      defaultValue="yes"
-                      {...register("negotiate")}
-                      onValueChange={(value) => {
-                        setValue("negotiate", value as "yes" | "no");
-                      }}
-                      className="flex gap-8 h-[40px]"
-                    >
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.negotiate?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="yes" id="yes" />
-                        <Label htmlFor="yes">{t("yes")}</Label>
-                      </div>
-                      <div
-                        className={cn(
-                          "flex items-center space-x-2",
-                          formState.errors.negotiate?.types &&
-                            "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
-                        )}
-                      >
-                        <RadioGroupItem value="no" id="r1" />
-                        <Label htmlFor="r1">{t("no")}</Label>
-                      </div>
-                    </RadioGroup>
-                  </FormInput>
-                </div>
-
+                </FormInput>
+              </div>
+              <div className="flex gap-4" dir={i18n.dir()}>
+                <FormInput
+                  className="w-full"
+                  register={register("price")}
+                  error={{
+                    inputError: formState.errors.price?.message,
+                  }}
+                  input={{
+                    placeholder: t("add_price"),
+                    type: "number",
+                  }}
+                  input_label={{
+                    children: t("price"),
+                    className: "text-sm flex",
+                  }}
+                />
                 {
-                  //             <div className="flex gap-4" dir={i18n.dir()}>
-                  //   <FormInput
-                  //     className="w-full"
-                  //     error={{
-                  //       inputError: formState.errors.note?.message,
-                  //     }}
-                  //     input_label={{
-                  //       children: t("note"),
-                  //       className: "text-sm flex",
-                  //     }}
-                  //   >
-                  //     <Textarea
-                  //       className={cn(
-                  //         formState.errors.note?.types &&
-                  //           "border-red-400 bg-red-100 ring-red-400",
-                  //       )}
-                  //       placeholder={t("add_note")}
-                  //       rows={3}
-                  //       {...register("note")}
-                  //     />
-                  //   </FormInput>
-                  // </div>
+                  // <FormInput
+                  //   className="w-full"
+                  //   register={register("address")}
+                  //   error={{
+                  //     inputError: formState.errors.address?.message,
+                  //   }}
+                  //   input={{
+                  //     placeholder: t("add_address"),
+                  //     type: "text",
+                  //   }}
+                  //   input_label={{
+                  //     children: t("address"),
+                  //     className: "text-sm flex",
+                  //   }}
+                  // />
                 }
+              </div>
 
-                <div
-                  className="flex items-center gap-2 w-full"
-                  dir={i18n.dir()}
+              <div className="flex gap-4" dir={i18n.dir()}>
+                <FormInput
+                  className="w-full"
+                  register={register("status")}
+                  error={{
+                    inputError: formState.errors.negotiate?.message,
+                  }}
+                  input_label={{
+                    children: t("negotiable"),
+                    className: "text-sm flex",
+                  }}
                 >
-                  <FilterSlector
-                    filter_data={filter_data.governorates}
-                    value={{ id: +watch("governorate") } as any}
-                    name={t("governorate")}
-                    setValue={(item: FilterSchema["governorates"]) => {
-                      setValue("governorate", item?.id.toString() ?? "");
+                  <RadioGroup
+                    defaultValue="yes"
+                    {...register("negotiate")}
+                    onValueChange={(value) => {
+                      setValue("negotiate", value as "yes" | "no");
                     }}
-                  />
-                  <FilterSlector
-                    filter_data={filter_data.regions}
-                    value={{ id: +watch("region") } as any}
-                    name={t("regions")}
-                    id={"governorate_id"}
-                    selected={+watch("governorate")}
-                    setValue={(item: FilterSchema["regions"]) => {
-                      setValue("region", item?.id.toString() ?? "");
-                    }}
-                  />
-                </div>
-                <div
-                  className="flex items-center gap-2 w-full"
-                  dir={i18n.dir()}
-                >
-                  <FilterSlector
-                    filter_data={filter_data.categories}
-                    value={
-                      {
-                        id: +watch("category"),
-                      } as any
-                    }
-                    name={t("categories")}
-                    setValue={(item: FilterSchema["categories"]) => {
-                      setValue("category", item?.id.toString() ?? "");
-                    }}
-                  />
-                  <FilterSlector
-                    filter_data={filter_data.subcategories}
-                    value={
-                      {
-                        id: +watch("subcategory"),
-                      } as any
-                    }
-                    name={t("subcategories")}
-                    id={"category_id"}
-                    selected={+watch("category")}
-                    disabled={!watch("category") ? true : false}
-                    setValue={(item: FilterSchema["subcategories"]) => {
-                      setValue("subcategory", item?.id.toString() ?? "");
-                    }}
-                  />
-                </div>
-                <div
-                  className="flex items-center gap-2 w-full"
-                  dir={i18n.dir()}
-                >
-                  {+watch("subcategory") ? (
-                    <FilterSlector
-                      filter_data={filter_data.brand_countries}
-                      name={t("brand_countries")}
-                      disabled={!watch("subcategory") ? true : false}
-                      value={
-                        {
-                          id: +watch("brand_country"),
-                        } as any
-                      }
-                      id={"subcategory_id"}
-                      selected={+watch("subcategory")}
-                      setValue={(item: FilterSchema["brand_countries"]) => {
-                        setValue("brand_country", item?.id.toString() ?? "");
-                      }}
-                    />
-                  ) : null}
-                  {+watch("third_branch") ? (
-                    <FilterSlector
-                      disabled={!watch("brand_country") ? true : false}
-                      filter_data={filter_data.third_branches}
-                      value={
-                        {
-                          id: +watch("third_branch"),
-                        } as any
-                      }
-                      id={"brandcountry_id"}
-                      selected={+watch("third_branch")}
-                      name={t("third_branches")}
-                      setValue={(item: FilterSchema["third_branches"]) => {
-                        setValue("third_branch", item?.id.toString() ?? "");
-                      }}
-                    />
-                  ) : null}
-                </div>
-                <div className="flex items-center gap-2 w-full">
-                  <FormInput
-                    className="w-full"
-                    error={{
-                      inputError:
-                        formState.errors.location?.lng?.message ||
-                        formState.errors.location?.lat?.message,
-                      type: "raw",
-                    }}
-                    input_label={{
-                      children: t("location"),
-                      className: "text-sm flex",
-                    }}
+                    className="flex gap-8 h-[40px]"
                   >
-                    <GetLocation
-                      register={register}
-                      errors={formState.errors}
-                      value={watch("location")}
-                      setValue={setValue}
-                    />
-                  </FormInput>
-                </div>
-              </form>
-            </ScrollArea>
+                    <div
+                      className={cn(
+                        "flex items-center space-x-2",
+                        formState.errors.negotiate?.types &&
+                          "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
+                      )}
+                    >
+                      <RadioGroupItem value="yes" id="yes" />
+                      <Label htmlFor="yes">{t("yes")}</Label>
+                    </div>
+                    <div
+                      className={cn(
+                        "flex items-center space-x-2",
+                        formState.errors.negotiate?.types &&
+                          "text-red-400 ring-red-400 [&_button]:border-red-400 [&_button]:bg-red-100",
+                      )}
+                    >
+                      <RadioGroupItem value="no" id="r1" />
+                      <Label htmlFor="r1">{t("no")}</Label>
+                    </div>
+                  </RadioGroup>
+                </FormInput>
+              </div>
+
+              {
+                //             <div className="flex gap-4" dir={i18n.dir()}>
+                //   <FormInput
+                //     className="w-full"
+                //     error={{
+                //       inputError: formState.errors.note?.message,
+                //     }}
+                //     input_label={{
+                //       children: t("note"),
+                //       className: "text-sm flex",
+                //     }}
+                //   >
+                //     <Textarea
+                //       className={cn(
+                //         formState.errors.note?.types &&
+                //           "border-red-400 bg-red-100 ring-red-400",
+                //       )}
+                //       placeholder={t("add_note")}
+                //       rows={3}
+                //       {...register("note")}
+                //     />
+                //   </FormInput>
+                // </div>
+              }
+
+              <div className="flex items-center gap-2 w-full" dir={i18n.dir()}>
+                <FilterSlector
+                  filter_data={filter_data.governorates}
+                  value={{ id: +watch("governorate") } as any}
+                  name={t("governorate")}
+                  setValue={(item: FilterSchema["governorates"]) => {
+                    setValue("governorate", item?.id.toString() ?? "");
+                  }}
+                />
+                <FilterSlector
+                  filter_data={filter_data.regions}
+                  value={{ id: +watch("region") } as any}
+                  name={t("regions")}
+                  id={"governorate_id"}
+                  selected={+watch("governorate")}
+                  setValue={(item: FilterSchema["regions"]) => {
+                    setValue("region", item?.id.toString() ?? "");
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-2 w-full" dir={i18n.dir()}>
+                <FilterSlector
+                  filter_data={filter_data.categories}
+                  value={
+                    {
+                      id: +watch("category"),
+                    } as any
+                  }
+                  name={t("categories")}
+                  setValue={(item: FilterSchema["categories"]) => {
+                    setValue("category", item?.id.toString() ?? "");
+                  }}
+                />
+                <FilterSlector
+                  filter_data={filter_data.subcategories}
+                  value={
+                    {
+                      id: +watch("subcategory"),
+                    } as any
+                  }
+                  name={t("subcategories")}
+                  id={"category_id"}
+                  selected={+watch("category")}
+                  disabled={!watch("category") ? true : false}
+                  setValue={(item: FilterSchema["subcategories"]) => {
+                    setValue("subcategory", item?.id.toString() ?? "");
+                  }}
+                />
+              </div>
+              <div className="flex items-center gap-2 w-full" dir={i18n.dir()}>
+                {+watch("subcategory") ? (
+                  <FilterSlector
+                    filter_data={filter_data.brand_countries}
+                    name={t("brand_countries")}
+                    disabled={!watch("subcategory") ? true : false}
+                    value={
+                      {
+                        id: +watch("brand_country"),
+                      } as any
+                    }
+                    id={"subcategory_id"}
+                    selected={+watch("subcategory")}
+                    setValue={(item: FilterSchema["brand_countries"]) => {
+                      setValue("brand_country", item?.id.toString() ?? "");
+                    }}
+                  />
+                ) : null}
+                {+watch("third_branch") ? (
+                  <FilterSlector
+                    disabled={!watch("brand_country") ? true : false}
+                    filter_data={filter_data.third_branches}
+                    value={
+                      {
+                        id: +watch("third_branch"),
+                      } as any
+                    }
+                    id={"brandcountry_id"}
+                    selected={+watch("third_branch")}
+                    name={t("third_branches")}
+                    setValue={(item: FilterSchema["third_branches"]) => {
+                      setValue("third_branch", item?.id.toString() ?? "");
+                    }}
+                  />
+                ) : null}
+              </div>
+              <div className="flex items-center gap-2 w-full">
+                <FormInput
+                  className="w-full"
+                  error={{
+                    inputError:
+                      formState.errors.location?.lng?.message ||
+                      formState.errors.location?.lat?.message,
+                    type: "raw",
+                  }}
+                  input_label={{
+                    children: t("location"),
+                    className: "text-sm flex",
+                  }}
+                >
+                  <GetLocation
+                    register={register}
+                    errors={formState.errors}
+                    value={watch("location")}
+                    setValue={setValue}
+                  />
+                </FormInput>
+              </div>
+            </form>
           ),
         }}
       />
@@ -486,7 +474,7 @@ const UploadAdPictures = ({
                 className={cn(
                   "absolute gap-2 flex items-center h-fit py-1 transition-all duration-400 ease-out",
                   [...(attachments ?? [])].length > 0
-                    ? `bottom-[1.5rem] opacity-100 pointer-events-all z-50 ${i18n.dir() === "rtl" ? " left-0" : "-right-0"}`
+                    ? `bottom-[2.2rem] opacity-100 pointer-events-all z-50 ${i18n.dir() === "rtl" ? " left-0" : "-right-0"}`
                     : "-bottom-4 opacity-0 pointer-events-none",
                 )}
                 icon={{
@@ -497,7 +485,7 @@ const UploadAdPictures = ({
                   children: [...(attachments ?? [])].length,
                 }}
               >
-                <span className="text-xs">Attachments</span>
+                <span className="text-xs">{t("attachments")}</span>
               </Button>
             </PopoverTrigger>
             <PopoverContent
@@ -664,7 +652,7 @@ const GetLocation: React.FC<GetLocationProps> = ({
           Get Location
         </Button>
       )}
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="text-[#ee1d24] text-sm mt-1">{error}</p>}
     </div>
   );
 };

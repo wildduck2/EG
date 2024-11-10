@@ -41,14 +41,14 @@ export const onSubmitSignup = async <T extends TraderValues>(
     );
 
     if (!res_data.success) {
-      return toast.error("Something went wrong, already exists");
+      return toast.error("فشل التسجيل");
     }
 
     localStorage.setItem("phone", JSON.stringify("+2" + data.phone));
     route({ to: "/auth/verification" });
-    return toast.success("Account created successfully");
+    return toast.success("تم التسجيل بنجاح");
   } catch (error) {
-    return toast.error("Something went wrong, already exists");
+    return toast.error("فشل التسجيل");
     return null;
   }
 };

@@ -1,4 +1,5 @@
 "use client";
+// @ts-nocheck
 import React from "react";
 
 import { filteredObject, NavGroup, NavGroupProps, NavType } from "./nav-group";
@@ -67,7 +68,3 @@ const Header = <T extends boolean>({
     </header>
   );
 };
-
-Header.displayName = "Header";
-
-export { Header };

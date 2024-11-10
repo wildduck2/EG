@@ -162,7 +162,7 @@ export async function user_edit_ad({
     return null;
   } catch (error) {
     console.error("Failed to create ad", error);
-    toast.error("Failed to create ad");
+    toast.error("فشل تعديل الاعلان");
     return null;
   }
 }

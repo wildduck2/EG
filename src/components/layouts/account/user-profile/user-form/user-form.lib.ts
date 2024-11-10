@@ -37,7 +37,7 @@ export const update_user_data = async ({
 }: UpdateUserFormData) => {
   const user: User = JSON.parse(localStorage.getItem("user-info") as string);
   if (!user) {
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تحديث بيانات المستخدم");
     return null;
   }
 
@@ -58,7 +58,7 @@ export const update_user_data = async ({
   formData.append("email", data.email);
   formData.append("phone_number", data.phone);
   if (user.is_trader === 1) {
-    formData.append("company_name", data.companyname);
+    formData.append("name_company", data.companyname);
   }
   formData.append("user_type", user.is_trader === 1 ? "trader" : "client");
 
@@ -75,15 +75,15 @@ export const update_user_data = async ({
     );
 
     if (res_data.success) {
-      toast.success("Your data has been saved");
+      toast.success("فشل في تحديث بيانات المستخدم");
       return res_data.data;
     }
 
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تحديث بيانات المستخدم");
     return null;
   } catch (error) {
     console.error(error);
-    toast.error("Your data has not been saved");
+    toast.error("فشل في تحديث بيانات المستخدم");
     return null;
   }
 };

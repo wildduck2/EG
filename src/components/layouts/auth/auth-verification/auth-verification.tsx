@@ -89,7 +89,6 @@ export const AuthVerification = ({
                   index={1}
                 />
               </InputOTPGroup>
-              <InputOTPSeparator />
               <InputOTPGroup>
                 <InputOTPSlot
                   className={cn(
@@ -106,7 +105,6 @@ export const AuthVerification = ({
                   index={3}
                 />
               </InputOTPGroup>
-              <InputOTPSeparator />
               <InputOTPGroup>
                 <InputOTPSlot
                   className={cn(

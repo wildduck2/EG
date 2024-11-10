@@ -30,7 +30,7 @@ export const Footer = () => {
   return (
     <footer className="text-white bg-[#ed1c24;]">
       <div className="pt-4 container">
-        <div className="flex flex-col lg:flex-row items-end  xl:gap-20 pb-12">
+        <div className="flex flex-col lg:flex-row items-end  xl:gap-20">
           <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-12 items-center xl:items-start w-full">
             <img src={lap} className="w-72" />
             <div>
@@ -63,12 +63,12 @@ export const Footer = () => {
             </div>
             <div className="flex flex-col gap-4 justify-cneter mt-[5rem] lg:mt-0">
               <h3 className="text-md font-bold">{footer.socialtitle}</h3>
-              <li className="flex justify-start items-center gap-2 text-sm mb-3 mr-4 rounded-lg overflow-hidden">
+              <li className="grid md:flex justify-start items-center gap-2 text-sm mb-3 mr-4 rounded-lg overflow-hidden">
                 <img
                   src={img1}
                   alt="img1"
                   style={{ maxWidth: "200px" }}
-                  className="rounded-lg "
+                  className="rounded-lg"
                 />
                 <img src={img2} alt="img2" style={{ maxWidth: "200px" }} />
               </li>
@@ -111,12 +111,15 @@ export const Footer = () => {
                     <img className="size-[2.2rem]" src={ticktock} alt="" />
                   </a>
                 </li>
+                <li>
+                  <a
+                    href="https://www.youtube.com/@goods_eg/videos"
+                    target="_blank"
+                  >
+                    <img className="size-[2.2rem]" src={yt} alt="" />
+                  </a>
+                </li>
                 {
-                  // <li>
-                  //     <a>
-                  //         <img className="size-[2.2rem]" src={yt} alt="" />
-                  //     </a>
-                  //     </li>
                   // <li>
                   //   <a>
                   //     <img className="size-[2.2rem]" src={snap} alt="" />

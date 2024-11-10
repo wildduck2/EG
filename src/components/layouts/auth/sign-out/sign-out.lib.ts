@@ -25,16 +25,16 @@ export const signoutAsync = async ({
 
     console.log(data.success);
     if (!data.success) {
-      toast.error("The User is not Signed out");
+      toast.error("فشل التسجيل الخروج");
       return;
     }
 
     localStorage.setItem("user-info", JSON.stringify(null));
     route({ to: "/auth/signin" });
-    toast.success("The User is Signed out successfully");
+    toast.success("تم تسجيل الخروج بنجاح");
     return true;
   } catch (error) {
-    toast.error("Sign out failed. Please try again.");
+    toast.error("فشل التسجيل الخروج");
     return false;
   }
 };

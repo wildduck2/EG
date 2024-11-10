@@ -99,7 +99,7 @@ export const ProductPageCardSwiper = ({ category }: { category: string }) => {
       );
 
       if (!data.success) {
-        toast.error("failed to get related ads");
+        toast.error("فشل الحصول على العروض الخاصة");
         return null;
       }
 

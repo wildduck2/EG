@@ -95,7 +95,7 @@ export const UpdatePasswordForm = () => {
 
       <Button
         type="submit"
-        className="w-1/2"
+        className="w-1/2 bg-[#ee1d24] text-primary-foreground hover:bg-[#ee1d24]/80"
         disabled={!formState.isValid || !formState.isDirty}
         loading={formState.isSubmitting}
       >

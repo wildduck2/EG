@@ -195,7 +195,7 @@ export const Bundles = ({ id }: { id: string }) => {
   if (status === "success" && data.length) {
     return (
       <div className="w-full flex flex-col justify-center">
-        <h3 className="text-xl font-semibold">Bundles</h3>
+        <h3 className="text-xl font-semibold">{t("bundles")}</h3>
         <div className="flex gap-4 justify-between my-4">
           {data.map((item, i) => (
             <Card
@@ -297,7 +297,7 @@ export async function get_method_payment_link({
 
     return null;
   } catch (error) {
-    toast.error("Failed to get payment link");
+    toast.error("شفل انشائاده را بررسی کنید");
     console.log(error);
     return null;
   }
@@ -333,7 +333,7 @@ export async function verifyAccount({
   setLoadiong(true);
   const user: User = JSON.parse(localStorage.getItem("user-info") as string);
   if (!user) {
-    toast.error("Your data has not been saved");
+    toast.error("فشل التحقق من الحساب");
     setLoadiong(false);
     return null;
   }
@@ -352,7 +352,7 @@ export async function verifyAccount({
     );
 
     if (!data.success) {
-      toast.error("Failed to send OTP");
+      toast.error("شفل انشائاده را بررسی کنید");
       setLoadiong(false);
       return;
     }
@@ -362,7 +362,7 @@ export async function verifyAccount({
       to: "/auth/verification",
     });
   } catch (error) {
-    toast.error("Failed to send OTP");
+    toast.error("شفل انشائاده را بررسی کنید");
     setLoadiong(false);
     return;
   }

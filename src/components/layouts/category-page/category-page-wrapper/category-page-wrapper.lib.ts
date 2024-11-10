@@ -58,7 +58,7 @@ export async function get_gategory_page_ads({
       );
 
       if (!data.success) {
-        toast.error("Failed to get category ad");
+        toast.error("فشل في استعادة الاعلانات");
         return null;
       }
 
@@ -76,7 +76,7 @@ export async function get_gategory_page_ads({
     }
   } catch (error) {
     console.log(error);
-    toast.error("Failed to get category ad");
+    toast.error("فشل في استعادة الاعلانات");
     return null;
   }
 }
