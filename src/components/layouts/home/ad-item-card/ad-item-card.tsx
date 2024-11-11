@@ -69,9 +69,11 @@ export const AdItemCard: React.FC<
       )}
     >
       <div className="absolute top-8 left-8 z-10 flex items-center gap-2">
-        <Badge className={cn("", status === "تحت المراجعه" && "opacity-90")}>
-          {status}
-        </Badge>
+        {status === "تحت المراجعه" && (
+          <Badge className={cn("", status === "تحت المراجعه" && "opacity-90")}>
+            {status}
+          </Badge>
+        )}
         {is_featured === 1 ? (
           <Button
             variant="secondary"

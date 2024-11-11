@@ -1,4 +1,5 @@
 import {
+  ds,
   Facebook,
   LinkedIn,
   Logo,
@@ -153,7 +154,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                       <div className="w-full">
                         <div className="flex gap-4 justify-center pb-4">
                           <h2 className="text-3xl font-semibold text-start w-full mb-3 flex items-center gap-4">
-                            <Building2 size={30} />{" "}
+                            <img src={ds} className="size-[3rem] rounded-lg" />{" "}
                             {user?.name || user?.company_name}
                           </h2>
                           <Popover>
@@ -309,7 +310,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             </CardHeader>
                             <CardContent className="grid gap-2 w-full">
                               <p className="text-primary/80 text-md text-start max-w-[800px]">
-                                asdfasdf{" "}
+                                {user?.about}
                               </p>
                             </CardContent>
                           </Card>
@@ -350,31 +351,15 @@ export const Route = createFileRoute("/account/trader2/$id")({
                           <div className="p-2 border rounded-lg flex items-center gap-4">
                             <h5 className="text-2xl">{t("address")}</h5>
                             <ul className="flex items-center gap-8 flex-col lg:flex-row">
-                              {filter_data.governorates.find(
-                                (e) => e.id === user?.governorate_id,
-                              )?.name && (
-                                <p className="text-md p-4 rounded-md bg-secondary/80">
-                                  {t("governorate")}:{" "}
-                                  {
-                                    filter_data.governorates.find(
-                                      (e) => e.id === user?.governorate_id,
-                                    )?.name
-                                  }
-                                </p>
-                              )}
+                              <p className="text-md p-4 rounded-md bg-secondary/80">
+                                {t("governorate")}: {user?.address}
+                              </p>
 
-                              {filter_data.regions.find(
-                                (e) => e.id === user?.region_id,
-                              )?.name && (
-                                <p className="text-md p-4 rounded-md bg-secondary/80">
-                                  {t("region")}:{" "}
-                                  {
-                                    filter_data.regions.find(
-                                      (e) => e.id === user?.region_id,
-                                    )?.name
-                                  }
-                                </p>
-                              )}
+                              {
+                                // <p className="text-md p-4 rounded-md bg-secondary/80">
+                                //   {t("region")}: {user?.address}
+                                // </p>
+                              }
                             </ul>
                           </div>
 
@@ -429,12 +414,18 @@ export const Route = createFileRoute("/account/trader2/$id")({
                           </Dialog>
                         ))}
                       </div>
-                      <Button
-                        size={"lg"}
+                      <a
+                        href={user?.catalog}
                         className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
+                        target="_blank"
                       >
-                        {i18n.dir() === "ltr" ? "Catelog" : "كاتالوج"}
-                      </Button>
+                        <Button
+                          size={"lg"}
+                          className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
+                        >
+                          {i18n.dir() === "ltr" ? "Catelog" : "كاتالوج"}
+                        </Button>
+                      </a>
                     </div>
 
                     <Card className="m-4">
