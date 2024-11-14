@@ -413,6 +413,12 @@ export const FilterSlector = ({
 }) => {
   const [open, setOpen] = React.useState(false);
   const { t, i18n } = useTranslation();
+  console.log(
+    filter_data,
+    filter_data.filter((item) => item?.[id] === selected?.id),
+    id,
+    selected,
+  );
 
   return (
     <div className=" max-w-[48.5%] w-full">

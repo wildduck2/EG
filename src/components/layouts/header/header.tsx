@@ -47,8 +47,6 @@ export const Header = () => {
   const userData = JSON.parse(localStorage.getItem("user-info") as string);
   const [isSticky, setIsSticky] = React.useState(false);
 
-  console.log();
-
   React.useEffect(() => {
     window.onscroll = () => {
       if (window.scrollY > 0) {
@@ -364,8 +362,9 @@ export const SGHeader = () => {
           filter_data={filter_data.regions}
           value={{ id: filter_data1.region } as any}
           name={t("regions")}
-          // id={"governorate_id"}
-          // selected={{ governorate_id: filter_data.governates }}
+          id={"governorate_id"}
+          disabled={filter_data1.governates ? false : true}
+          selected={filter_data1.governates}
           setValue={(item: FilterSchema["regions"]) => {
             setFilterData((old) => ({
               ...old,

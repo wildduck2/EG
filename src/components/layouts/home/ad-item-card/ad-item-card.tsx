@@ -237,7 +237,7 @@ export const DeleteButton = ({ id }: { id: number }) => {
     <Button
       variant="destructive"
       size={"icon"}
-      className=""
+      className="w-24"
       onClick={() => {
         startMutation.mutate();
       }}

@@ -25,6 +25,7 @@ export const UserAds = () => {
       refetchOnWindowFocus: false,
     });
 
+  // console.log(data);
   if (status === "pending") {
     return <UserAdsSkeleton />;
   }

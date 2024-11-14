@@ -110,47 +110,6 @@ export const Route = createFileRoute("/account/trader2/$id")({
                 <div className="grid grid-cols-3 w-[98%]">
                   <div className="flex flex-col mx auto w-full col-span-2">
                     <div className="flex items-start justify-between gap-8 px-3">
-                      <ul className="flex flex-col items-center gap-8 lg:mt-[4.2rem] place-content-center lg:mr-8">
-                        <a href={user.facebook} target="_blank">
-                          <img
-                            src={Facebook}
-                            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-                          />
-                        </a>
-                        <a href={user.twitter} target="_blank">
-                          <img
-                            src={x}
-                            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-                          />
-                        </a>
-                        <a
-                          href={"https://wa.me/" + user.whatsapp}
-                          target="_blank"
-                        >
-                          <img
-                            src={wts}
-                            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-                          />
-                        </a>
-                        <a href={user.instagram} target="_blank">
-                          <img
-                            src={Whatsapp}
-                            className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-                          />
-                        </a>
-
-                        {user.tiktok && (
-                          <li>
-                            <a href={user.tiktok} target="_blank">
-                              <img
-                                className="size-[3.2rem]"
-                                src={ticktock}
-                                alt=""
-                              />
-                            </a>
-                          </li>
-                        )}
-                      </ul>
                       <div className="w-full">
                         <div className="flex gap-4 justify-center pb-4">
                           <h2 className="text-3xl font-semibold text-start w-full mb-3 flex items-center gap-4">
@@ -332,18 +291,9 @@ export const Route = createFileRoute("/account/trader2/$id")({
                                   </p>
                                 )}
 
-                                {filter_data.subcategories.find(
-                                  (e) => e.id === user?.subcategory_id,
-                                )?.name && (
-                                  <p className="text-md p-4 rounded-md bg-secondary/80">
-                                    {t("subcategory")}:
-                                    {
-                                      filter_data.subcategories.find(
-                                        (e) => e.id === user?.subcategory_id,
-                                      )?.name
-                                    }
-                                  </p>
-                                )}
+                                <p className="text-md p-4 rounded-md bg-secondary/80">
+                                  {t("subcategory")}:{user?.subcategory}
+                                </p>
                               </div>
                             </div>
                           </div>
@@ -352,7 +302,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             <h5 className="text-2xl">{t("address")}</h5>
                             <ul className="flex items-center gap-8 flex-col lg:flex-row">
                               <p className="text-md p-4 rounded-md bg-secondary/80">
-                                {t("governorate")}: {user?.address}
+                                {user?.address}
                               </p>
 
                               {
@@ -380,85 +330,137 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             </CardContent>
                           </Card>
                         </div>
+                        <div className="p-2 border rounded-lg gap-4  mt-4">
+                          <h5 className="text-primary/90 text-2xl flex items-center gap-3 mb-3">
+                            {i18n.dir() === "ltr" ? "الصور" : "الصور"}
+                          </h5>
+                          <div className="grid grid-cols-4 gap-2 max-w-[100%] pl-3">
+                            {user.images.map(
+                              (image) =>
+                                image?.image_type === "profile" && (
+                                  <Dialog>
+                                    <DialogTrigger className="w-full">
+                                      <picture>
+                                        <img
+                                          className="lg:h-[150px] w-full object-cover rounded-md border border-solid border-border"
+                                          src={
+                                            process.env
+                                              .BACKEND__BASE_UPLOAD_URL +
+                                            "/" +
+                                            image?.image_path
+                                          }
+                                        />
+                                      </picture>
+                                    </DialogTrigger>
+                                    <DialogContent className="max-w-[90dvw] w-full">
+                                      <img
+                                        className="lg:h-[90dvh] w-[90dvw] object-contain"
+                                        src={
+                                          process.env.BACKEND__BASE_UPLOAD_URL +
+                                          "/" +
+                                          image?.image_path
+                                        }
+                                      />
+                                    </DialogContent>
+                                  </Dialog>
+                                ),
+                            )}
+                          </div>
+                          <a
+                            href={user?.catalog}
+                            className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
+                            target="_blank"
+                          >
+                            <Button
+                              size={"lg"}
+                              className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
+                            >
+                              {i18n.dir() === "ltr" ? "Catelog" : "كاتالوج"}
+                            </Button>
+                          </a>
+                        </div>
+                        <Card className="mt-4">
+                          <CardHeader>
+                            <CardTitle>{products.locationtitle}</CardTitle>
+                          </CardHeader>
+                          <CardContent className="grid gap-2 w-full">
+                            <iframe
+                              height="450"
+                              loading="lazy"
+                              className="w-full rounded-lg border border-border border-solid"
+                              src={`https://www.google.com/maps?q=${user?.latitude},${user?.longitude}&z=15&output=embed`}
+                            ></iframe>
+                          </CardContent>
+                        </Card>
                       </div>
                     </div>
-                    <div className="p-2 border rounded-lg gap-4  mr-[7.8rem] ml-[.8rem] mt-4">
-                      <h5 className="text-primary/90 text-2xl flex items-center gap-3 mb-3">
-                        {i18n.dir() === "ltr" ? "الصور" : "الصور"}
-                      </h5>
-                      <div className="grid grid-cols-4 gap-2 max-w-[100%] pl-3">
-                        {user.images.map((image) => (
-                          <Dialog>
-                            <DialogTrigger className="w-full">
-                              <picture>
-                                <img
-                                  className="lg:h-[150px] w-full object-cover rounded-md border border-solid border-border"
-                                  src={
-                                    process.env.BACKEND__BASE_UPLOAD_URL +
-                                    "/" +
-                                    image?.image_path
-                                  }
-                                />
-                              </picture>
-                            </DialogTrigger>
-                            <DialogContent className="max-w-[90dvw] w-full">
+                  </div>
+
+                  <div>
+                    <ul className="flex flex-row items-center gap-8 place-content-center ">
+                      <a href={user.facebook} target="_blank">
+                        <img
+                          src={Facebook}
+                          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+                        />
+                      </a>
+                      <a href={user.twitter} target="_blank">
+                        <img
+                          src={x}
+                          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+                        />
+                      </a>
+                      <a
+                        href={"https://wa.me/" + user.whatsapp}
+                        target="_blank"
+                      >
+                        <img
+                          src={wts}
+                          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+                        />
+                      </a>
+                      <a href={user.instagram} target="_blank">
+                        <img
+                          src={Whatsapp}
+                          className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
+                        />
+                      </a>
+
+                      {user.tiktok && (
+                        <li>
+                          <a href={user.tiktok} target="_blank">
+                            <img
+                              className="size-[3.2rem]"
+                              src={ticktock}
+                              alt=""
+                            />
+                          </a>
+                        </li>
+                      )}
+                    </ul>
+
+                    <div className="w-full border h-[95.5%] m-4 flex flex-col gap-4 mb-8 p-4 rounded-lg mt-[1.7rem] overflow-hidden">
+                      {user.images.map(
+                        (image) =>
+                          image?.image_type === "banner" && (
+                            <a
+                              // href={bannersss?.[0]?.link}
+                              target="_blank"
+                              className="size-[27.2rem] h-fit border w-full p-8 rounded-lg"
+                            >
                               <img
-                                className="lg:h-[90dvh] w-[90dvw] object-contain"
                                 src={
                                   process.env.BACKEND__BASE_UPLOAD_URL +
                                   "/" +
                                   image?.image_path
                                 }
+                                alt="banner"
+                                className=" object-cover rounded-xl"
                               />
-                            </DialogContent>
-                          </Dialog>
-                        ))}
-                      </div>
-                      <a
-                        href={user?.catalog}
-                        className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
-                        target="_blank"
-                      >
-                        <Button
-                          size={"lg"}
-                          className="mt-4 w-[50%] bg-[#ed1c24] text-white mx-auto"
-                        >
-                          {i18n.dir() === "ltr" ? "Catelog" : "كاتالوج"}
-                        </Button>
-                      </a>
+                            </a>
+                          ),
+                      )}
                     </div>
-
-                    <Card className="m-4">
-                      <CardHeader>
-                        <CardTitle>{products.locationtitle}</CardTitle>
-                      </CardHeader>
-                      <CardContent className="grid gap-2 w-full">
-                        <iframe
-                          height="450"
-                          loading="lazy"
-                          className="w-full rounded-lg border border-border border-solid"
-                          src={`https://www.google.com/maps?q=${user?.latitude},${user?.longitude}&z=15&output=embed`}
-                        ></iframe>
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  <div className="w-full border h-[95.5%] m-4 mb-8 p-4 rounded-lg mt-[4.1rem] overflow-hidden">
-                    <a
-                      href={bannersss?.[0]?.link}
-                      target="_blank"
-                      className="w-full h-full"
-                    >
-                      <img
-                        src={
-                          process.env.BACKEND__BASE_UPLOAD_URL +
-                          "/" +
-                          bannersss?.[0]?.image
-                        }
-                        alt="banner"
-                        className="w-full h-full object-cover rounded-xl"
-                      />
-                    </a>
                   </div>
                 </div>
               </section>

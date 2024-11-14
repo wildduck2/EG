@@ -24,7 +24,7 @@ export const ProductPageSwiper = ({ data }: { data: ProductType }) => {
         <CarouselItem key={index}>
           <Dialog>
             <DialogTrigger className="w-full">
-              {data.is_featured && (
+              {data.is_featured ? (
                 <Button
                   variant="secondary"
                   size="sm"
@@ -39,6 +39,8 @@ export const ProductPageSwiper = ({ data }: { data: ProductType }) => {
                     className={cn("size-5", "text-yellow-400 fill-yellow-400")}
                   />
                 </Button>
+              ) : (
+                ""
               )}
               <picture>
                 <img

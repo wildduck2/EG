@@ -75,6 +75,19 @@ export const Footer = () => {
               <ul className="flex items-center xl:justify-center gap-3 lg:mb-4">
                 <li>
                   <a
+                    href="https://www.facebook.com/people/%D8%A7%D9%84%D8%A8%D8%B6%D8%A7%D8%B9%D8%A9/61563898674585/"
+                    target="_blank"
+                  >
+                    <img className="size-[2.2rem]" src={Facebook} alt="" />
+                  </a>
+                </li>
+                <li>
+                  <a href="https://x.com/Goods_Eg" target="_blank">
+                    <img className="size-[2.2rem]" src={x} alt="" />
+                  </a>
+                </li>
+                <li>
+                  <a
                     href="https://www.instagram.com/goods.egypt/"
                     target="_blank"
                   >
@@ -95,28 +108,15 @@ export const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href="https://www.facebook.com/people/%D8%A7%D9%84%D8%A8%D8%B6%D8%A7%D8%B9%D8%A9/61563898674585/"
+                    href="https://www.youtube.com/@goods_eg/videos"
                     target="_blank"
                   >
-                    <img className="size-[2.2rem]" src={Facebook} alt="" />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://x.com/Goods_Eg" target="_blank">
-                    <img className="size-[2.2rem]" src={x} alt="" />
+                    <img className="size-[2.2rem]" src={yt} alt="" />
                   </a>
                 </li>
                 <li>
                   <a href="https://www.tiktok.com/@goods.eg" target="_blank">
                     <img className="size-[2.2rem]" src={ticktock} alt="" />
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://www.youtube.com/@goods_eg/videos"
-                    target="_blank"
-                  >
-                    <img className="size-[2.2rem]" src={yt} alt="" />
                   </a>
                 </li>
                 {

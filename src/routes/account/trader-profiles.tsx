@@ -243,7 +243,7 @@ export const TraderProfiles = () => {
           {data.pages
             .flatMap((page) => page?.data)
             ?.map((e: any, i) => (
-              <div className="flex flex-col place-items-center gap-8 border p-4 rounded-lg">
+              <div className="flex flex-col place-items-center gap-4 border p-4 rounded-lg">
                 <Link
                   key={e.id as any}
                   className="flex flex-col justify-center items-center w-full rounded-lg gap-2 "
@@ -264,7 +264,7 @@ export const TraderProfiles = () => {
                     {e.company_name}
                   </h4>
                   <p className="text-primary/80 text-lg text-center">
-                    {t("description")}: {e?.description}
+                    {e?.description}
                   </p>
                 </Link>
                 <div className="flex items-center gap-2">
