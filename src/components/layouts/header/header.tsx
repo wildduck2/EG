@@ -203,7 +203,7 @@ export const Header = () => {
                       {t("egypt")}
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-96 p-4">
+                  <PopoverContent className="w-fit p-4">
                     <SGHeader />
                   </PopoverContent>
                 </Popover>
@@ -346,7 +346,10 @@ export const SGHeader = () => {
         });
       }}
     >
-      <div className="flex items-center gap-2 w-full" dir={i18n.dir()}>
+      <div
+        className="flex items-center gap-2 w-full [&_div]:w-[300px]"
+        dir={i18n.dir()}
+      >
         <FilterSlector
           filter_data={filter_data.governorates}
           value={{ id: filter_data1.governates } as any}
@@ -358,20 +361,22 @@ export const SGHeader = () => {
             }));
           }}
         />
-        <FilterSlector
-          filter_data={filter_data.regions}
-          value={{ id: filter_data1.region } as any}
-          name={t("regions")}
-          id={"governorate_id"}
-          disabled={filter_data1.governates ? false : true}
-          selected={filter_data1.governates}
-          setValue={(item: FilterSchema["regions"]) => {
-            setFilterData((old) => ({
-              ...old,
-              region: item?.id as number,
-            }));
-          }}
-        />
+        {
+          // <FilterSlector
+          //         filter_data={filter_data.regions}
+          //         value={{ id: filter_data1.region } as any}
+          //         name={t("regions")}
+          //         id={"governorate_id"}
+          //         disabled={filter_data1.governates ? false : true}
+          //         selected={filter_data1.governates}
+          //         setValue={(item: FilterSchema["regions"]) => {
+          //           setFilterData((old) => ({
+          //             ...old,
+          //             region: item?.id as number,
+          //           }));
+          //         }}
+          //       />
+        }
       </div>
 
       <Button type="submit" className="w-full mt-4">

@@ -94,7 +94,7 @@ export const ProductPreviewInfo = React.forwardRef<
               }}
             />
           </a>
-          <a href={`https://wa.me/${data.user.phone_number}`} target="_blank">
+          <a href={`sms:${data.user.phone_number}`} target="_blank">
             <Button
               variant={"default"}
               className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
@@ -197,13 +197,14 @@ export const ProductPreviewInfo = React.forwardRef<
             variant={"ghost"}
             size={"lg"}
             onClick={() => {
-              if (data.user.is_trader !== 0) {
-                return route({
-                  to: `/account`,
-                });
-              }
+              // if (data.user.is_trader !== 0) {
+              //   return route({
+              //     to: `/account`,
+              //   });
+              // }
+
               route({
-                to: `/account/trader/$id`,
+                to: `/trader/$id`,
                 params: { id: data.user.id.toString() },
                 state: {
                   user: data.user,

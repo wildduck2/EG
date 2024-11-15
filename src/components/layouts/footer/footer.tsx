@@ -28,7 +28,7 @@ export const Footer = () => {
   //           </h3>
   //         </div>
   return (
-    <footer className="text-white bg-[#ed1c24;]">
+    <footer className="text-white bg-[#ed1c24;] z-10 relative">
       <div className="pt-4 container">
         <div className="flex flex-col lg:flex-row items-end  xl:gap-20">
           <div className="flex flex-col md:flex-row lg:flex-col xl:flex-row gap-12 items-center xl:items-start w-full">

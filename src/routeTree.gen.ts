@@ -14,6 +14,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as TraderIdImport } from './routes/trader.$id'
 import { Route as CategoriesCategoriesImport } from './routes/categories/_categories'
 import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as AccountTraderProfilesImport } from './routes/account/trader-profiles'
@@ -31,7 +32,6 @@ import { Route as AuthAuthForgetPasswordImport } from './routes/auth/_auth.forge
 import { Route as AuthAuthChangePasswordImport } from './routes/auth/_auth.change-password'
 import { Route as AccountTrader2IdImport } from './routes/account/trader2.$id'
 import { Route as CategoriesCategoriesSearchIdImport } from './routes/categories/_categories.search.$id'
-import { Route as AccountAccountTraderIdImport } from './routes/account/_account.trader.$id'
 
 // Create Virtual Routes
 
@@ -69,6 +69,11 @@ const IndexRoute = IndexImport.update({
 const CategoriesProductRoute = CategoriesProductImport.update({
   path: '/product',
   getParentRoute: () => CategoriesRoute,
+} as any)
+
+const TraderIdRoute = TraderIdImport.update({
+  path: '/trader/$id',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const CategoriesCategoriesRoute = CategoriesCategoriesImport.update({
@@ -178,11 +183,6 @@ const CategoriesCategoriesSearchIdRoute =
     getParentRoute: () => CategoriesCategoriesSearchRoute,
   } as any)
 
-const AccountAccountTraderIdRoute = AccountAccountTraderIdImport.update({
-  path: '/trader/$id',
-  getParentRoute: () => AccountAccountRoute,
-} as any)
-
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -242,6 +242,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/categories'
       preLoaderRoute: typeof CategoriesCategoriesImport
       parentRoute: typeof CategoriesRoute
+    }
+    '/trader/$id': {
+      id: '/trader/$id'
+      path: '/trader/$id'
+      fullPath: '/trader/$id'
+      preLoaderRoute: typeof TraderIdImport
+      parentRoute: typeof rootRoute
     }
     '/account/trader2/$id': {
       id: '/account/trader2/$id'
@@ -341,13 +348,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesCategoriesIndexImport
       parentRoute: typeof CategoriesCategoriesImport
     }
-    '/account/_account/trader/$id': {
-      id: '/account/_account/trader/$id'
-      path: '/trader/$id'
-      fullPath: '/account/trader/$id'
-      preLoaderRoute: typeof AccountAccountTraderIdImport
-      parentRoute: typeof AccountAccountImport
-    }
     '/categories/_categories/search/$id': {
       id: '/categories/_categories/search/$id'
       path: '/$id'
@@ -369,12 +369,10 @@ declare module '@tanstack/react-router' {
 
 interface AccountAccountRouteChildren {
   AccountAccountIndexRoute: typeof AccountAccountIndexRoute
-  AccountAccountTraderIdRoute: typeof AccountAccountTraderIdRoute
 }
 
 const AccountAccountRouteChildren: AccountAccountRouteChildren = {
   AccountAccountIndexRoute: AccountAccountIndexRoute,
-  AccountAccountTraderIdRoute: AccountAccountTraderIdRoute,
 }
 
 const AccountAccountRouteWithChildren = AccountAccountRoute._addFileChildren(
@@ -505,6 +503,7 @@ export interface FileRoutesByFullPath {
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesCategoriesRouteWithChildren
+  '/trader/$id': typeof TraderIdRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -518,7 +517,6 @@ export interface FileRoutesByFullPath {
   '/auth/signup': typeof AuthAuthSignupLazyRoute
   '/account/': typeof AccountAccountIndexRoute
   '/categories/': typeof CategoriesCategoriesIndexRoute
-  '/account/trader/$id': typeof AccountAccountTraderIdRoute
   '/categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
   '/categories/product/$product': typeof CategoriesProductProductProductLazyRoute
 }
@@ -529,6 +527,7 @@ export interface FileRoutesByTo {
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesCategoriesIndexRoute
+  '/trader/$id': typeof TraderIdRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -540,7 +539,6 @@ export interface FileRoutesByTo {
   '/categories/search': typeof CategoriesCategoriesSearchRouteWithChildren
   '/categories/product': typeof CategoriesProductProductRouteWithChildren
   '/auth/signup': typeof AuthAuthSignupLazyRoute
-  '/account/trader/$id': typeof AccountAccountTraderIdRoute
   '/categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
   '/categories/product/$product': typeof CategoriesProductProductProductLazyRoute
 }
@@ -555,6 +553,7 @@ export interface FileRoutesById {
   '/auth/_auth': typeof AuthAuthRouteWithChildren
   '/categories': typeof CategoriesRouteWithChildren
   '/categories/_categories': typeof CategoriesCategoriesRouteWithChildren
+  '/trader/$id': typeof TraderIdRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/_auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/_auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -569,7 +568,6 @@ export interface FileRoutesById {
   '/auth/_auth/signup': typeof AuthAuthSignupLazyRoute
   '/account/_account/': typeof AccountAccountIndexRoute
   '/categories/_categories/': typeof CategoriesCategoriesIndexRoute
-  '/account/_account/trader/$id': typeof AccountAccountTraderIdRoute
   '/categories/_categories/search/$id': typeof CategoriesCategoriesSearchIdRoute
   '/categories/product/_product/$product': typeof CategoriesProductProductProductLazyRoute
 }
@@ -582,6 +580,7 @@ export interface FileRouteTypes {
     | '/account/trader-profiles'
     | '/auth'
     | '/categories'
+    | '/trader/$id'
     | '/account/trader2/$id'
     | '/auth/change-password'
     | '/auth/forget-password'
@@ -595,7 +594,6 @@ export interface FileRouteTypes {
     | '/auth/signup'
     | '/account/'
     | '/categories/'
-    | '/account/trader/$id'
     | '/categories/search/$id'
     | '/categories/product/$product'
   fileRoutesByTo: FileRoutesByTo
@@ -605,6 +603,7 @@ export interface FileRouteTypes {
     | '/account/trader-profiles'
     | '/auth'
     | '/categories'
+    | '/trader/$id'
     | '/account/trader2/$id'
     | '/auth/change-password'
     | '/auth/forget-password'
@@ -616,7 +615,6 @@ export interface FileRouteTypes {
     | '/categories/search'
     | '/categories/product'
     | '/auth/signup'
-    | '/account/trader/$id'
     | '/categories/search/$id'
     | '/categories/product/$product'
   id:
@@ -629,6 +627,7 @@ export interface FileRouteTypes {
     | '/auth/_auth'
     | '/categories'
     | '/categories/_categories'
+    | '/trader/$id'
     | '/account/trader2/$id'
     | '/auth/_auth/change-password'
     | '/auth/_auth/forget-password'
@@ -643,7 +642,6 @@ export interface FileRouteTypes {
     | '/auth/_auth/signup'
     | '/account/_account/'
     | '/categories/_categories/'
-    | '/account/_account/trader/$id'
     | '/categories/_categories/search/$id'
     | '/categories/product/_product/$product'
   fileRoutesById: FileRoutesById
@@ -654,6 +652,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
   CategoriesRoute: typeof CategoriesRouteWithChildren
+  TraderIdRoute: typeof TraderIdRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -661,6 +660,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
   CategoriesRoute: CategoriesRouteWithChildren,
+  TraderIdRoute: TraderIdRoute,
 }
 
 export const routeTree = rootRoute
@@ -678,7 +678,8 @@ export const routeTree = rootRoute
         "/",
         "/account",
         "/auth",
-        "/categories"
+        "/categories",
+        "/trader/$id"
       ]
     },
     "/": {
@@ -696,8 +697,7 @@ export const routeTree = rootRoute
       "filePath": "account/_account.tsx",
       "parent": "/account",
       "children": [
-        "/account/_account/",
-        "/account/_account/trader/$id"
+        "/account/_account/"
       ]
     },
     "/account/trader-profiles": {
@@ -738,6 +738,9 @@ export const routeTree = rootRoute
         "/categories/_categories/search",
         "/categories/_categories/"
       ]
+    },
+    "/trader/$id": {
+      "filePath": "trader.$id.tsx"
     },
     "/account/trader2/$id": {
       "filePath": "account/trader2.$id.tsx",
@@ -803,10 +806,6 @@ export const routeTree = rootRoute
     "/categories/_categories/": {
       "filePath": "categories/_categories.index.tsx",
       "parent": "/categories/_categories"
-    },
-    "/account/_account/trader/$id": {
-      "filePath": "account/_account.trader.$id.tsx",
-      "parent": "/account/_account"
     },
     "/categories/_categories/search/$id": {
       "filePath": "categories/_categories.search.$id.tsx",

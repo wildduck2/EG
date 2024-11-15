@@ -22,8 +22,7 @@ export const TraderProfile = ({ id }: { id: string }) => {
   const [filter_data, setFilterData] = useAtom(filterData);
 
   return (
-    user?.name ||
-    (user?.company_name && (
+    user?.name && (
       <section className="flex gap-8 items-start my-8 min-h-[63vh]">
         <div className="flex flex-col gap-4 w-full">
           <div className="flex gap-8 items-center">
@@ -31,8 +30,6 @@ export const TraderProfile = ({ id }: { id: string }) => {
               src={
                 (user?.image &&
                   process.env.BACKEND__BASE_UPLOAD_URL + "/" + user?.image) ||
-                (user?.slug &&
-                  process.env.BACKEND__BASE_UPLOAD_URL + "/" + user?.slug) ||
                 "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLMI5YxZE03Vnj-s-sth2_JxlPd30Zy7yEGg&s"
               }
               className="w-36 h-36 rounded-full border"
@@ -40,9 +37,7 @@ export const TraderProfile = ({ id }: { id: string }) => {
             />
             <div className="flex flex-col gap-4">
               <div className="flex items-center gap-4">
-                <h2 className="text-3xl font-semibold">
-                  {user?.name || user?.company_name}
-                </h2>
+                <h2 className="text-3xl font-semibold">{user?.name}</h2>
 
                 <p className="text-primary/60 text-sm">{user?.created_at}</p>
               </div>
@@ -131,6 +126,6 @@ export const TraderProfile = ({ id }: { id: string }) => {
           {user?.name && <TraderProfileAds id={id || user?.id} />}
         </div>
       </section>
-    ))
+    )
   );
 };

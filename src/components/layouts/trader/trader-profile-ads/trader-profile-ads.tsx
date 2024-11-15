@@ -21,7 +21,7 @@ export const TraderProfileAds = ({ id }: { id: string }) => {
   }
 
   if (status === "success" && !data) {
-    return <h2 className="text-center text-sm">{t("notrades")}</h2>;
+    return <h2 className="text-center text-sm">{t("notradess")}</h2>;
   }
 
   if (status === "success" && data) {

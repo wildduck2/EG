@@ -12,6 +12,7 @@ i18n
       en: {
         translation: {
           contact: "phone numbers",
+          notradess: "there's not ads",
           sorty: "category",
           preface: "Preface",
           search2: "Search for the trader, companies and factories...",
@@ -567,7 +568,8 @@ i18n
           card: "بطاقة",
           wallet: "محفظة",
           pickpaymentmenthod: "اختر طريقة الدفع",
-          tradersprofile: "بحث التجار",
+          tradersprofile: "ابحث في الدليل",
+          notradess: "لا يوجد اعلانات",
           searchy: "ابحث",
           notrades: "لا يوجد تجار",
           searchyy: "ابحث عن تاجر او شركه",

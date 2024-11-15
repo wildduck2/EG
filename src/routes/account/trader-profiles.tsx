@@ -263,39 +263,7 @@ export const TraderProfiles = () => {
                   <h4 className="text-center mt-0 font-semibold text-lg transition-colors duration-300 ease-in-out group-hover:text-[#ffc223]">
                     {e.company_name}
                   </h4>
-                  <p className="text-primary/80 text-lg text-center">
-                    {e?.description}
-                  </p>
                 </Link>
-                <div className="flex items-center gap-2">
-                  <a href={`tel:${e.phone_number}`} target="_blank">
-                    <Button
-                      variant={"default"}
-                      className="w-full w-[50px] h-[50px] grid-2"
-                      icon={{
-                        icon: Phone,
-                      }}
-                    ></Button>
-                  </a>
-                  <a href={`https://wa.me/${e.phone_number}`} target="_blank">
-                    <Button
-                      variant={"default"}
-                      className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6 bg-green-400 hover:bg-green-500"
-                      icon={{
-                        icon: FaWhatsapp,
-                      }}
-                    />
-                  </a>
-                  <a href={`https://wa.me/${e.phone_number}`} target="_blank">
-                    <Button
-                      variant={"default"}
-                      className="md:w-[50px] h-[50px] [&_svg]:w-6 [&_svg]:h-6"
-                      icon={{
-                        icon: MessageSquare,
-                      }}
-                    ></Button>
-                  </a>
-                </div>
               </div>
             ))}
         </div>

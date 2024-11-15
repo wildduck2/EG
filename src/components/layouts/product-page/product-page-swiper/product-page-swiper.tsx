@@ -50,10 +50,22 @@ export const ProductPageSwiper = ({ data }: { data: ProductType }) => {
               </picture>
             </DialogTrigger>
             <DialogContent className="max-w-[90dvw] w-full">
-              <img
-                className="lg:h-[90dvh] w-[90dvw] object-contain"
-                src={process.env.BACKEND__BASE_UPLOAD_URL + "/" + image}
-              />
+              <CustomCarousel>
+                {[...data.images.map((item) => item.image_path)].map(
+                  (image, index) => (
+                    <CarouselItem key={index}>
+                      <picture>
+                        <img
+                          className="lg:h-[500px] w-full object-contain rounded-md"
+                          src={
+                            process.env.BACKEND__BASE_UPLOAD_URL + "/" + image
+                          }
+                        />
+                      </picture>
+                    </CarouselItem>
+                  ),
+                )}
+              </CustomCarousel>
             </DialogContent>
           </Dialog>
         </CarouselItem>

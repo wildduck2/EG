@@ -168,7 +168,7 @@ export const UserAddAd = ({
         trigger={{
           children: (
             <Button
-              variant="outline"
+              variant="destructive"
               size={default_input?.title ? "icon" : "default"}
               className=""
               icon={{

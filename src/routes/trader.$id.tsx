@@ -1,15 +1,14 @@
+import { Footer, Header } from "@/components/layouts";
 import { TraderProfilePage } from "@/components/pages";
 import { createFileRoute } from "@tanstack/react-router";
 
-type TraderRouteState = {
-  isVIP: boolean;
-};
-
-export const Route = createFileRoute("/account/_account/trader/$id")({
+export const Route = createFileRoute("/trader/$id")({
   component: () => {
     return (
       <>
+        <Header />
         <TraderProfilePage />
+        <Footer />
       </>
     );
   },
