@@ -54,7 +54,7 @@ export const update_user_data = async ({
   }
 
   // Add other fields to the FormData
-  formData.append("name", data.username);
+  formData.append("name", data.firstName + " " + data.lastName);
   formData.append("email", data.email);
   formData.append("phone_number", data.phone);
   if (user.is_trader === 1) {

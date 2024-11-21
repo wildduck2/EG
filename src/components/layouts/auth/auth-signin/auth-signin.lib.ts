@@ -32,7 +32,7 @@ export const onSubmitSignin = async (
     );
 
     if (!res_data.data) {
-      toast.error("فشل تسجيل الدخول");
+      // toast.error("فشل تسجيل الدخول");
       return null;
     }
 
@@ -42,7 +42,10 @@ export const onSubmitSignin = async (
     localStorage.setItem("user-info", JSON.stringify(res_data.data.user));
     return res_data;
   } catch (error) {
-    toast.error("فشل تسجيل الدخول");
+    console.log();
+
+    toast.error(error.response.data.msg);
+    // toast.error("فشل تسجيل الدخول");
     return null;
   }
 };

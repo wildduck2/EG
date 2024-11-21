@@ -24,7 +24,7 @@ export const onSubmitSignup = async <T extends TraderValues>(
     const { data: res_data } = await axios.post(
       process.env.BACKEND__BASE_URL + "/user/register",
       {
-        name: data.username,
+        name: data.first_name + " " + data.last_name,
         email: data.email,
         name_company: data.companyname,
         password_confirmation: data.password_confirmation,
@@ -45,8 +45,10 @@ export const onSubmitSignup = async <T extends TraderValues>(
     }
 
     localStorage.setItem("phone", JSON.stringify("+2" + data.phone));
-    route({ to: "/auth/verification" });
-    return toast.success("تم التسجيل بنجاح");
+    toast.success("جاري المراجعه البيانات لتفعيل الحساب");
+    route({ to: "/auth/signin" });
+    // route({ to: "/auth/verification" });
+    // return toast.success("تم التسجيل بنجاح");
   } catch (error) {
     return toast.error("فشل التسجيل");
     return null;

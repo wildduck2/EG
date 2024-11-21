@@ -64,12 +64,17 @@ export const Footer = () => {
             <div className="flex flex-col gap-4 justify-cneter mt-[5rem] lg:mt-0">
               <h3 className="text-md font-bold">{footer.socialtitle}</h3>
               <li className="grid md:flex justify-start items-center gap-2 text-sm mb-3 mr-4 rounded-lg overflow-hidden">
-                <img
-                  src={img1}
-                  alt="img1"
-                  style={{ maxWidth: "200px" }}
-                  className="rounded-lg"
-                />
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.goods.elbda"
+                  target="_blank"
+                >
+                  <img
+                    src={img1}
+                    alt="img1"
+                    style={{ maxWidth: "200px" }}
+                    className="rounded-lg"
+                  />
+                </a>
                 <img src={img2} alt="img2" style={{ maxWidth: "200px" }} />
               </li>
               <ul className="flex items-center xl:justify-center gap-3 lg:mb-4">

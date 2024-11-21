@@ -33,7 +33,8 @@ export const AuthSignup = () => {
       password: "",
       password_confirmation: "",
       email: "",
-      username: "",
+      first_name: "",
+      last_name: "",
     },
     shouldUseNativeValidation: false,
     criteriaMode: "all",
@@ -47,7 +48,8 @@ export const AuthSignup = () => {
       password: "",
       password_confirmation: "",
       email: "",
-      username: "",
+      first_name: "",
+      last_name: "",
       companyname: "",
     },
     shouldUseNativeValidation: false,
@@ -135,24 +137,45 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
       >
         <div>
           <div className="flex flex-col gap-2">
-            <FormInput
-              name="username"
-              register={register("username")}
-              error={{
-                states: formState.errors.username?.types,
-                errors: userNameErrorsArray,
-                inputError: formState.errors.username?.message,
-                type: "slide",
-              }}
-              input={{
-                id: "username",
-                placeholder: signup.username,
-                type: "text",
-                autoCapitalize: "none",
-                autoCorrect: "off",
-                required: true,
-              }}
-            />
+            <div className="flex items-center gap-2" dir={i18n.dir()}>
+              <FormInput
+                name="username"
+                register={register("first_name")}
+                error={{
+                  states: formState.errors.username?.types,
+                  errors: userNameErrorsArray,
+                  inputError: formState.errors.username?.message,
+                  type: "slide",
+                }}
+                input={{
+                  id: "username",
+                  placeholder: signup.firstName,
+                  type: "text",
+                  autoCapitalize: "none",
+                  autoCorrect: "off",
+                  required: true,
+                }}
+              />
+
+              <FormInput
+                name="username"
+                register={register("last_name")}
+                error={{
+                  states: formState.errors.username?.types,
+                  errors: userNameErrorsArray,
+                  inputError: formState.errors.username?.message,
+                  type: "slide",
+                }}
+                input={{
+                  id: "username",
+                  placeholder: signup.lastName,
+                  type: "text",
+                  autoCapitalize: "none",
+                  autoCorrect: "off",
+                  required: true,
+                }}
+              />
+            </div>
 
             {type === "trader" && (
               <FormInput
@@ -185,7 +208,7 @@ export const AuthSignupForm = <T extends TraderValues | CustomerValues>({
               }}
               input={{
                 id: "email",
-                placeholder: `${t("email")} (${t("optional")})`,
+                placeholder: `${t("email")}`,
                 type: "email",
                 autoCapitalize: "none",
                 autoCorrect: "off",

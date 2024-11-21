@@ -44,14 +44,18 @@ export const AdGridSectionsWrapper = () => {
           <React.Fragment key={idx}>
             <Banner>
               <a
-                href={bannersss?.[idx % bannersss.length]?.link}
+                href={
+                  bannersss?.[Math.floor(Math.random() * bannersss.length)]
+                    ?.link
+                }
                 target="_blank"
               >
                 <img
                   src={
                     process.env.BACKEND__BASE_UPLOAD_URL +
                     "/" +
-                    bannersss?.[idx % bannersss.length]?.image
+                    bannersss?.[Math.floor(Math.random() * bannersss.length)]
+                      ?.image
                   }
                   alt="banner"
                   className="w-full h-full object-cover rounded-xl"

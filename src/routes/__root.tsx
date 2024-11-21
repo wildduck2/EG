@@ -41,7 +41,8 @@ export const Route = createRootRoute({
 
     const lang = localStorage.getItem("i18nextLng");
     React.useEffect(() => {
-      i18n.changeLanguage(lang?.split("-")[0] ?? "ar");
+      console.log(lang);
+      i18n.changeLanguage(lang ?? "ar");
       if (lang === "ar") {
         document.body.classList.add("rtl");
       } else {

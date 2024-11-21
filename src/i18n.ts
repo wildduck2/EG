@@ -6,7 +6,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    lng: "ar",
+    // lng: "ar",
     returnObjects: true,
     resources: {
       en: {
@@ -259,6 +259,9 @@ i18n
             createaccount: "Create Account",
             agree: "By clicking continue, you agree to the",
             link: "Terms and Conditions",
+
+            firstName: "First Name",
+            lastName: "Last Name",
           },
           forgetpassword: {
             signin: "Signin",
@@ -475,6 +478,9 @@ i18n
             createaccount: "إنشاء حساب",
             agree: "بالنقر على متابعة، فإنك توافق على",
             link: "الشروط والأحكام",
+
+            firstName: "الاسم الاول",
+            lastName: "الاسم الثاني",
           },
           forgetpassword: {
             signin: "تسجيل الدخول",

@@ -115,21 +115,25 @@ export const MakeYourAd = () => {
 
       {ads.length > 0 ? (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
-          {ads.map((ad, idx) => (
-            <Dialog>
-              <DialogTrigger>
-                <AdItemCard
-                  key={idx}
-                  {...(ad as ProductType)}
-                  edit={true}
-                  select={true}
-                />
-              </DialogTrigger>
-              <DialogContent className="w-fit">
-                <Bundles id={ad.id} />
-              </DialogContent>
-            </Dialog>
-          ))}
+          {ads.map(
+            (ad, idx) =>
+              ad.is_featured !== 1 &&
+              (ad.status === "المتوافق عليه" || ad.status === "المنتهى") && (
+                <Dialog>
+                  <DialogTrigger>
+                    <AdItemCard
+                      key={idx}
+                      {...(ad as ProductType)}
+                      edit={true}
+                      select={true}
+                    />
+                  </DialogTrigger>
+                  <DialogContent className="w-fit">
+                    <Bundles id={ad.id} />
+                  </DialogContent>
+                </Dialog>
+              ),
+          )}
         </div>
       ) : (
         <h2 className="text-lg mx-auto mt-8 text-center">{t("theresNoAds")}</h2>

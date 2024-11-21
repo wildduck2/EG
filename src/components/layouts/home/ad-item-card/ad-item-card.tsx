@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "@tanstack/react-router";
+import { useLocation, useNavigate, useParams } from "@tanstack/react-router";
 import { AddItemCardProps, ProductType } from "./ad-item-card.types";
 import {
   Badge,
@@ -61,6 +61,8 @@ export const AdItemCard: React.FC<
   const { category } = useParams({ strict: false });
   const route = useNavigate();
 
+  const location = useLocation();
+
   return (
     <Card
       className={cn(
@@ -74,6 +76,13 @@ export const AdItemCard: React.FC<
             {status}
           </Badge>
         )}
+
+        {(status === "المنتهى" || status === "المتوافق عليه") &&
+          location.href.includes("account") && (
+            <Badge className={cn("", status === "المنتهى" && "opacity-90")}>
+              {status}
+            </Badge>
+          )}
         {is_featured === 1 ? (
           <Button
             variant="secondary"

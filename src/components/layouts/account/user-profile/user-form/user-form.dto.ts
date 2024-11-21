@@ -9,7 +9,8 @@ import { z } from "zod";
 export const userInfoFormSchema = z.object({
   phone: phoneSchema,
   email: emailSchema.optional().nullable(),
-  username: usernameSchema,
+  firstName: usernameSchema,
+  lastName: usernameSchema,
   companyname: companyNameSchema.optional().nullable(),
 });
 

@@ -217,7 +217,7 @@ export const Header = () => {
 
                 <Button
                   title={t("search2")}
-                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] w-full md:w-[100px] font-bold !max-w-[300px] md:w-full !w-full relative [&_svg]:stroke-white [&_input]:placeholder:text-white [&_input]:bg-[#ee1d24]"
+                  className="bg-[#e60000] hover:bg-transparent border hover:border-solid hover:border-[#e60000] hover:text-[#e60000] font-bold !max-w-[300px] md:w-full !w-full relative [&_svg]:stroke-white [&_input]:placeholder:text-white [&_input]:bg-[#ee1d24] [&>div]:w-[250px] [&>div]:truncate px-2"
                   onClick={() => {
                     navigate({ to: "/account/trader-profiles" });
                   }}
