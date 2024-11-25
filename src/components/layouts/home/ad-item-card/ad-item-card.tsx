@@ -134,7 +134,9 @@ export const AdItemCard: React.FC<
             !select && window.scrollTo(0, 0);
           }}
         >
-          <h4 className="text-[14px] font-medium m-0 truncate">{name}</h4>
+          <h4 className="text-[14px] font-medium m-0 truncate max-w-[17rem]">
+            {name}
+          </h4>
           <div className="flex justify-start items-center gap-1 mt-1 text-gray-500">
             <MapPin className="w-[15px]" />
             <span className="text-[10px] font-medium truncate">

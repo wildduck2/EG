@@ -75,7 +75,12 @@ export const Footer = () => {
                     className="rounded-lg"
                   />
                 </a>
-                <img src={img2} alt="img2" style={{ maxWidth: "200px" }} />
+                <a
+                  target="_blank"
+                  href="https://apps.apple.com/us/app/%D8%A7%D9%84%D8%A8%D8%B6%D8%A7%D8%B9%D8%A9/id6737291419"
+                >
+                  <img src={img2} alt="img2" style={{ maxWidth: "200px" }} />
+                </a>
               </li>
               <ul className="flex items-center xl:justify-center gap-3 lg:mb-4">
                 <li>

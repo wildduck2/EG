@@ -34,7 +34,7 @@ export const ProductPageCards = ({ data, category }: ProductPageCardsProps) => {
           <CardContent className="grid lg:grid-cols-2 gap-2">
             {data.details.map((item, index) => (
               <div className="grid item-center grid-cols-2 justify-between">
-                <p className="text-md truncate" key={index}>
+                <p className="text-md " key={index}>
                   - {item.label} :
                 </p>
                 <p className="text-md font-semibold truncate" key={index}>
@@ -50,7 +50,7 @@ export const ProductPageCards = ({ data, category }: ProductPageCardsProps) => {
           <CardTitle>{products.productdescription}</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-2 w-full">
-          <p className="text-md truncate"> {data.description} </p>
+          <p className="text-md "> {data.description} </p>
           {
             // products.description.map((item, index) => (
             //             <p className="text-md max-w-[80%] text-primary/80" key={index}>

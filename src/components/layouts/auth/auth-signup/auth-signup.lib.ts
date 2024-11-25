@@ -45,10 +45,10 @@ export const onSubmitSignup = async <T extends TraderValues>(
     }
 
     localStorage.setItem("phone", JSON.stringify("+2" + data.phone));
-    toast.success("جاري المراجعه البيانات لتفعيل الحساب");
-    route({ to: "/auth/signin" });
-    // route({ to: "/auth/verification" });
-    // return toast.success("تم التسجيل بنجاح");
+    // toast.success("جاري المراجعه البيانات لتفعيل الحساب");
+    // route({ to: "/auth/signin" });
+    route({ to: "/auth/verification" });
+    return toast.success("تم التسجيل بنجاح");
   } catch (error) {
     return toast.error("فشل التسجيل");
     return null;

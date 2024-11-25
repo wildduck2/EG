@@ -42,19 +42,25 @@ export const ProductPage = () => {
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator />
+              {state.category_en && (
+                <>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink>
+                      <Link
+                        to="/categories/$category"
+                        params={{ category: category ?? "" }}
+                      >
+                        {i18n.dir() === "ltr"
+                          ? state.category_en
+                          : state.category}
+                      </Link>
+                    </BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                </>
+              )}
               <BreadcrumbItem>
-                <BreadcrumbLink>
-                  <Link
-                    to="/categories/$category"
-                    params={{ category: category ?? "" }}
-                  >
-                    {i18n.dir() === "ltr" ? state.category_en : state.category}
-                  </Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="text-red-400 font-bold">
+                <BreadcrumbPage className="text-red-400 font-bold max-w-[10rem] truncate">
                   {i18n.dir() === "ltr" ? state.name_en : state.name}
                 </BreadcrumbPage>
               </BreadcrumbItem>
