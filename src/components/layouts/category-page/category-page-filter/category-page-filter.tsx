@@ -394,6 +394,7 @@ export const FilterInput = ({
     </div>
   );
 };
+
 export const FilterSlector = ({
   value,
   setValue,
@@ -403,8 +404,8 @@ export const FilterSlector = ({
   selected,
   id,
 }: {
-  id: string;
-  selected: number;
+  id?: string;
+  selected?: number;
   value: FilterSchema[keyof FilterSchema];
   disabled?: boolean;
   setValue: (item: FilterSchema[keyof FilterSchema]) => void;
@@ -412,13 +413,7 @@ export const FilterSlector = ({
   name: string;
 }) => {
   const [open, setOpen] = React.useState(false);
-  const { t, i18n } = useTranslation();
-  console.log(
-    filter_data,
-    filter_data.filter((item) => item?.[id] === selected?.id),
-    id,
-    selected,
-  );
+  const { t } = useTranslation();
 
   return (
     <div className=" max-w-[48.5%] w-full">
