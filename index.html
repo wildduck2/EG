@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -18,57 +19,37 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-      rel="stylesheet"
-    />
+        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet" />
 
     <!-- Meta Description -->
-    <meta
-      name="description"
-      content="Explore البضاعه (Goods) - Your comprehensive platform for finding and purchasing quality goods. We offer a wide variety of products to meet all your needs."
-    />
+    <meta name="description"
+        content="Explore البضاعه (Goods) - Your comprehensive platform for finding and purchasing quality goods. We offer a wide variety of products to meet all your needs." />
 
     <!-- Keywords for SEO -->
-    <meta
-      name="keywords"
-      content="goods, marketplace, shopping, online store, البضاعة, quality products, buy online"
-    />
+    <meta name="keywords" content="goods, marketplace, shopping, online store, البضاعة, quality products, buy online" />
 
     <!-- Author -->
     <meta name="author" content="ahmed ayob" />
     <meta name="author" content="goods" />
 
     <!-- Open Graph Metadata -->
-    <meta
-      property="og:title"
-      content="البضاعه | Goods - Your Comprehensive Goods Marketplace"
-    />
-    <meta
-      property="og:description"
-      content="Explore a wide variety of products on our comprehensive goods platform. Find what you need at competitive prices."
-    />
-    <meta
-      property="og:image"
-      content="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/777778.png"
-    />
+    <meta property="og:title" content="البضاعه | Goods - Your Comprehensive Goods Marketplace" />
+    <meta property="og:description"
+        content="Explore a wide variety of products on our comprehensive goods platform. Find what you need at competitive prices." />
+    <meta property="og:image"
+        content="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/777778.png" />
     <meta property="og:url" content="https://www.yourwebsite.com" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="ar_AR" />
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="البضاعه | Goods - Your Comprehensive Goods Marketplace"
-    />
-    <meta
-      name="twitter:description"
-      content="Explore a wide variety of products on our comprehensive goods platform. Find what you need at competitive prices."
-    />
-    <meta
-      name="twitter:image"
-      content="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/777778.pngg"
-    />
+    <meta name="twitter:title" content="البضاعه | Goods - Your Comprehensive Goods Marketplace" />
+    <meta name="twitter:description"
+        content="Explore a wide variety of products on our comprehensive goods platform. Find what you need at competitive prices." />
+    <meta name="twitter:image"
+        content="https://zpgqhogoevbgpxustvmo.supabase.co/storage/v1/object/public/produc_imgs/777778.pngg" />
 
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
@@ -86,48 +67,56 @@
         }
       }
     </script>
-  </head>
 
-  <body>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CY2JSTDMS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag("js", new Date());
+
+        gtag("config", "G-1CY2JSTDMS");
+    </script>
+</head>
+
+<body>
     <div id="root"></div>
 
     <!-- Meta Pixel Code -->
     <script>
-      !(function (f, b, e, v, n, t, s) {
-        if (f.fbq) return;
-        n = f.fbq = function () {
-          n.callMethod
-            ? n.callMethod.apply(n, arguments)
-            : n.queue.push(arguments);
-        };
-        if (!f._fbq) f._fbq = n;
-        n.push = n;
-        n.loaded = !0;
-        n.version = "2.0";
-        n.queue = [];
-        t = b.createElement(e);
-        t.async = !0;
-        t.src = v;
-        s = b.getElementsByTagName(e)[0];
-        s.parentNode.insertBefore(t, s);
-      })(
-        window,
-        document,
-        "script",
-        "https://connect.facebook.net/en_US/fbevents.js",
-      );
-      fbq("init", "1638155360129766");
-      fbq("track", "PageView");
+        !(function (f, b, e, v, n, t, s) {
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod
+                    ? n.callMethod.apply(n, arguments)
+                    : n.queue.push(arguments);
+            };
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = "2.0";
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
+        })(
+            window,
+            document,
+            "script",
+            "https://connect.facebook.net/en_US/fbevents.js",
+        );
+        fbq("init", "1638155360129766");
+        fbq("track", "PageView");
     </script>
-    <noscript
-      ><img
-        height="1"
-        width="1"
-        style="display: none"
-        src="https://www.facebook.com/tr?id=1638155360129766&ev=PageView&noscript=1"
-    /></noscript>
+    <noscript><img height="1" width="1" style="display: none"
+            src="https://www.facebook.com/tr?id=1638155360129766&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
     <script type="module" src="/src/main.tsx"></script>
     <script></script>
-  </body>
+</body>
+
 </html>
