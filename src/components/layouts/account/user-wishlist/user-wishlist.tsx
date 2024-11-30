@@ -37,11 +37,14 @@ export const UserWishlist = () => {
         <h2 className="capitalize text-lg">{t("yourWishlist")}</h2>
 
         <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 my-4">
-          {data?.map((item, idx) => (
-            <div className="" key={item.id}>
-              <AdItemCard {...item} />
-            </div>
-          ))}
+          {data?.map((item, idx) => {
+            console.log(item);
+            return (
+              <div className="" key={item.id}>
+                <AdItemCard {...item} />
+              </div>
+            );
+          })}
         </div>
       </div>
     );

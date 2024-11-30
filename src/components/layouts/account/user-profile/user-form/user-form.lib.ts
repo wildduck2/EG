@@ -75,11 +75,11 @@ export const update_user_data = async ({
     );
 
     if (res_data.success) {
-      toast.success("فشل في تحديث بيانات المستخدم");
+      toast.success(res_data.msg);
       return res_data.data;
     }
 
-    toast.error("فشل في تحديث بيانات المستخدم");
+    toast.error(res_data.msg);
     return null;
   } catch (error) {
     console.error(error);

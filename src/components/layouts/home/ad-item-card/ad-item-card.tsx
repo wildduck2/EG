@@ -102,10 +102,10 @@ export const AdItemCard: React.FC<
               to: "/categories/product/$product",
               params: { product: `${id}` },
               state: {
-                category_id: _category.id,
+                category_id: _category?.id,
                 name: i18n.dir() == "rtl" ? name : name,
                 category:
-                  i18n.dir() === "rtl" ? _category.name : _category.name_en,
+                  i18n.dir() === "rtl" ? _category?.name : _category?.name_en,
               } as any,
             });
           !select && window.scrollTo(0, 0);
