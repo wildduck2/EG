@@ -8,7 +8,8 @@ import { Category } from "../../home";
 
 export const HeaderTop = ({}: HeaderTopProps) => {
   const { i18n } = useTranslation();
-  const isLTR = i18n.dir() === "ltr";
+  const isLTR = i18n.language === "en-US" || i18n.language === "en";
+  console.log(i18n.language);
 
   const categories: Category[] = JSON.parse(
     localStorage.getItem("categories") || "{}",
@@ -25,10 +26,8 @@ export const HeaderTop = ({}: HeaderTopProps) => {
         className={cn(
           "w-[605px] -mt-4 hidden lg:block fixed",
           isLTR ? "right-0" : "left-0",
+          isLTR ? "rotateY(180deg)" : "rotateY(-180deg)",
         )}
-        style={{
-          transform: isLTR ? "rotateY(180deg)" : "",
-        }}
       />
     </div>
   );
