@@ -1,4 +1,5 @@
 export * from "./icons";
+export * from "./blog_articles_pictures/";
 import map from "./map_dumb.png";
 import logo from "./logo.png";
 import HomeBanner from "./home-banner-bg.png";
@@ -12,19 +13,25 @@ import Tools from "./tools-free-image-png.png";
 import img1 from "./1.png";
 import img2 from "./2.png";
 import side from "./side.png";
+import Shape from "./shape.png";
+import goods from "./goods.jpeg";
+import form from "./for.jpeg";
 
 export {
-  side,
-  img1,
-  img2,
-  map,
-  logo,
-  HomeBanner,
-  FireExtinguisher,
+  form,
+  goods,
   Bg,
   Conditioner1,
   Conditioner2,
+  FireExtinguisher,
   Grear,
+  HomeBanner,
+  img1,
+  img2,
+  logo,
+  map,
   Screws,
+  Shape,
+  side,
   Tools,
 };

@@ -4,6 +4,7 @@ import {
   LinkedIn,
   Logo,
   mes,
+  Shape,
   teletgram,
   ticktock,
   Whatsapp,
@@ -18,7 +19,6 @@ import {
   User,
 } from "@/components/layouts";
 
-import shape from "../../assets/shape.png";
 import {
   Button,
   buttonVariants,
@@ -66,7 +66,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
     const user_old = (state as any).user as User;
     const { t, i18n } = useTranslation();
     const [filter_data, setFilterData] = useAtom(filterData);
-    console.log(id);
+
     const { data } = useQuery({
       queryKey: ["trader"],
       queryFn: () => gettrader(id ?? user.id),
@@ -74,10 +74,6 @@ export const Route = createFileRoute("/account/trader2/$id")({
     });
 
     const user = data ?? user_old;
-
-    const bannersss = JSON.parse(localStorage.getItem("banners") || "[]");
-
-    console.log(data);
 
     const [copied, setCopied] = React.useState(false);
     const products = t("product");
@@ -107,20 +103,24 @@ export const Route = createFileRoute("/account/trader2/$id")({
                   className="w-full h-[300px] border  object-cover"
                   alt="map"
                 />
-                <div className="grid grid-cols-3 w-[98%]">
+                <div className="grid grid-cols-1 lg:grid-cols-3 w-[98%]">
                   <div className="flex flex-col mx auto w-full col-span-2">
                     <div className="flex items-start justify-between gap-8 px-3">
                       <div className="w-full">
-                        <div className="flex gap-4 justify-center pb-4">
-                          <h2 className="text-3xl font-semibold text-start w-full mb-3 flex items-center gap-4">
-                            <img src={ds} className="size-[3rem] rounded-lg" />{" "}
+                        <div className="flex gap-8 justify-center pb-4">
+                          <h2 className="text-lg lg:text-3xl font-semibold text-start w-full mb-3 flex items-center gap-4">
+                            <img
+                              src={ds}
+                              className="size-8 lg:size-[3rem] rounded-lg"
+                            />{" "}
                             {user?.name || user?.company_name}
                           </h2>
                           <Popover>
                             <PopoverTrigger asChild>
                               <Button
                                 variant={"default"}
-                                className="w-full max-w-[300px] h-[50px] grid-4 bg-[#ed1c24] text-white hover:bg-[#ed1c24] hover:text-white"
+                                className="w-[195px] lg:w-full lg:max-w-[300px] h-[50px] grid-4 bg-[#ed1c24] text-white hover:bg-[#ed1c24] hover:text-white"
+                                size={"sm"}
                                 icon={{
                                   icon: Share,
                                 }}
@@ -256,8 +256,8 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             <CardHeader className="p-2">
                               <CardTitle>{t("description")}</CardTitle>
                             </CardHeader>
-                            <CardContent className="grid lg:grid-cols-2 gap-2">
-                              <p className="text-primary/80 text-md text-start max-w-[800px]">
+                            <CardContent className="grid lg:grid-cols-1 gap-2">
+                              <p className="text-primary/80 text-md text-start max-w-[1100px]">
                                 {user?.description}
                               </p>
                             </CardContent>
@@ -268,16 +268,16 @@ export const Route = createFileRoute("/account/trader2/$id")({
                               <CardTitle>{t("preface")}</CardTitle>
                             </CardHeader>
                             <CardContent className="grid gap-2 w-full">
-                              <p className="text-primary/80 text-md text-start max-w-[800px]">
+                              <p className="text-primary/80 text-md text-start max-w-[1100px]">
                                 {user?.about}
                               </p>
                             </CardContent>
                           </Card>
 
-                          <div className="p-2 border rounded-lg flex items-center gap-4">
+                          <div className="p-2 border rounded-lg lg:flex items-center gap-4">
                             <h5 className="text-2xl">{t("sorty")}</h5>
-                            <div className="flex gap-4">
-                              <div className="flex items-center gap-4 lg:gap-12 lg:flex-row">
+                            <div className="lg:flex gap-4">
+                              <div className="lg:flex items-center gap-4 lg:gap-12 lg:flex-row">
                                 {filter_data.categories.find(
                                   (e) => e.id === user?.category_id,
                                 )?.name && (
@@ -298,9 +298,9 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             </div>
                           </div>
 
-                          <div className="p-2 border rounded-lg flex items-center gap-4">
+                          <div className="p-2 border rounded-lg lg:flex items-center gap-4">
                             <h5 className="text-2xl">{t("address")}</h5>
-                            <ul className="flex items-center gap-8 flex-col lg:flex-row">
+                            <ul className="lg:flex items-center gap-8 flex-col lg:flex-row">
                               <p className="text-md p-4 rounded-md bg-secondary/80">
                                 {user?.address}
                               </p>
@@ -334,7 +334,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                           <h5 className="text-primary/90 text-2xl flex items-center gap-3 mb-3">
                             {i18n.dir() === "ltr" ? "الصور" : "الصور"}
                           </h5>
-                          <div className="grid grid-cols-4 gap-2 max-w-[100%] pl-3">
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 max-w-[100%] pl-3">
                             {user.images.map(
                               (image) =>
                                 image?.image_type === "profile" && (
@@ -387,7 +387,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                             <iframe
                               height="450"
                               loading="lazy"
-                              className="w-full rounded-lg border border-border border-solid"
+                              className="w-full rounded-lg border border-border border-solid h-[300px] lg:h-[450px]"
                               src={`https://www.google.com/maps?q=${user?.latitude},${user?.longitude}&z=15&output=embed`}
                             ></iframe>
                           </CardContent>
@@ -396,7 +396,7 @@ export const Route = createFileRoute("/account/trader2/$id")({
                     </div>
                   </div>
 
-                  <div>
+                  <div className="mt-8 lg:mt-0">
                     <ul className="flex flex-row items-center gap-8 place-content-center ">
                       <a href={user.facebook} target="_blank">
                         <img
@@ -439,25 +439,35 @@ export const Route = createFileRoute("/account/trader2/$id")({
                       )}
                     </ul>
 
-                    <div className="w-full border h-[95.5%] m-4 flex flex-col gap-4 mb-8 p-4 rounded-lg mt-[1.7rem] overflow-hidden">
+                    <div className="w-full lg:border lg:m-4 flex flex-col gap-4 mb-8 p-4 rounded-lg mt-[1.7rem] overflow-hidden">
                       {user.images.map(
                         (image) =>
                           image?.image_type === "banner" && (
-                            <a
-                              // href={bannersss?.[0]?.link}
-                              target="_blank"
-                              className="size-[27.2rem] h-fit border w-full p-8 rounded-lg"
-                            >
-                              <img
-                                src={
-                                  process.env.BACKEND__BASE_UPLOAD_URL +
-                                  "/" +
-                                  image?.image_path
-                                }
-                                alt="banner"
-                                className=" object-cover rounded-xl"
-                              />
-                            </a>
+                            <Dialog>
+                              <DialogTrigger className="w-full">
+                                <div className="border p-2 rounded-lg border-solid border-border h-[11rem] w-full lg:h-[32rem]">
+                                  <img
+                                    src={
+                                      process.env.BACKEND__BASE_UPLOAD_URL +
+                                      "/" +
+                                      image?.image_path
+                                    }
+                                    alt="banner"
+                                    className="w-full object-cover rounded-xl max-h-[30.8rem]"
+                                  />
+                                </div>
+                              </DialogTrigger>
+                              <DialogContent className="max-w-[90dvw] w-full">
+                                <img
+                                  className="lg:h-[90dvh] w-[90dvw] object-contain"
+                                  src={
+                                    process.env.BACKEND__BASE_UPLOAD_URL +
+                                    "/" +
+                                    image?.image_path
+                                  }
+                                />
+                              </DialogContent>
+                            </Dialog>
                           ),
                       )}
                     </div>
@@ -542,7 +552,7 @@ export const Header = () => {
               />
             </div>
             <img
-              src={shape}
+              src={Shape}
               className={cn(
                 "w-[605px] -mt-4 hidden lg:block fixed",
                 i18n.dir() === "ltr" ? "right-0" : "left-0",

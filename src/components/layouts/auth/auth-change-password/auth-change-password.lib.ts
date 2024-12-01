@@ -1,5 +1,4 @@
-import { User } from "@/types";
-import { redirect, UseNavigateResult } from "@tanstack/react-router";
+import { UseNavigateResult } from "@tanstack/react-router";
 import axios from "axios";
 import { toast } from "sonner";
 

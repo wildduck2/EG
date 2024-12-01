@@ -14,8 +14,11 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as IndexImport } from './routes/index'
+import { Route as OurServicesIndexImport } from './routes/our-services/index'
+import { Route as BlogIndexImport } from './routes/blog/index'
 import { Route as TraderIdImport } from './routes/trader.$id'
 import { Route as CategoriesCategoriesImport } from './routes/categories/_categories'
+import { Route as BlogBlogImport } from './routes/blog/_blog'
 import { Route as AuthAuthImport } from './routes/auth/_auth'
 import { Route as AccountTraderProfilesImport } from './routes/account/trader-profiles'
 import { Route as AccountAccountImport } from './routes/account/_account'
@@ -24,6 +27,7 @@ import { Route as AccountAccountIndexImport } from './routes/account/_account.in
 import { Route as CategoriesProductProductImport } from './routes/categories/product/_product'
 import { Route as CategoriesCategoriesSearchImport } from './routes/categories/_categories.search'
 import { Route as CategoriesCategoriesCategoryImport } from './routes/categories/_categories.$category'
+import { Route as BlogBlogIdImport } from './routes/blog/_blog.$id'
 import { Route as AuthAuthVerification2Import } from './routes/auth/_auth.verification2'
 import { Route as AuthAuthVerificationConfirmedImport } from './routes/auth/_auth.verification-confirmed'
 import { Route as AuthAuthVerificationImport } from './routes/auth/_auth.verification'
@@ -36,6 +40,7 @@ import { Route as CategoriesCategoriesSearchIdImport } from './routes/categories
 // Create Virtual Routes
 
 const CategoriesImport = createFileRoute('/categories')()
+const BlogImport = createFileRoute('/blog')()
 const AuthImport = createFileRoute('/auth')()
 const AccountImport = createFileRoute('/account')()
 const CategoriesProductImport = createFileRoute('/categories/product')()
@@ -48,6 +53,11 @@ const CategoriesProductProductProductLazyImport = createFileRoute(
 
 const CategoriesRoute = CategoriesImport.update({
   path: '/categories',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BlogRoute = BlogImport.update({
+  path: '/blog',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -71,6 +81,16 @@ const CategoriesProductRoute = CategoriesProductImport.update({
   getParentRoute: () => CategoriesRoute,
 } as any)
 
+const OurServicesIndexRoute = OurServicesIndexImport.update({
+  path: '/our-services/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const BlogIndexRoute = BlogIndexImport.update({
+  path: '/',
+  getParentRoute: () => BlogRoute,
+} as any)
+
 const TraderIdRoute = TraderIdImport.update({
   path: '/trader/$id',
   getParentRoute: () => rootRoute,
@@ -79,6 +99,11 @@ const TraderIdRoute = TraderIdImport.update({
 const CategoriesCategoriesRoute = CategoriesCategoriesImport.update({
   id: '/_categories',
   getParentRoute: () => CategoriesRoute,
+} as any)
+
+const BlogBlogRoute = BlogBlogImport.update({
+  id: '/_blog',
+  getParentRoute: () => BlogRoute,
 } as any)
 
 const AuthAuthRoute = AuthAuthImport.update({
@@ -130,6 +155,11 @@ const CategoriesCategoriesCategoryRoute =
     path: '/$category',
     getParentRoute: () => CategoriesCategoriesRoute,
   } as any)
+
+const BlogBlogIdRoute = BlogBlogIdImport.update({
+  path: '/$id',
+  getParentRoute: () => BlogBlogRoute,
+} as any)
 
 const AuthAuthVerification2Route = AuthAuthVerification2Import.update({
   path: '/verification2',
@@ -229,6 +259,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthImport
       parentRoute: typeof AuthRoute
     }
+    '/blog': {
+      id: '/blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogImport
+      parentRoute: typeof rootRoute
+    }
+    '/blog/_blog': {
+      id: '/blog/_blog'
+      path: '/blog'
+      fullPath: '/blog'
+      preLoaderRoute: typeof BlogBlogImport
+      parentRoute: typeof BlogRoute
+    }
     '/categories': {
       id: '/categories'
       path: '/categories'
@@ -248,6 +292,20 @@ declare module '@tanstack/react-router' {
       path: '/trader/$id'
       fullPath: '/trader/$id'
       preLoaderRoute: typeof TraderIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/blog/': {
+      id: '/blog/'
+      path: '/'
+      fullPath: '/blog/'
+      preLoaderRoute: typeof BlogIndexImport
+      parentRoute: typeof BlogImport
+    }
+    '/our-services/': {
+      id: '/our-services/'
+      path: '/our-services'
+      fullPath: '/our-services'
+      preLoaderRoute: typeof OurServicesIndexImport
       parentRoute: typeof rootRoute
     }
     '/account/trader2/$id': {
@@ -298,6 +356,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/auth/verification2'
       preLoaderRoute: typeof AuthAuthVerification2Import
       parentRoute: typeof AuthAuthImport
+    }
+    '/blog/_blog/$id': {
+      id: '/blog/_blog/$id'
+      path: '/$id'
+      fullPath: '/blog/$id'
+      preLoaderRoute: typeof BlogBlogIdImport
+      parentRoute: typeof BlogBlogImport
     }
     '/categories/_categories/$category': {
       id: '/categories/_categories/$category'
@@ -428,6 +493,30 @@ const AuthRouteChildren: AuthRouteChildren = {
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
+interface BlogBlogRouteChildren {
+  BlogBlogIdRoute: typeof BlogBlogIdRoute
+}
+
+const BlogBlogRouteChildren: BlogBlogRouteChildren = {
+  BlogBlogIdRoute: BlogBlogIdRoute,
+}
+
+const BlogBlogRouteWithChildren = BlogBlogRoute._addFileChildren(
+  BlogBlogRouteChildren,
+)
+
+interface BlogRouteChildren {
+  BlogBlogRoute: typeof BlogBlogRouteWithChildren
+  BlogIndexRoute: typeof BlogIndexRoute
+}
+
+const BlogRouteChildren: BlogRouteChildren = {
+  BlogBlogRoute: BlogBlogRouteWithChildren,
+  BlogIndexRoute: BlogIndexRoute,
+}
+
+const BlogRouteWithChildren = BlogRoute._addFileChildren(BlogRouteChildren)
+
 interface CategoriesCategoriesSearchRouteChildren {
   CategoriesCategoriesSearchIdRoute: typeof CategoriesCategoriesSearchIdRoute
 }
@@ -502,8 +591,11 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountAccountRouteWithChildren
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
+  '/blog': typeof BlogBlogRouteWithChildren
   '/categories': typeof CategoriesCategoriesRouteWithChildren
   '/trader/$id': typeof TraderIdRoute
+  '/blog/': typeof BlogIndexRoute
+  '/our-services': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -511,6 +603,7 @@ export interface FileRoutesByFullPath {
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
   '/auth/verification2': typeof AuthAuthVerification2Route
+  '/blog/$id': typeof BlogBlogIdRoute
   '/categories/$category': typeof CategoriesCategoriesCategoryRoute
   '/categories/search': typeof CategoriesCategoriesSearchRouteWithChildren
   '/categories/product': typeof CategoriesProductProductRouteWithChildren
@@ -526,8 +619,10 @@ export interface FileRoutesByTo {
   '/account': typeof AccountAccountIndexRoute
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
+  '/blog': typeof BlogIndexRoute
   '/categories': typeof CategoriesCategoriesIndexRoute
   '/trader/$id': typeof TraderIdRoute
+  '/our-services': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -535,6 +630,7 @@ export interface FileRoutesByTo {
   '/auth/verification': typeof AuthAuthVerificationRoute
   '/auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
   '/auth/verification2': typeof AuthAuthVerification2Route
+  '/blog/$id': typeof BlogBlogIdRoute
   '/categories/$category': typeof CategoriesCategoriesCategoryRoute
   '/categories/search': typeof CategoriesCategoriesSearchRouteWithChildren
   '/categories/product': typeof CategoriesProductProductRouteWithChildren
@@ -551,9 +647,13 @@ export interface FileRoutesById {
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthRouteWithChildren
   '/auth/_auth': typeof AuthAuthRouteWithChildren
+  '/blog': typeof BlogRouteWithChildren
+  '/blog/_blog': typeof BlogBlogRouteWithChildren
   '/categories': typeof CategoriesRouteWithChildren
   '/categories/_categories': typeof CategoriesCategoriesRouteWithChildren
   '/trader/$id': typeof TraderIdRoute
+  '/blog/': typeof BlogIndexRoute
+  '/our-services/': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/_auth/change-password': typeof AuthAuthChangePasswordRoute
   '/auth/_auth/forget-password': typeof AuthAuthForgetPasswordRoute
@@ -561,6 +661,7 @@ export interface FileRoutesById {
   '/auth/_auth/verification': typeof AuthAuthVerificationRoute
   '/auth/_auth/verification-confirmed': typeof AuthAuthVerificationConfirmedRoute
   '/auth/_auth/verification2': typeof AuthAuthVerification2Route
+  '/blog/_blog/$id': typeof BlogBlogIdRoute
   '/categories/_categories/$category': typeof CategoriesCategoriesCategoryRoute
   '/categories/_categories/search': typeof CategoriesCategoriesSearchRouteWithChildren
   '/categories/product': typeof CategoriesProductRouteWithChildren
@@ -579,8 +680,11 @@ export interface FileRouteTypes {
     | '/account'
     | '/account/trader-profiles'
     | '/auth'
+    | '/blog'
     | '/categories'
     | '/trader/$id'
+    | '/blog/'
+    | '/our-services'
     | '/account/trader2/$id'
     | '/auth/change-password'
     | '/auth/forget-password'
@@ -588,6 +692,7 @@ export interface FileRouteTypes {
     | '/auth/verification'
     | '/auth/verification-confirmed'
     | '/auth/verification2'
+    | '/blog/$id'
     | '/categories/$category'
     | '/categories/search'
     | '/categories/product'
@@ -602,8 +707,10 @@ export interface FileRouteTypes {
     | '/account'
     | '/account/trader-profiles'
     | '/auth'
+    | '/blog'
     | '/categories'
     | '/trader/$id'
+    | '/our-services'
     | '/account/trader2/$id'
     | '/auth/change-password'
     | '/auth/forget-password'
@@ -611,6 +718,7 @@ export interface FileRouteTypes {
     | '/auth/verification'
     | '/auth/verification-confirmed'
     | '/auth/verification2'
+    | '/blog/$id'
     | '/categories/$category'
     | '/categories/search'
     | '/categories/product'
@@ -625,9 +733,13 @@ export interface FileRouteTypes {
     | '/account/trader-profiles'
     | '/auth'
     | '/auth/_auth'
+    | '/blog'
+    | '/blog/_blog'
     | '/categories'
     | '/categories/_categories'
     | '/trader/$id'
+    | '/blog/'
+    | '/our-services/'
     | '/account/trader2/$id'
     | '/auth/_auth/change-password'
     | '/auth/_auth/forget-password'
@@ -635,6 +747,7 @@ export interface FileRouteTypes {
     | '/auth/_auth/verification'
     | '/auth/_auth/verification-confirmed'
     | '/auth/_auth/verification2'
+    | '/blog/_blog/$id'
     | '/categories/_categories/$category'
     | '/categories/_categories/search'
     | '/categories/product'
@@ -651,16 +764,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  BlogRoute: typeof BlogRouteWithChildren
   CategoriesRoute: typeof CategoriesRouteWithChildren
   TraderIdRoute: typeof TraderIdRoute
+  OurServicesIndexRoute: typeof OurServicesIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  BlogRoute: BlogRouteWithChildren,
   CategoriesRoute: CategoriesRouteWithChildren,
   TraderIdRoute: TraderIdRoute,
+  OurServicesIndexRoute: OurServicesIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -678,8 +795,10 @@ export const routeTree = rootRoute
         "/",
         "/account",
         "/auth",
+        "/blog",
         "/categories",
-        "/trader/$id"
+        "/trader/$id",
+        "/our-services/"
       ]
     },
     "/": {
@@ -723,6 +842,20 @@ export const routeTree = rootRoute
         "/auth/_auth/signup"
       ]
     },
+    "/blog": {
+      "filePath": "blog",
+      "children": [
+        "/blog/_blog",
+        "/blog/"
+      ]
+    },
+    "/blog/_blog": {
+      "filePath": "blog/_blog.tsx",
+      "parent": "/blog",
+      "children": [
+        "/blog/_blog/$id"
+      ]
+    },
     "/categories": {
       "filePath": "categories",
       "children": [
@@ -741,6 +874,13 @@ export const routeTree = rootRoute
     },
     "/trader/$id": {
       "filePath": "trader.$id.tsx"
+    },
+    "/blog/": {
+      "filePath": "blog/index.tsx",
+      "parent": "/blog"
+    },
+    "/our-services/": {
+      "filePath": "our-services/index.tsx"
     },
     "/account/trader2/$id": {
       "filePath": "account/trader2.$id.tsx",
@@ -769,6 +909,10 @@ export const routeTree = rootRoute
     "/auth/_auth/verification2": {
       "filePath": "auth/_auth.verification2.tsx",
       "parent": "/auth/_auth"
+    },
+    "/blog/_blog/$id": {
+      "filePath": "blog/_blog.$id.tsx",
+      "parent": "/blog/_blog"
     },
     "/categories/_categories/$category": {
       "filePath": "categories/_categories.$category.tsx",

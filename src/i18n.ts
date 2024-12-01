@@ -11,6 +11,10 @@ i18n
     resources: {
       en: {
         translation: {
+          homepage: "Home",
+          ourservice: "About us",
+          blog: "Blog",
+          ourServices: "Our Services",
           contact: "phone numbers",
           notradess: "there's not ads",
           sorty: "category",
@@ -594,6 +598,10 @@ i18n
           preface: "نبذة عن الشركة",
           sorty: "التصنيف",
           contact: "ارقام التلفونات",
+          ourServices: "خدماتنا",
+          blog: "المدونة",
+          ourservice: "من نحن",
+          homepage: "الرئيسية",
         },
       },
     },

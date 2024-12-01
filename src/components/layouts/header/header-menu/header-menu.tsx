@@ -27,7 +27,7 @@ export const HeaderMenu = ({ categories }: { categories: Category[] }) => {
       </SheetTrigger>
 
       <SheetContent className="w-full overflow-scroll">
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-3">
           <nav className={cn("grid pt-2 pb-4 gap-2 w-full")}>
             {userData && (
               <HeaderProfile
