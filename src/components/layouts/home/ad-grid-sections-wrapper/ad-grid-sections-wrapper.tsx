@@ -17,7 +17,6 @@ export const AdGridSectionsWrapper = () => {
     queryFn: () => get_ads_section({}),
     refetchOnWindowFocus: false,
   });
-  console.log(data);
 
   const [bann, setBanners] = useAtom(banners);
   const bannersss = JSON.parse(localStorage.getItem("banners") || "[]");

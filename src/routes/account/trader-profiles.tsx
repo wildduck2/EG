@@ -1,4 +1,4 @@
-import { Logo } from "@/assets";
+import { Logo, Shape } from "@/assets";
 import {
   Category,
   CategoryPageFilter,
@@ -9,15 +9,7 @@ import {
 } from "@/components/layouts";
 import { paginationType } from "@/components/layouts/account/user-ads/user-ads.lib";
 import { User } from "@/components/layouts/account/user-profile";
-import {
-  Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-  Input,
-  Separator,
-} from "@/components/ui";
+import { Button, Input, Separator } from "@/components/ui";
 import { filterData } from "@/context";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/main";
@@ -30,10 +22,8 @@ import {
 } from "@tanstack/react-router";
 import axios from "axios";
 import { useAtom } from "jotai";
-import { MessageSquare, Phone } from "lucide-react";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { FaWhatsapp } from "react-icons/fa";
 
 export const Route = createFileRoute("/account/trader-profiles")({
   component: () => {
@@ -322,8 +312,6 @@ export const get_traders = async ({
   }
 };
 
-import shape from "../../assets/shape.png";
-
 export interface GetCatgegorySearchResponse {
   success: boolean;
   data: User[];
@@ -386,7 +374,7 @@ export const Header = () => {
               />
             </div>
             <img
-              src={shape}
+              src={Shape}
               className={cn(
                 "w-[605px] -mt-4 hidden lg:block fixed",
                 i18n.dir() === "ltr" ? "right-0" : "left-0",

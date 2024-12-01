@@ -11,7 +11,7 @@ import { cva } from "class-variance-authority";
 import { VariantProps } from "class-variance-authority";
 import { Loader, LucideIcon } from "lucide-react";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
-import { useDuckShortcut } from "@ahmedayob/duck-shortcut";
+import { useDuckShortcut } from "@/lib/duck-shortcut";
 
 export type IconType = { icon: LucideIcon } & IconProps &
   React.RefAttributes<SVGSVGElement>;

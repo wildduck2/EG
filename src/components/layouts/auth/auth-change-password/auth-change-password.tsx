@@ -2,24 +2,13 @@ import { Button, FormInput, zodResolver } from "@/components/ui";
 import { Check, LucideIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { auth_change_password_icons } from "./auth-change-password.constants";
-import { passwordErrorsArray, passwordSchema, user } from "../auth-signin";
-import { z } from "zod";
+import { passwordErrorsArray } from "../auth-signin";
 import { useForm } from "react-hook-form";
-import { useAtom } from "jotai";
 import { onSubmitResetPassword } from "./auth-change-password.lib";
-import { phone_number } from "@/context";
-
-const changePasswordShema = z
-  .object({
-    password: passwordSchema,
-    password_confirmation: z.string(),
-  })
-  .refine((data) => data.password === data.password_confirmation, {
-    path: ["password_confirmation"],
-    message: "passwords_must_match",
-  });
-
-export type ChangePasswordFormType = z.infer<typeof changePasswordShema>;
+import {
+  ChangePasswordFormType,
+  changePasswordShema,
+} from "./auth-change-password.dto";
 
 export const AuthChangePassword = () => {
   const { register, handleSubmit, formState } = useForm<ChangePasswordFormType>(

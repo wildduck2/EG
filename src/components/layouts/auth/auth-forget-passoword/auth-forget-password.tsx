@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import {
   Button,
   buttonVariants,
-  Checkbox,
   Label,
   zodResolver,
   FormInput,
@@ -18,11 +17,9 @@ import {
 } from "./auth-forget-password.dto";
 import { onSubmitForgetPassword } from "./auth-forget-password.lib";
 import { ForgetPasswordI18n } from "./auth-forget-password.types";
-import { useAtom } from "jotai";
-import { phone_number } from "@/context";
 
 export const AuthForgetPassword = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const forgetpassword = t("forgetpassword") as unknown as ForgetPasswordI18n;
 
   const methods = useForm<ForgetPasswordFormType>({
@@ -37,8 +34,6 @@ export const AuthForgetPassword = () => {
 
   const { register, formState, handleSubmit } = methods;
   const route = useNavigate();
-
-  const [_, setPhoneNumber] = useAtom(phone_number);
 
   return (
     <div className="h-screen w-full lg:w-1/2 md:p-12 flex relative">

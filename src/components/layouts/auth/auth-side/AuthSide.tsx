@@ -1,4 +1,4 @@
-import { Logo, LogoWhite, side } from "@/assets";
+import { LogoWhite, side } from "@/assets";
 import { Link } from "@tanstack/react-router";
 
 export const AuthSide = () => {

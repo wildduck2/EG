@@ -52,7 +52,10 @@ export const AdGridSection: React.FC<AdGridSectionProps> = ({
       <CustomCarousel className="min-h-[447px] w-full">
         {ads.slice(0, 20).map((item, index) => {
           return (
-            <CarouselItem className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+            <CarouselItem
+              key={index}
+              className="w-full sm:basis-1/2 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+            >
               <AdItemCard {...(item as any)} key={index} />
             </CarouselItem>
           );
