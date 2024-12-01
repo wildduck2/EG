@@ -6,7 +6,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    // lng: "ar",
+    fallbackLng: "ar-SA",
     returnObjects: true,
     resources: {
       en: {

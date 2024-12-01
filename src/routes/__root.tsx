@@ -39,11 +39,11 @@ export const Route = createRootRoute({
     }, []);
     const { i18n } = useTranslation();
 
-    const lang = localStorage.getItem("i18nextLng");
+    const lang = localStorage.getItem("i18nextLng") || "ar-SA";
     React.useEffect(() => {
       console.log(lang);
-      i18n.changeLanguage(lang ?? "ar");
-      if (lang === "ar") {
+      i18n.changeLanguage(localStorage.getItem("i18nextLng") || "ar-SA");
+      if (lang === "ar-SA") {
         document.body.classList.add("rtl");
       } else {
         document.body.classList.remove("rtl");

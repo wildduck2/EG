@@ -28,16 +28,24 @@ export const HeaderDesktopMain = () => {
 
           <div className="flex  sm:flex-row items-center justify-center gap-2 [&_button]:place-content-center [&_button]:text-[1rem]">
             <Button
-              title={i18n.language === "en" ? "عربي" : "English"}
+              title={i18n.language === "en-US" ? "عربي" : "English"}
               variant={"outline"}
               className="w-full md:w-[100px] font-bold hidden lg:flex"
               onClick={() => {
                 document.body.classList.toggle("rtl");
                 localStorage.setItem(
                   "i18nextLng",
-                  i18n.language === "en" ? "ar" : "en",
+                  i18n.language === "en-US" ? "ar-SA" : "en-US",
                 );
-                i18n.changeLanguage(i18n.language === "en" ? "ar" : "en");
+
+                if (i18n.language === "ar-SA") {
+                  document.body.classList.remove("rtl");
+                } else {
+                  document.body.classList.add("rtl");
+                }
+                i18n.changeLanguage(
+                  i18n.language === "en-US" ? "ar-SA" : "en-US",
+                );
               }}
             />
             {!userData && (

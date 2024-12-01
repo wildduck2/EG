@@ -1,4 +1,4 @@
-import { Button, buttonVariants, NavGroup, Separator } from "@/components/ui";
+import { buttonVariants, NavGroup, Separator } from "@/components/ui";
 import { useTranslation } from "react-i18next";
 import { HeaderDesktopMenuProps } from "./header-desktop-menu.types";
 import { Category } from "../../home";
@@ -52,20 +52,20 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
             },
             data:
               categories.length > 0
-                ? i18n.language === "en"
+                ? i18n.language === "en-US"
                   ? [
                       ...categories.slice(0, 8).map((item) => ({
                         title: item.name_en,
                         route: `/categories/${item.id}`,
                         state: { ...item, branch: 1 },
                         children:
-                          i18n.language === "en" ? item.name_en : item.name,
+                          i18n.language === "en-US" ? item.name_en : item.name,
                       })),
                       {
                         title: "more",
                         route: `/categories/`,
                         state: { branch: 0 },
-                        children: i18n.language === "en" ? "More" : "المزيد",
+                        children: i18n.language === "en-US" ? "More" : "المزيد",
                       },
                     ]
                   : [
@@ -73,7 +73,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
                         title: "more",
                         route: `/categories/`,
                         state: { branch: 0 },
-                        children: i18n.language === "en" ? "More" : "المزيد",
+                        children: i18n.language === "en-US" ? "More" : "المزيد",
                       },
                       ...categories
                         .slice(0, 8)
@@ -83,7 +83,9 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
                           route: `/categories/${item.id}`,
                           state: { ...item, branch: 1 },
                           children:
-                            i18n.language === "en" ? item.name_en : item.name,
+                            i18n.language === "en-US"
+                              ? item.name_en
+                              : item.name,
                         })),
                     ]
                 : [],
