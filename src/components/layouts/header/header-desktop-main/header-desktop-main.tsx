@@ -17,7 +17,7 @@ export const HeaderDesktopMain = () => {
 
   return (
     <>
-      <div className="hidden xl:flex flex-col">
+      <div className="hidden lg:flex flex-col">
         <nav
           className={cn(
             "grid md:flex items-center md:justify-center lg:justify-between place-self-center pt-2 pb-4 gap-2 w-full",
@@ -30,7 +30,7 @@ export const HeaderDesktopMain = () => {
             <Button
               title={i18n.language === "en" ? "عربي" : "English"}
               variant={"outline"}
-              className="w-full md:w-[100px] font-bold hidden lg:flex"
+              className="w-full md:w-[100px] font-bold hidden md:flex"
               onClick={() => {
                 document.body.classList.toggle("rtl");
                 localStorage.setItem(
