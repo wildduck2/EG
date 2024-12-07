@@ -2,17 +2,7 @@
     "rewrites": [
         {
             "source": "/(.*)",
-            "destination": "/"
-        }
-    ],
-    "builds": [
-        {
-            "src": "index.html",
-            "use": "@vercel/static"
-        },
-        {
-            "src": "service-worker.js",
-            "use": "@vercel/static"
+            "destination": "/index.html"
         }
     ],
     "routes": [
