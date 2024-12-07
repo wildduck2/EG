@@ -4,5 +4,24 @@
             "source": "/(.*)",
             "destination": "/"
         }
+    ],
+    "builds": [
+        {
+            "src": "index.html",
+            "use": "@vercel/static"
+        },
+        {
+            "src": "service-worker.js",
+            "use": "@vercel/static"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/service-worker.js",
+            "headers": {
+                "Content-Type": "application/javascript"
+            },
+            "dest": "/service-worker.js"
+        }
     ]
 }

@@ -5,11 +5,18 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import viteReact from "@vitejs/plugin-react";
 import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
+import fs from "fs";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
+    server: {
+      https: {
+        key: fs.readFileSync("./public/localhost-key.pem"),
+        cert: fs.readFileSync("./public/localhost-cert.pem"),
+      },
+    },
     define: {
       "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
       "process.env.BACKEND__BASE_UPLOAD_URL": JSON.stringify(
