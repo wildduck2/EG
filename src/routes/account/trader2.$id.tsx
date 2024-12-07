@@ -494,7 +494,7 @@ function formatJoinedAtDate(dateString: string, lan = "en"): string {
     // timeZoneName: "short", // Abbreviated timezone name (e.g., GMT)
   };
 
-  return `${date.toLocaleString(lan === "ar" ? "ar-SA" : "en-US", options)}`;
+  return `${date.toLocaleString(lan === "ar" ? "ar" : "en", options)}`;
 }
 export const Header = () => {
   const location = useLocation();

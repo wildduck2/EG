@@ -51,29 +51,29 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
               className: "bg-[#ee1d24] text-accent",
             },
             data:
-              categories.length > 0
-                ? i18n.language === "en-US"
+              categories.length == 0
+                ? i18n.language === "en"
                   ? [
                       ...categories.slice(0, 8).map((item) => ({
                         title: item.name_en,
                         route: `/categories/${item.id}`,
                         state: { ...item, branch: 1 },
                         children:
-                          i18n.language === "en-US" ? item.name_en : item.name,
+                          i18n.language === "en" ? item.name_en : item.name,
                       })),
                       {
                         title: "more",
                         route: `/categories/`,
                         state: { branch: 0 },
-                        children: i18n.language === "en-US" ? "More" : "المزيد",
+                        children: i18n.language === "en" ? "More" : "المزيد",
                       },
                     ]
                   : [
                       {
                         title: "more",
-                        route: `/categories/`,
+                        route: `/categories/more`,
                         state: { branch: 0 },
-                        children: i18n.language === "en-US" ? "More" : "المزيد",
+                        children: i18n.language === "en" ? "More" : "المزيد",
                       },
                       ...categories
                         .slice(0, 8)
@@ -83,9 +83,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
                           route: `/categories/${item.id}`,
                           state: { ...item, branch: 1 },
                           children:
-                            i18n.language === "en-US"
-                              ? item.name_en
-                              : item.name,
+                            i18n.language === "en" ? item.name_en : item.name,
                         })),
                     ]
                 : [],

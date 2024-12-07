@@ -141,7 +141,7 @@ const NavGroup = <T extends boolean>({
                       key.className,
                       navKeysClassName,
                       location.pathname === key.route && activeKeyClassName,
-                      " !hover:bg-[#ee1d24] !hover:text-accent w-fit bg-transparent [&_svg]:hidden",
+                      " !hover:bg-[#ee1d24] !hover:text-accent w-fit [&_svg]:hidden",
                     )}
                     {...props}
                     {...navKeysProps}

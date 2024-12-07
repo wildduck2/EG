@@ -8,8 +8,7 @@ import { Category } from "../../home";
 
 export const HeaderTop = ({}: HeaderTopProps) => {
   const { i18n } = useTranslation();
-  const isLTR = i18n.language === "en-US" || i18n.language === "en";
-  console.log(i18n.language);
+  const isLTR = localStorage.getItem("lang") === "en";
 
   const categories: Category[] = JSON.parse(
     localStorage.getItem("categories") || "{}",

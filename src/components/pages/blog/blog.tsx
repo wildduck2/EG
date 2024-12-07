@@ -17,7 +17,11 @@ export const Blog = () => {
         {article_data.map((data, i) => {
           return (
             <React.Fragment>
-              <Link key={data.id} to={`/blog/${data.id}`}>
+              <Link
+                key={data.id}
+                to={`/blog/${data.id}`}
+                className="inline-block"
+              >
                 <Card
                   className="grid w-full rounded-lg gap-2 p-3 h-[270px]"
                   key={i}

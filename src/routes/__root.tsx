@@ -17,6 +17,8 @@ import axios from "axios";
 export const Route = createRootRoute({
   beforeLoad: async () => {
     await getUser();
+    const lang = localStorage.getItem("lang");
+    localStorage.setItem("lang", lang || "ar");
   },
   component: () => {
     const [filter_data, setFilterData] = useAtom(filterData);
@@ -39,11 +41,13 @@ export const Route = createRootRoute({
     }, []);
     const { i18n } = useTranslation();
 
-    const lang = localStorage.getItem("i18nextLng") || "ar-SA";
+    const lang = localStorage.getItem("lang");
+
     React.useEffect(() => {
       console.log(lang);
-      i18n.changeLanguage(localStorage.getItem("i18nextLng") || "ar-SA");
-      if (lang === "ar-SA") {
+      localStorage.setItem("lang", lang || "ar");
+      i18n.changeLanguage(lang || "ar");
+      if (lang === "ar") {
         document.body.classList.add("rtl");
       } else {
         document.body.classList.remove("rtl");
