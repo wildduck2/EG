@@ -7,96 +7,100 @@ import { TanStackRouterVite } from "@tanstack/router-plugin/vite";
 import { VitePWA, VitePWAOptions } from "vite-plugin-pwa";
 
 export default defineConfig(({ mode }) => {
-    const env = loadEnv(mode, process.cwd(), "");
+  const env = loadEnv(mode, process.cwd(), "");
 
-    return {
-        define: {
-            "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
-            "process.env.BACKEND__BASE_UPLOAD_URL": JSON.stringify(
-                env.BACKEND__BASE_UPLOAD_URL,
-            ),
+  return {
+    define: {
+      "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
+      "process.env.BACKEND__BASE_UPLOAD_URL": JSON.stringify(
+        env.BACKEND__BASE_UPLOAD_URL,
+      ),
+    },
+    plugins: [
+      ViteImageOptimizer({}),
+      VitePWA(manifestForPlugin),
+      tsconfigPaths(),
+      TanStackRouterVite({
+        // Enable experimental code-splitting in TanStack Router, if supported
+        //
+        autoCodeSplitting: true,
+      }),
+      viteReact(),
+    ],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
+    },
+    build: {
+      rollupOptions: {
+        output: {
+          // Separate large dependencies like React and TanStack Router
+          manualChunks: {
+            react: ["react", "react-dom"],
+            tanstack: ["@tanstack/react-router", "@tanstack/react-query"],
+            // Include other common libraries as needed
+          },
         },
-        plugins: [
-            ViteImageOptimizer({}),
-            VitePWA(manifestForPlugin),
-            tsconfigPaths(),
-            TanStackRouterVite({
-                // Enable experimental code-splitting in TanStack Router, if supported
-                //
-                autoCodeSplitting: true,
-            }),
-            viteReact(),
-        ],
-        resolve: {
-            alias: {
-                "@": path.resolve(__dirname, "./src"),
-            },
-        },
-        build: {
-            rollupOptions: {
-                output: {
-                    // Separate large dependencies like React and TanStack Router
-                    manualChunks: {
-                        react: ["react", "react-dom"],
-                        tanstack: ["@tanstack/react-router", "@tanstack/react-query"],
-                        // Include other common libraries as needed
-                    },
-                },
-            },
-            chunkSizeWarningLimit: 1000, // Suppress warnings if necessary
-        },
-    };
+      },
+      chunkSizeWarningLimit: 1000, // Suppress warnings if necessary
+    },
+  };
 });
 
 const manifestForPlugin: Partial<VitePWAOptions> = {
-    registerType: "prompt",
-    includeAssets: ["favicon.ico", "apple-touc-icon.png", "masked-icon.png"],
-    manifest: {
-        name: "Weather app",
-        short_name: "Weather app",
-        description: "An app that can show the weather forecast for your city.",
-        icons: [
-            {
-                src: "./icon-192x192.png",
-                sizes: "192x192",
-                type: "image/png",
-            },
-            {
-                src: "./icon-512x512.png",
-                sizes: "512x512",
-                type: "image/png",
-                purpose: "favicon",
-            },
-            {
-                src: "/apple-touch-icon.png",
-                sizes: "180x180",
-                type: "image/png",
-                purpose: "apple touch icon",
-            },
-            {
-                src: "./icon-144x144.png",
-                sizes: "144x144",
-                type: "image/png",
-                purpose: "any",
-            },
-            {
-                src: "./icon-256x256.png",
-                sizes: "256x256",
-                type: "image/png",
-                purpose: "icon",
-            },
-            {
-                src: "./icon-384x384.png",
-                sizes: "384x384",
-                type: "image/png",
-                purpose: "any maskable",
-            },
-        ],
-        theme_color: "#181818",
-        background_color: "#e8eac2",
-        display: "standalone",
-        scope: "/",
-        start_url: "/",
-        orientation: "portrait",
-    },
+  // registerType: "prompt",
+  includeAssets: ["favicon.ico", "apple-touc-icon.png", "masked-icon.png"],
+  registerType: "autoUpdate",
+  workbox: {
+    cleanupOutdatedCaches: true,
+  },
+  manifest: {
+    name: "Weather app",
+    short_name: "Weather app",
+    description: "An app that can show the weather forecast for your city.",
+    icons: [
+      {
+        src: "./icon-192x192.png",
+        sizes: "192x192",
+        type: "image/png",
+      },
+      {
+        src: "./icon-512x512.png",
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "favicon",
+      },
+      {
+        src: "/apple-touch-icon.png",
+        sizes: "180x180",
+        type: "image/png",
+        purpose: "apple touch icon",
+      },
+      {
+        src: "./icon-144x144.png",
+        sizes: "144x144",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: "./icon-256x256.png",
+        sizes: "256x256",
+        type: "image/png",
+        purpose: "icon",
+      },
+      {
+        src: "./icon-384x384.png",
+        sizes: "384x384",
+        type: "image/png",
+        purpose: "any maskable",
+      },
+    ],
+    theme_color: "#181818",
+    background_color: "#e8eac2",
+    display: "standalone",
+    scope: "/",
+    start_url: "/",
+    orientation: "portrait",
+  },
 };
