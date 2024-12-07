@@ -63,9 +63,10 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
     cleanupOutdatedCaches: true,
   },
   manifest: {
-    name: "Weather app",
-    short_name: "Weather app",
-    description: "An app that can show the weather forecast for your city.",
+    name: "Goods | البضاعه",
+    short_name: "Goods | البضاعه",
+    description:
+      "Explore a wide variety of products on our comprehensive goods platform. Find what you need at competitive prices.",
     icons: [
       {
         src: "./icon-192x192.png",
