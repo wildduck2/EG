@@ -25,8 +25,11 @@ export const HeaderTop = ({}: HeaderTopProps) => {
         className={cn(
           "w-[605px] -mt-4 hidden lg:block fixed",
           isLTR ? "right-0" : "left-0",
-          isLTR ? "rotateY(180deg)" : "rotateY(-180deg)",
+          // isLTR ? "rotateY(180deg)" : "rotateY(-180deg)",
         )}
+        style={{
+          transform: !isLTR ? "rotateY(0)" : "rotateY(180deg)",
+        }}
       />
     </div>
   );

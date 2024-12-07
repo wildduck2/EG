@@ -11,12 +11,12 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
   return {
-    server: {
-      https: {
-        key: fs.readFileSync("./public/localhost-key.pem"),
-        cert: fs.readFileSync("./public/localhost-cert.pem"),
-      },
-    },
+    // server: {
+    //   https: {
+    //     key: fs.readFileSync("./public/localhost-key.pem"),
+    //     cert: fs.readFileSync("./public/localhost-cert.pem"),
+    //   },
+    // },
     define: {
       "process.env.BACKEND__BASE_URL": JSON.stringify(env.BACKEND__BASE_URL),
       "process.env.BACKEND__BASE_UPLOAD_URL": JSON.stringify(
@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       ViteImageOptimizer({}),
-      VitePWA(manifestForPlugin),
+      // VitePWA(manifestForPlugin),
       tsconfigPaths(),
       TanStackRouterVite({
         // Enable experimental code-splitting in TanStack Router, if supported

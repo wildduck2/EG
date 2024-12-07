@@ -51,10 +51,10 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
               className: "bg-[#ee1d24] text-accent",
             },
             data:
-              categories.length == 0
+              categories.length > 0
                 ? i18n.language === "en"
                   ? [
-                      ...categories.slice(0, 8).map((item) => ({
+                      ...categories.slice(0, 7).map((item) => ({
                         title: item.name_en,
                         route: `/categories/${item.id}`,
                         state: { ...item, branch: 1 },
@@ -76,7 +76,7 @@ export const HeaderDesktopMenu = ({}: HeaderDesktopMenuProps) => {
                         children: i18n.language === "en" ? "More" : "المزيد",
                       },
                       ...categories
-                        .slice(0, 8)
+                        .slice(0, 7)
                         .reverse()
                         .map((item) => ({
                           title: item.name_en,

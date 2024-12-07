@@ -81,25 +81,7 @@
 
         gtag("config", "G-1CY2JSTDMS");
     </script>
-    <link rel="manifest" href="/manifest.json" />
-    <script>
-        // Register the service worker
-        if ("serviceWorker" in navigator) {
-            window.addEventListener("load", () => {
-                navigator.serviceWorker
-                    .register("/service-worker.js")
-                    .then((registration) => {
-                        console.log(
-                            "Service Worker registered with scope:",
-                            registration.scope,
-                        );
-                    })
-                    .catch((error) => {
-                        console.error("Service Worker registration failed:", error);
-                    });
-            });
-        }
-    </script>
+    <link rel="manifest" href="/public/manifest.json" />
 </head>
 
 <body>
@@ -136,7 +118,7 @@
     <noscript><img height="1" width="1" style="display: none"
             src="https://www.facebook.com/tr?id=1638155360129766&ev=PageView&noscript=1" /></noscript>
     <!-- End Meta Pixel Code -->
-    <!-- <script type="module" src="/src/main.tsx"></script> -->
+    <script type="module" src="/src/main.tsx"></script>
     <script></script>
 </body>
 
