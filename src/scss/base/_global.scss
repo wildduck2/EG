@@ -39,14 +39,14 @@
 }
 
 body.rtl {
-  font-feature-settings:
-    "rlig" 1,
-    "calt" 1;
-  direction: rtl;
   font-family: "Cairo", sans-serif;
   font-optical-sizing: auto;
   font-weight: 500;
   font-style: normal;
+  font-feature-settings:
+    "rlig" 1,
+    "calt" 1;
+  direction: rtl;
   font-variation-settings: "slnt" 0;
 
   input {

@@ -13,6 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as ShowLinksImport } from './routes/show-links'
 import { Route as IndexImport } from './routes/index'
 import { Route as OurServicesIndexImport } from './routes/our-services/index'
 import { Route as BlogIndexImport } from './routes/blog/index'
@@ -68,6 +69,11 @@ const AuthRoute = AuthImport.update({
 
 const AccountRoute = AccountImport.update({
   path: '/account',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ShowLinksRoute = ShowLinksImport.update({
+  path: '/show-links',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -222,6 +228,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/show-links': {
+      id: '/show-links'
+      path: '/show-links'
+      fullPath: '/show-links'
+      preLoaderRoute: typeof ShowLinksImport
       parentRoute: typeof rootRoute
     }
     '/account': {
@@ -588,6 +601,7 @@ const CategoriesRouteWithChildren = CategoriesRoute._addFileChildren(
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/show-links': typeof ShowLinksRoute
   '/account': typeof AccountAccountRouteWithChildren
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
@@ -616,6 +630,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/show-links': typeof ShowLinksRoute
   '/account': typeof AccountAccountIndexRoute
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
   '/auth': typeof AuthAuthRouteWithChildren
@@ -642,6 +657,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/show-links': typeof ShowLinksRoute
   '/account': typeof AccountRouteWithChildren
   '/account/_account': typeof AccountAccountRouteWithChildren
   '/account/trader-profiles': typeof AccountTraderProfilesRoute
@@ -677,6 +693,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/show-links'
     | '/account'
     | '/account/trader-profiles'
     | '/auth'
@@ -704,6 +721,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/show-links'
     | '/account'
     | '/account/trader-profiles'
     | '/auth'
@@ -728,6 +746,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/show-links'
     | '/account'
     | '/account/_account'
     | '/account/trader-profiles'
@@ -762,6 +781,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ShowLinksRoute: typeof ShowLinksRoute
   AccountRoute: typeof AccountRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
   BlogRoute: typeof BlogRouteWithChildren
@@ -772,6 +792,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ShowLinksRoute: ShowLinksRoute,
   AccountRoute: AccountRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
   BlogRoute: BlogRouteWithChildren,
@@ -793,6 +814,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/show-links",
         "/account",
         "/auth",
         "/blog",
@@ -803,6 +825,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/show-links": {
+      "filePath": "show-links.tsx"
     },
     "/account": {
       "filePath": "account",
