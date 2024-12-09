@@ -1,5 +1,4 @@
 import { img1, img2 } from "@/assets";
-import { OurServices } from "@/components/pages/our-services";
 import { buttonVariants } from "@/components/ui";
 import { cn } from "@/lib/utils";
 import { createFileRoute } from "@tanstack/react-router";
