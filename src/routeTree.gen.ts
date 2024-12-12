@@ -17,6 +17,7 @@ import { Route as ShowLinksImport } from './routes/show-links'
 import { Route as IndexImport } from './routes/index'
 import { Route as OurServicesIndexImport } from './routes/our-services/index'
 import { Route as BlogIndexImport } from './routes/blog/index'
+import { Route as ViewPdfIdImport } from './routes/view-pdf.$id'
 import { Route as TraderIdImport } from './routes/trader.$id'
 import { Route as CategoriesCategoriesImport } from './routes/categories/_categories'
 import { Route as BlogBlogImport } from './routes/blog/_blog'
@@ -95,6 +96,11 @@ const OurServicesIndexRoute = OurServicesIndexImport.update({
 const BlogIndexRoute = BlogIndexImport.update({
   path: '/',
   getParentRoute: () => BlogRoute,
+} as any)
+
+const ViewPdfIdRoute = ViewPdfIdImport.update({
+  path: '/view-pdf/$id',
+  getParentRoute: () => rootRoute,
 } as any)
 
 const TraderIdRoute = TraderIdImport.update({
@@ -305,6 +311,13 @@ declare module '@tanstack/react-router' {
       path: '/trader/$id'
       fullPath: '/trader/$id'
       preLoaderRoute: typeof TraderIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/view-pdf/$id': {
+      id: '/view-pdf/$id'
+      path: '/view-pdf/$id'
+      fullPath: '/view-pdf/$id'
+      preLoaderRoute: typeof ViewPdfIdImport
       parentRoute: typeof rootRoute
     }
     '/blog/': {
@@ -608,6 +621,7 @@ export interface FileRoutesByFullPath {
   '/blog': typeof BlogBlogRouteWithChildren
   '/categories': typeof CategoriesCategoriesRouteWithChildren
   '/trader/$id': typeof TraderIdRoute
+  '/view-pdf/$id': typeof ViewPdfIdRoute
   '/blog/': typeof BlogIndexRoute
   '/our-services': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
@@ -637,6 +651,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/categories': typeof CategoriesCategoriesIndexRoute
   '/trader/$id': typeof TraderIdRoute
+  '/view-pdf/$id': typeof ViewPdfIdRoute
   '/our-services': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
   '/auth/change-password': typeof AuthAuthChangePasswordRoute
@@ -668,6 +683,7 @@ export interface FileRoutesById {
   '/categories': typeof CategoriesRouteWithChildren
   '/categories/_categories': typeof CategoriesCategoriesRouteWithChildren
   '/trader/$id': typeof TraderIdRoute
+  '/view-pdf/$id': typeof ViewPdfIdRoute
   '/blog/': typeof BlogIndexRoute
   '/our-services/': typeof OurServicesIndexRoute
   '/account/trader2/$id': typeof AccountTrader2IdRoute
@@ -700,6 +716,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/categories'
     | '/trader/$id'
+    | '/view-pdf/$id'
     | '/blog/'
     | '/our-services'
     | '/account/trader2/$id'
@@ -728,6 +745,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/categories'
     | '/trader/$id'
+    | '/view-pdf/$id'
     | '/our-services'
     | '/account/trader2/$id'
     | '/auth/change-password'
@@ -757,6 +775,7 @@ export interface FileRouteTypes {
     | '/categories'
     | '/categories/_categories'
     | '/trader/$id'
+    | '/view-pdf/$id'
     | '/blog/'
     | '/our-services/'
     | '/account/trader2/$id'
@@ -787,6 +806,7 @@ export interface RootRouteChildren {
   BlogRoute: typeof BlogRouteWithChildren
   CategoriesRoute: typeof CategoriesRouteWithChildren
   TraderIdRoute: typeof TraderIdRoute
+  ViewPdfIdRoute: typeof ViewPdfIdRoute
   OurServicesIndexRoute: typeof OurServicesIndexRoute
 }
 
@@ -798,6 +818,7 @@ const rootRouteChildren: RootRouteChildren = {
   BlogRoute: BlogRouteWithChildren,
   CategoriesRoute: CategoriesRouteWithChildren,
   TraderIdRoute: TraderIdRoute,
+  ViewPdfIdRoute: ViewPdfIdRoute,
   OurServicesIndexRoute: OurServicesIndexRoute,
 }
 
@@ -820,6 +841,7 @@ export const routeTree = rootRoute
         "/blog",
         "/categories",
         "/trader/$id",
+        "/view-pdf/$id",
         "/our-services/"
       ]
     },
@@ -899,6 +921,9 @@ export const routeTree = rootRoute
     },
     "/trader/$id": {
       "filePath": "trader.$id.tsx"
+    },
+    "/view-pdf/$id": {
+      "filePath": "view-pdf.$id.tsx"
     },
     "/blog/": {
       "filePath": "blog/index.tsx",
