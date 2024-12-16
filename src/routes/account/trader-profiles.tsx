@@ -30,7 +30,7 @@ export const Route = createFileRoute("/account/trader-profiles")({
     return (
       <>
         <Header />
-        <main className="flex flex-col [&>div:not(:first-child)]:pt-12 [&>div:not(:first-child)]:pb-12 container min-h-screen lg:mt-[4rem]">
+        <main className="flex flex-col [&>div:not(:first-child)]:pt-12 [&>div:not(:first-child)]:pb-12 container min-h-screen lg:mt-[7rem]">
           <TraderProfiles />
         </main>
 
@@ -355,8 +355,11 @@ export const Header = () => {
       >
         <div className="flex flex-col items-cetner gap-2 container  bg-background ">
           <div className="flex items-center justify-between">
-            <Link to="/" className="logo mt-2">
+            <Link to="/" className="logo mt-2 flex flex-col">
               <img src={Logo} className="w-[12rem] h-auto" alt="Logo" />
+              <span className="text-[.7rem] font-bold mx-auto pl-4">
+                للحلول الرقميه{" "}
+              </span>
             </Link>
             <div className="flex lg:hidden items-center gap-4">
               <Button

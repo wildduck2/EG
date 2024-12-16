@@ -16,9 +16,14 @@ export const HeaderTop = ({}: HeaderTopProps) => {
 
   return (
     <div className="flex items-center justify-between">
-      <Link to="/" className="logo mt-2">
+      <Link to="/" className="logo mt-2 flex flex-col">
         <img src={Logo} className="w-[9rem] h-auto" alt="Logo" />
+        <span className="text-[.7rem] font-bold mx-auto pl-4">
+          {" "}
+          للحلول الرقميه{" "}
+        </span>
       </Link>
+
       <HeaderMenu categories={categories} />
       <img
         src={Shape}
