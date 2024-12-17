@@ -19,7 +19,6 @@ export const HeaderTop = ({}: HeaderTopProps) => {
       <Link to="/" className="logo mt-2 flex flex-col">
         <img src={Logo} className="w-[9rem] h-auto" alt="Logo" />
         <span className="text-[.7rem] font-bold mx-auto pl-4">
-          {" "}
           للحلول الرقميه{" "}
         </span>
       </Link>
